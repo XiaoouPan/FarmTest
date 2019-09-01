@@ -1,0 +1,13 @@
+Package: FarmTest
+Type: Package
+Title: Factor Adjustd Robust Multiple Testing
+Version: 2.0
+Date: 2019-08-27
+Author: Who wrote it
+Maintainer: Who to complain to <yourfault@somewhere.net>
+Description: More about what it does (maybe more than one line)
+License: GPL-2
+Encoding: UTF-8
+Imports: Rcpp (>= 1.0.1), RcppArmadillo
+LinkingTo: Rcpp, RcppArmadillo
+RoxygenNote: 6.1.1
