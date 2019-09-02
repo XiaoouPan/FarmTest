@@ -34,17 +34,48 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// farmTest
-Rcpp::List farmTest(const arma::mat& X, int K, const double alpha, const std::string alternative);
-RcppExport SEXP _FarmTest_farmTest(SEXP XSEXP, SEXP KSEXP, SEXP alphaSEXP, SEXP alternativeSEXP) {
+// huberRegItcp
+arma::vec huberRegItcp(const arma::mat& X, const arma::vec& Y, const double epsilon, const double constTau, const int iteMax);
+RcppExport SEXP _FarmTest_huberRegItcp(SEXP XSEXP, SEXP YSEXP, SEXP epsilonSEXP, SEXP constTauSEXP, SEXP iteMaxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const double >::type epsilon(epsilonSEXP);
+    Rcpp::traits::input_parameter< const double >::type constTau(constTauSEXP);
+    Rcpp::traits::input_parameter< const int >::type iteMax(iteMaxSEXP);
+    rcpp_result_gen = Rcpp::wrap(huberRegItcp(X, Y, epsilon, constTau, iteMax));
+    return rcpp_result_gen;
+END_RCPP
+}
+// farmTest
+Rcpp::List farmTest(const arma::mat& X, Rcpp::Nullable<Rcpp::NumericVector> H0, int K, const double alpha, const std::string alternative);
+RcppExport SEXP _FarmTest_farmTest(SEXP XSEXP, SEXP H0SEXP, SEXP KSEXP, SEXP alphaSEXP, SEXP alternativeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type H0(H0SEXP);
     Rcpp::traits::input_parameter< int >::type K(KSEXP);
     Rcpp::traits::input_parameter< const double >::type alpha(alphaSEXP);
     Rcpp::traits::input_parameter< const std::string >::type alternative(alternativeSEXP);
-    rcpp_result_gen = Rcpp::wrap(farmTest(X, K, alpha, alternative));
+    rcpp_result_gen = Rcpp::wrap(farmTest(X, H0, K, alpha, alternative));
+    return rcpp_result_gen;
+END_RCPP
+}
+// farmTestFac
+Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, Rcpp::Nullable<Rcpp::NumericVector> H0, const double alpha, const std::string alternative);
+RcppExport SEXP _FarmTest_farmTestFac(SEXP XSEXP, SEXP facSEXP, SEXP H0SEXP, SEXP alphaSEXP, SEXP alternativeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type fac(facSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type H0(H0SEXP);
+    Rcpp::traits::input_parameter< const double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type alternative(alternativeSEXP);
+    rcpp_result_gen = Rcpp::wrap(farmTestFac(X, fac, H0, alpha, alternative));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -52,7 +83,9 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_FarmTest_huberMean", (DL_FUNC) &_FarmTest_huberMean, 3},
     {"_FarmTest_huberReg", (DL_FUNC) &_FarmTest_huberReg, 5},
-    {"_FarmTest_farmTest", (DL_FUNC) &_FarmTest_farmTest, 4},
+    {"_FarmTest_huberRegItcp", (DL_FUNC) &_FarmTest_huberRegItcp, 5},
+    {"_FarmTest_farmTest", (DL_FUNC) &_FarmTest_farmTest, 5},
+    {"_FarmTest_farmTestFac", (DL_FUNC) &_FarmTest_farmTestFac, 5},
     {NULL, NULL, 0}
 };
 

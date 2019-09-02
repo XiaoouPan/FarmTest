@@ -9,8 +9,17 @@ huberReg <- function(X, Y, epsilon = 0.0001, constTau = 1.345, iteMax = 500L) {
     .Call('_FarmTest_huberReg', PACKAGE = 'FarmTest', X, Y, epsilon, constTau, iteMax)
 }
 
+huberRegItcp <- function(X, Y, epsilon = 0.0001, constTau = 1.345, iteMax = 500L) {
+    .Call('_FarmTest_huberRegItcp', PACKAGE = 'FarmTest', X, Y, epsilon, constTau, iteMax)
+}
+
 #' @export
-farmTest <- function(X, K = -1L, alpha = 0.05, alternative = "two.sided") {
-    .Call('_FarmTest_farmTest', PACKAGE = 'FarmTest', X, K, alpha, alternative)
+farmTest <- function(X, H0 = NULL, K = -1L, alpha = 0.05, alternative = "two.sided") {
+    .Call('_FarmTest_farmTest', PACKAGE = 'FarmTest', X, H0, K, alpha, alternative)
+}
+
+#' @export
+farmTestFac <- function(X, fac, H0 = NULL, alpha = 0.05, alternative = "two.sided") {
+    .Call('_FarmTest_farmTestFac', PACKAGE = 'FarmTest', X, fac, H0, alpha, alternative)
 }
 

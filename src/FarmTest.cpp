@@ -132,11 +132,52 @@ arma::vec huberReg(const arma::mat& X, const arma::vec& Y, const double epsilon 
   return thetaNew;
 }
 
+// [[Rcpp::export]]
+arma::vec huberRegItcp(const arma::mat& X, const arma::vec& Y, const double epsilon = 0.0001, 
+                       const double constTau = 1.345, const int iteMax = 500) {
+  int n = X.n_rows;
+  int d = X.n_cols;
+  arma::mat Z(n, d + 1);
+  Z.cols(1, d) = X;
+  Z.col(0) = arma::ones(n);
+  arma::vec thetaOld = arma::zeros(d + 1);
+  arma::vec thetaNew = arma::solve(Z.t() * Z, Z.t() * Y);
+  double tauOld = 0;
+  double tauNew = std::sqrt((long double)arma::sum(arma::square(Y - Z * thetaNew)) / (n - d)) *
+    std::sqrt((long double)n / std::log((long double)(d + std::log(n * d))));
+  double mad;
+  int iteNum = 0;
+  arma::vec res(n), WY(n);
+  arma::mat WZ(n, d + 1);
+  while ((arma::norm(thetaNew - thetaOld, "inf") > epsilon || std::abs(tauNew - tauOld) > epsilon) 
+           && iteNum < iteMax) {
+    thetaOld = thetaNew;
+    tauOld = tauNew;
+    res = Y - Z * thetaOld;
+    mad = arma::median(arma::abs(res - arma::median(res))) / 0.6744898;
+    tauNew = constTau * mad;
+    WZ = Z;
+    WY = Y;
+    for (int i = 0; i < n; i++) {
+      double w = tauNew / std::abs(res(i));
+      if (w < 1) {
+        WZ.row(i) *= w;
+        WY(i) *= w;
+      }
+    }
+    thetaNew = arma::solve(Z.t() * WZ, Z.t() * WY);
+    iteNum++;
+  }
+  thetaNew(0) = huberMean(Y - X * thetaNew.rows(1, d));
+  return thetaNew;
+}
+
 //' @export
 // [[Rcpp::export]]
-Rcpp::List farmTest(const arma::mat& X, int K = -1, const double alpha = 0.05, 
-                    const std::string alternative = "two.sided") {
+Rcpp::List farmTest(const arma::mat& X, Rcpp::Nullable<Rcpp::NumericVector> H0 = R_NilValue,
+                    int K = -1, const double alpha = 0.05, const std::string alternative = "two.sided") {
   int n = X.n_rows, p = X.n_cols;
+  arma::vec h0 = H0.isNotNull() ? Rcpp::as<arma::vec>(H0) : arma::zeros(p);
   arma::mat sigmaHat(p, p);
   arma::vec mu(p), sigma(p);
   for (int j = 0; j < p; j++) {
@@ -182,18 +223,18 @@ Rcpp::List farmTest(const arma::mat& X, int K = -1, const double alpha = 0.05,
   }
   arma::vec f = huberReg(B, arma::mean(X, 0).t());
   for (int j = 0; j < p; j++) {
-    double temp = arma::norm(B.row(j), 2) * arma::norm(B.row(j), 2);
-    if (sigma(j) > temp) {
-      sigma(j) -= temp;
+    double temp = arma::norm(B.row(j), 2);
+    if (sigma(j) > temp * temp) {
+      sigma(j) -= temp * temp;
     }
   }
   mu -= B * f;
   sigma = arma::sqrt(sigma / n);
-  arma::vec T = mu / sigma;
+  arma::vec T = (mu - h0) / sigma;
   arma::vec Prob;
   if (alternative == "two.sided") {
     Prob = 2 * arma::normcdf(-arma::abs(T));
-  } else if (alternative == "lesser") {
+  } else if (alternative == "less") {
     Prob = arma::normcdf(-T);
   } else if (alternative == "greater") {
     Prob = arma::normcdf(T);
@@ -215,7 +256,52 @@ Rcpp::List farmTest(const arma::mat& X, int K = -1, const double alpha = 0.05,
                             Rcpp::Named("alternative") = alternative);
 }
 
-/*// [[Rcpp::export]]
-int exam(int n, int p) {
-  return std::min(n, p) >> 1;
-}*/
+//' @export
+// [[Rcpp::export]]
+Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, Rcpp::Nullable<Rcpp::NumericVector> H0 = R_NilValue,
+                       const double alpha = 0.05, const std::string alternative = "two.sided") {
+  int n = X.n_rows, p = X.n_cols;
+  arma::vec h0 = H0.isNotNull() ? Rcpp::as<arma::vec>(H0) : arma::zeros(p);
+  arma::mat Sigma = arma::sqrtmat_sympd(arma::cov(fac));
+  arma::vec mu(p), sigma(p);
+  arma::vec theta, beta;
+  for (int j = 0; j < p; j++) {
+    theta = huberRegItcp(fac, X.col(j));
+    mu(j) = theta(0);
+    beta = theta.rows(1, p);
+    double sig = huberMean(arma::square(X.col(j)));
+    double temp = mu(j) * mu(j);
+    if (sig > temp) {
+      sig -= temp;
+    }
+    temp = arma::norm(Sigma * beta, 2);
+    if (sig > temp * temp) {
+      sig -= temp * temp;
+    }
+    sigma(j) = sig;
+  }
+  sigma = arma::sqrt(sigma / n);
+  arma::vec T = (mu - h0) / sigma;
+  arma::vec Prob;
+  if (alternative == "two.sided") {
+    Prob = 2 * arma::normcdf(-arma::abs(T));
+  } else if (alternative == "less") {
+    Prob = arma::normcdf(-T);
+  } else if (alternative == "greater") {
+    Prob = arma::normcdf(T);
+  }
+  double piHat = (double)arma::sum(Prob > alpha) / ((1 - alpha) * p);
+  arma::vec z = arma::sort(Prob);
+  double pAlpha = -1.0;
+  for (int i = p - 1; i >= 0; i--) {
+    if (z(i) * piHat * p <= alpha * (i + 1)) {
+      pAlpha = z(i);
+      break;
+    }
+  }
+  arma::uvec reject = Prob <= pAlpha;
+  return Rcpp::List::create(Rcpp::Named("means") = mu, Rcpp::Named("stdDev") = sigma,
+                            Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, 
+                            Rcpp::Named("reject") = reject, Rcpp::Named("alpha") = alpha, 
+                            Rcpp::Named("alternative") = alternative);
+}
