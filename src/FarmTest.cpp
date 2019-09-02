@@ -260,7 +260,7 @@ Rcpp::List farmTest(const arma::mat& X, Rcpp::Nullable<Rcpp::NumericVector> H0 =
 // [[Rcpp::export]]
 Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, Rcpp::Nullable<Rcpp::NumericVector> H0 = R_NilValue,
                        const double alpha = 0.05, const std::string alternative = "two.sided") {
-  int n = X.n_rows, p = X.n_cols;
+  int n = X.n_rows, p = X.n_cols, K = fac.n_cols;
   arma::vec h0 = H0.isNotNull() ? Rcpp::as<arma::vec>(H0) : arma::zeros(p);
   arma::mat Sigma = arma::sqrtmat_sympd(arma::cov(fac));
   arma::vec mu(p), sigma(p);
@@ -268,7 +268,7 @@ Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, Rcpp::Nullable<
   for (int j = 0; j < p; j++) {
     theta = huberRegItcp(fac, X.col(j));
     mu(j) = theta(0);
-    beta = theta.rows(1, p);
+    beta = theta.rows(1, K);
     double sig = huberMean(arma::square(X.col(j)));
     double temp = mu(j) * mu(j);
     if (sig > temp) {
