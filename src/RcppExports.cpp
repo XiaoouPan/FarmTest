@@ -19,19 +19,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// huberCov
-arma::mat huberCov(const arma::mat& X, const double epsilon, const int iteMax);
-RcppExport SEXP _FarmTest_huberCov(SEXP XSEXP, SEXP epsilonSEXP, SEXP iteMaxSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
-    Rcpp::traits::input_parameter< const double >::type epsilon(epsilonSEXP);
-    Rcpp::traits::input_parameter< const int >::type iteMax(iteMaxSEXP);
-    rcpp_result_gen = Rcpp::wrap(huberCov(X, epsilon, iteMax));
-    return rcpp_result_gen;
-END_RCPP
-}
 // huberReg
 arma::vec huberReg(const arma::mat& X, const arma::vec& Y, const double epsilon, const double constTau, const int iteMax);
 RcppExport SEXP _FarmTest_huberReg(SEXP XSEXP, SEXP YSEXP, SEXP epsilonSEXP, SEXP constTauSEXP, SEXP iteMaxSEXP) {
@@ -48,24 +35,24 @@ BEGIN_RCPP
 END_RCPP
 }
 // farmTest
-Rcpp::List farmTest(const arma::mat& X, const double alpha, const int K);
-RcppExport SEXP _FarmTest_farmTest(SEXP XSEXP, SEXP alphaSEXP, SEXP KSEXP) {
+Rcpp::List farmTest(const arma::mat& X, int K, const double alpha, const std::string alternative);
+RcppExport SEXP _FarmTest_farmTest(SEXP XSEXP, SEXP KSEXP, SEXP alphaSEXP, SEXP alternativeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< int >::type K(KSEXP);
     Rcpp::traits::input_parameter< const double >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< const int >::type K(KSEXP);
-    rcpp_result_gen = Rcpp::wrap(farmTest(X, alpha, K));
+    Rcpp::traits::input_parameter< const std::string >::type alternative(alternativeSEXP);
+    rcpp_result_gen = Rcpp::wrap(farmTest(X, K, alpha, alternative));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
     {"_FarmTest_huberMean", (DL_FUNC) &_FarmTest_huberMean, 3},
-    {"_FarmTest_huberCov", (DL_FUNC) &_FarmTest_huberCov, 3},
     {"_FarmTest_huberReg", (DL_FUNC) &_FarmTest_huberReg, 5},
-    {"_FarmTest_farmTest", (DL_FUNC) &_FarmTest_farmTest, 3},
+    {"_FarmTest_farmTest", (DL_FUNC) &_FarmTest_farmTest, 4},
     {NULL, NULL, 0}
 };
 

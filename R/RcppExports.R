@@ -5,16 +5,12 @@ huberMean <- function(X, epsilon = 0.0001, iteMax = 500L) {
     .Call('_FarmTest_huberMean', PACKAGE = 'FarmTest', X, epsilon, iteMax)
 }
 
-huberCov <- function(X, epsilon = 0.0001, iteMax = 500L) {
-    .Call('_FarmTest_huberCov', PACKAGE = 'FarmTest', X, epsilon, iteMax)
-}
-
 huberReg <- function(X, Y, epsilon = 0.0001, constTau = 1.345, iteMax = 500L) {
     .Call('_FarmTest_huberReg', PACKAGE = 'FarmTest', X, Y, epsilon, constTau, iteMax)
 }
 
 #' @export
-farmTest <- function(X, alpha, K) {
-    .Call('_FarmTest_farmTest', PACKAGE = 'FarmTest', X, alpha, K)
+farmTest <- function(X, K = -1L, alpha = 0.05, alternative = "two.sided") {
+    .Call('_FarmTest_farmTest', PACKAGE = 'FarmTest', X, K, alpha, alternative)
 }
 
