@@ -194,7 +194,6 @@ arma::uvec getRej(const arma::vec& Prob, const double alpha, const int p) {
   return Prob <= pAlpha;
 }
 
-//' @export
 // [[Rcpp::export]]
 Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const double alpha = 0.05, 
                     const std::string alternative = "two.sided") {
@@ -261,7 +260,6 @@ Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const d
                             Rcpp::Named("alternative") = alternative);
 }
 
-//' @export
 // [[Rcpp::export]]
 Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, const arma::vec& h0, 
                        const double alpha = 0.05, const std::string alternative = "two.sided") {
@@ -292,4 +290,51 @@ Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, const arma::vec
                             Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, 
                             Rcpp::Named("reject") = reject, Rcpp::Named("alpha") = alpha, 
                             Rcpp::Named("alternative") = alternative);
+}
+
+// [[Rcpp::export]]
+Rcpp::List farmTestTwoFac(const arma::mat& X, const arma::mat& facX, const arma::mat& Y, 
+                          const arma::mat& facY, const arma::vec& h0, const double alpha = 0.05, 
+                          const std::string alternative = "two.sided") {
+  int nX = X.n_rows, nY = Y.n_rows, p = X.n_cols, K = facX.n_cols;
+  arma::mat SigmaX = arma::sqrtmat_sympd(arma::cov(facX));
+  arma::mat SigmaY = arma::sqrtmat_sympd(arma::cov(facY));
+  arma::vec muX(p), sigmaX(p), muY(p), sigmaY(p);
+  arma::vec theta, beta;
+  for (int j = 0; j < p; j++) {
+    theta = huberRegItcp(facX, X.col(j));
+    muX(j) = theta(0);
+    beta = theta.rows(1, K);
+    double sig = huberMean(arma::square(X.col(j)));
+    double temp = muX(j) * muX(j);
+    if (sig > temp) {
+      sig -= temp;
+    }
+    temp = arma::norm(SigmaX * beta, 2);
+    if (sig > temp * temp) {
+      sig -= temp * temp;
+    }
+    sigmaX(j) = sig;
+    theta = huberRegItcp(facY, Y.col(j));
+    muY(j) = theta(0);
+    beta = theta.rows(1, K);
+    sig = huberMean(arma::square(Y.col(j)));
+    temp = muY(j) * muY(j);
+    if (sig > temp) {
+      sig -= temp;
+    }
+    temp = arma::norm(SigmaY * beta, 2);
+    if (sig > temp * temp) {
+      sig -= temp * temp;
+    }
+    sigmaY(j) = sig;
+  }
+  arma::vec sigma = arma::sqrt(sigmaX / nX + sigmaY / nY);
+  arma::vec T = (muX - muY - h0) / sigma;
+  arma::vec Prob = getP(T, alternative);
+  arma::uvec reject = getRej(Prob, alpha, p);
+  return Rcpp::List::create(Rcpp::Named("meansX") = muX, Rcpp::Named("meansY") = muY, 
+                            Rcpp::Named("stdDev") = sigma, Rcpp::Named("tStat") = T, 
+                            Rcpp::Named("pValues") = Prob, Rcpp::Named("reject") = reject, 
+                            Rcpp::Named("alpha") = alpha, Rcpp::Named("alternative") = alternative);
 }
