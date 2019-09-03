@@ -175,7 +175,7 @@ arma::vec getP(const arma::vec& T, const std::string alternative) {
     rst = 2 * arma::normcdf(-arma::abs(T));
   } else if (alternative == "less") {
     rst = arma::normcdf(-T);
-  } else if (alternative == "greater") {
+  } else {
     rst = arma::normcdf(T);
   }
   return rst;
@@ -196,10 +196,9 @@ arma::uvec getRej(const arma::vec& Prob, const double alpha, const int p) {
 
 //' @export
 // [[Rcpp::export]]
-Rcpp::List farmTest(const arma::mat& X, Rcpp::Nullable<Rcpp::NumericVector> H0 = R_NilValue,
-                    int K = -1, const double alpha = 0.05, const std::string alternative = "two.sided") {
+Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const double alpha = 0.05, 
+                    const std::string alternative = "two.sided") {
   int n = X.n_rows, p = X.n_cols;
-  arma::vec h0 = H0.isNotNull() ? Rcpp::as<arma::vec>(H0) : arma::zeros(p);
   arma::mat sigmaHat(p, p);
   arma::vec mu(p), sigma(p);
   for (int j = 0; j < p; j++) {
@@ -264,10 +263,9 @@ Rcpp::List farmTest(const arma::mat& X, Rcpp::Nullable<Rcpp::NumericVector> H0 =
 
 //' @export
 // [[Rcpp::export]]
-Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, Rcpp::Nullable<Rcpp::NumericVector> H0 = R_NilValue,
+Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, const arma::vec& h0, 
                        const double alpha = 0.05, const std::string alternative = "two.sided") {
   int n = X.n_rows, p = X.n_cols, K = fac.n_cols;
-  arma::vec h0 = H0.isNotNull() ? Rcpp::as<arma::vec>(H0) : arma::zeros(p);
   arma::mat Sigma = arma::sqrtmat_sympd(arma::cov(fac));
   arma::vec mu(p), sigma(p);
   arma::vec theta, beta;
