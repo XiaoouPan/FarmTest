@@ -120,8 +120,7 @@ Rcpp::List huberCov(const arma::mat& X, const int n, const int p) {
 }
 
 arma::vec huberReg(const arma::mat& X, const arma::vec& Y, const int n, const int d, 
-                   const double epsilon = 0.0001, const double constTau = 1.345, 
-                   const int iteMax = 500) {
+                   const double epsilon = 0.0001, const double constTau = 1.345, const int iteMax = 500) {
   arma::vec thetaOld = arma::zeros(d);
   arma::vec thetaNew = arma::solve(X.t() * X, X.t() * Y);
   double tauOld = 0;
@@ -154,8 +153,7 @@ arma::vec huberReg(const arma::mat& X, const arma::vec& Y, const int n, const in
 }
 
 arma::vec huberRegItcp(const arma::mat& X, const arma::vec& Y, const int n, const int d, 
-                       const double epsilon = 0.0001, const double constTau = 1.345, 
-                       const int iteMax = 500) {
+                       const double epsilon = 0.0001, const double constTau = 1.345, const int iteMax = 500) {
   arma::mat Z(n, d + 1);
   Z.cols(1, d) = X;
   Z.col(0) = arma::ones(n);
@@ -249,7 +247,7 @@ Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const d
     double lambda = std::sqrt((long double)std::max(eigenVal(p - i), 0.0));
     B.col(i - 1) = lambda * eigenVec.col(p - i);
   }
-  arma::vec f = huberReg(B, arma::mean(X, 0).t(), n, p);
+  arma::vec f = huberReg(B, arma::mean(X, 0).t(), p, K);
   for (int j = 0; j < p; j++) {
     double temp = arma::norm(B.row(j), 2);
     if (sigma(j) > temp * temp) {
@@ -287,7 +285,7 @@ Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& 
     double lambda = std::sqrt((long double)std::max(eigenVal(p - i), 0.0));
     BX.col(i - 1) = lambda * eigenVec.col(p - i);
   }
-  arma::vec fX = huberReg(BX, arma::mean(X, 0).t(), nX, p);
+  arma::vec fX = huberReg(BX, arma::mean(X, 0).t(), p, KX);
   listCov = huberCov(Y, nY, p);
   arma::vec muY = listCov["means"];
   sigmaHat = Rcpp::as<arma::mat>(listCov["cov"]);
@@ -301,7 +299,7 @@ Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& 
     double lambda = std::sqrt((long double)std::max(eigenVal(p - i), 0.0));
     BY.col(i - 1) = lambda * eigenVec.col(p - i);
   }
-  arma::vec fY = huberReg(BY, arma::mean(Y, 0).t(), nY, p);
+  arma::vec fY = huberReg(BY, arma::mean(Y, 0).t(), p, KY);
   for (int j = 0; j < p; j++) {
     double temp = arma::norm(BX.row(j), 2);
     if (sigmaX(j) > temp * temp) {
@@ -319,7 +317,7 @@ Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& 
   arma::vec T = (muX - muY - h0) / arma::sqrt(sigmaX / nX + sigmaY / nY);
   arma::vec Prob = getP(T, alternative);
   arma::uvec reject = getRej(Prob, alpha, p);
-  return Rcpp::List::create(Rcpp::Named("meansX") = muX, Rcpp::Named("meansX") = muX, 
+  return Rcpp::List::create(Rcpp::Named("meansX") = muX, Rcpp::Named("meansY") = muY, 
                             Rcpp::Named("stdDevX") = sigmaX, Rcpp::Named("stdDevY") = sigmaY,
                             Rcpp::Named("loadingsX") = BX, Rcpp::Named("loadingsY") = BY, 
                             Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, 
