@@ -311,10 +311,10 @@ Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& 
     }
   }
   muX -= BX * fX;
-  sigmaX = arma::sqrt(sigmaX / nX);
   muY -= BY * fY;
-  sigmaY = arma::sqrt(sigmaY / nY);
   arma::vec T = (muX - muY - h0) / arma::sqrt(sigmaX / nX + sigmaY / nY);
+  sigmaX = arma::sqrt(sigmaX / nX);
+  sigmaY = arma::sqrt(sigmaY / nY);
   arma::vec Prob = getP(T, alternative);
   arma::uvec reject = getRej(Prob, alpha, p);
   return Rcpp::List::create(Rcpp::Named("meansX") = muX, Rcpp::Named("meansY") = muY, 
