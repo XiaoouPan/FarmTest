@@ -228,7 +228,6 @@ int estK(const arma::vec& eigenVal, const int n, const int p) {
   return K;
 }
 
-// [[Rcpp::export]]
 Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const double alpha = 0.05, 
                     const std::string alternative = "two.sided") {
   int n = X.n_rows, p = X.n_cols;
@@ -266,7 +265,6 @@ Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const d
                             Rcpp::Named("alternative") = alternative);
 }
 
-// [[Rcpp::export]]
 Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& h0, int KX = -1, 
                        int KY = -1, const double alpha = 0.05, const std::string alternative = "two.sided") {
   int nX = X.n_rows, nY = Y.n_rows, p = X.n_cols;
@@ -326,7 +324,6 @@ Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& 
                             Rcpp::Named("alternative") = alternative);
 }
 
-// [[Rcpp::export]]
 Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, const arma::vec& h0, 
                        const double alpha = 0.05, const std::string alternative = "two.sided") {
   int n = X.n_rows, p = X.n_cols, K = fac.n_cols;
@@ -358,7 +355,6 @@ Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, const arma::vec
                             Rcpp::Named("alternative") = alternative);
 }
 
-// [[Rcpp::export]]
 Rcpp::List farmTestTwoFac(const arma::mat& X, const arma::mat& facX, const arma::mat& Y, 
                           const arma::mat& facY, const arma::vec& h0, const double alpha = 0.05, 
                           const std::string alternative = "two.sided") {
