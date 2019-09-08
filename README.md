@@ -4,7 +4,13 @@
 
 ## Description
 
-This package updates an [earlier version](https://github.com/kbose28/FarmTest) of factor-adjusted robust multiple testing (FarmTest) proposed in [Fan et al., 2019](https://www.tandfonline.com/doi/full/10.1080/01621459.2018.1527700). Motivated by the work of [Wang et al., 2018](https://www.math.ucsd.edu/~wez243/Tuning_Free.pdf) and [Ke et al., 2019](https://arxiv.org/abs/1811.01520), estimation of mean and covariance in FarmTest can be completed via a tuning-free principle, so that computationally expensive cross-validation can be avoided without lossing estimation accuracy.
+This package updates an [earlier version](https://github.com/kbose28/FarmTest) of **F**actor-**A**djusted **R**obust **M**ultiple **Test**ing (FarmTest) proposed in [Fan et al., 2019](https://www.tandfonline.com/doi/full/10.1080/01621459.2018.1527700). We assume observed data *X* follow a factor model *X = &mu; + Bf + u*, where *f* are underlying factors, *B* are factor loadings, *u* are errors, and *&mu;* is the mean effect with null hypothesis *&mu; = &mu;<sub>0</sub>* to be tested. We assume the data is of dimension *p* with sample size *n*, leading to *p* hypothesis tests. 
+
+FarmTest includes a robust procedure to estimate distribution parameters and accounts for strong dependence among coordinates. This method is particularly suitable for high-dimensional data when there are thousands of variables but only a small number of observations available. Moreover, the method is tailored to cases when the underlying distribution deviates from Gaussianity, which is commonly assumed in the literature.
+
+## Main updates 
+
+Motivated by the recent work of [Wang et al., 2018](https://www.math.ucsd.edu/~wez243/Tuning_Free.pdf) and [Ke et al., 2019](https://arxiv.org/abs/1811.01520), estimation of mean and covariance in FarmTest can be completed via a tuning-free principle, so that computationally expensive cross-validation can be avoided without lossing estimation accuracy.
 
 ## Installation
 
