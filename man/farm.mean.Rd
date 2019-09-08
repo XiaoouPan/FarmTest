@@ -10,7 +10,7 @@ farm.mean(X)
 \item{X}{An \eqn{n}-dimensional data vector.}
 }
 \value{
-The Huber mean estimator.
+A Huber mean estimator will be returned.
 }
 \description{
 The function calculates adaptive Huber mean estimator from a data sample, with robustification parameter \eqn{\tau} determined by a tuning-free principle.
@@ -25,4 +25,7 @@ mu = farm.mean(X)
 Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.
 
 Wang, L., Zheng, C., Zhou, W. and Zhou, W.-X. (2018). A New Principle for Tuning-Free Huber Regression. Preprint.
+}
+\seealso{
+\code{\link{farm.cov}} for tuning-free Huber-type covariance estimation.
 }

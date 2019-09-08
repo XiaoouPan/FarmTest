@@ -10,10 +10,11 @@ farm.cov(X)
 \item{X}{An \eqn{n} by \eqn{p} data matrix.}
 }
 \value{
-An \eqn{p} by \eqn{p} Huber-type covariance matrix estimator.
+An \eqn{p} by \eqn{p} Huber-type covariance matrix estimator will be returned.
 }
 \description{
 The function calculates adaptive Huber-type covariance estimator from a data sample, with robustification parameter \eqn{\tau} determined by a tuning-free principle.
+For the input matrix \code{X}, both low-dimension (\eqn{p < n}) and high-dimension (\eqn{p > n}) are allowed.
 }
 \examples{
 set.seed(2019)
@@ -26,4 +27,7 @@ Sigma = farm.cov(X)
 Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.
 
 Ke, Y., Minsker, S., Ren, Z., Sun, Q. and Zhou, W.-X. (2019). User-friendly covariance estimation for heavy-tailed distributions: A survey and recent results. Statis. Sci. To appear.
+}
+\seealso{
+\code{\link{farm.mean}} for tuning-free Huber mean estimation.
 }

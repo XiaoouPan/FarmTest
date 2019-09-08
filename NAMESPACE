@@ -2,6 +2,7 @@
 
 export(farm.cov)
 export(farm.mean)
+export(farm.test)
 exportPattern("^[[:alpha:]]+")
 importFrom(Rcpp,evalCpp)
 useDynLib(FarmTest)
