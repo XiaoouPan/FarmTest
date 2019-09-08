@@ -10,7 +10,7 @@ FarmTest includes a robust procedure to estimate distribution parameters and acc
 
 ## Main updates 
 
-Motivated by the recent work of [Wang et al., 2018](https://www.math.ucsd.edu/~wez243/Tuning_Free.pdf) and [Ke et al., 2019](https://arxiv.org/abs/1811.01520), estimation of mean and covariance in FarmTest can be completed via a tuning-free principle, so that computationally expensive cross-validation can be avoided without lossing estimation accuracy.
+FarmTest introduces a robustification parameter *&tau;* while estimating mean and covariance of data sample. In the previous version, the value of *&tau;* is determined by cross-validation. Recently, motivated by the work of [Wang et al., 2018](https://www.math.ucsd.edu/~wez243/Tuning_Free.pdf) and [Ke et al., 2019](https://arxiv.org/abs/1811.01520), estimation of mean and covariance can be completed via a tuning-free principle, so that cross-validation, which used to be computationally expensive, can be avoided without lossing estimation accuracy.
 
 ## Installation
 
