@@ -4,7 +4,7 @@
 
 ## Description
 
-This package updates an [earlier version](https://github.com/kbose28/FarmTest) of **F**actor-**A**djusted **R**obust **M**ultiple **Test**ing (FarmTest) proposed in [Fan et al., 2019](https://www.tandfonline.com/doi/full/10.1080/01621459.2018.1527700). We assume observed data *X* follow a factor model *X = &mu; + Bf + u*, where *f* are underlying factors, *B* are factor loadings, *u* are errors, and *&mu;* is the mean effect with null hypothesis *&mu; = &mu;<sub>0</sub>* to be tested. We assume the data is of dimension *p* with sample size *n*, leading to *p* hypothesis tests. 
+This package updates an [earlier version](https://github.com/kbose28/FarmTest) of **F**actor-**A**djusted **R**obust **M**ultiple **Test**ing (FarmTest) proposed in [Fan et al., 2019](https://www.tandfonline.com/doi/full/10.1080/01621459.2018.1527700). We assume observed data *X* follow a factor model *X = &mu; + Bf + &epsilon;*, where *f* are underlying factors, *B* are factor loadings, *&epsilon;* are errors, and *&mu;* is the mean effect with null hypothesis *&mu; = &mu;<sub>0</sub>* to be tested. We assume the data is of dimension *p* with sample size *n*, leading to *p* hypothesis tests. 
 
 FarmTest includes a robust procedure to estimate distribution parameters and accounts for strong dependence among coordinates. This method is particularly suitable for high-dimensional data when there are thousands of variables but only a small number of observations available. Moreover, the method is tailored to cases when the underlying distribution deviates from Gaussianity, which is commonly assumed in the literature.
 
@@ -27,7 +27,7 @@ library(FarmTest)
 
 Help on the functions can be accessed by typing `?`, followed by function name at the R command prompt. 
 
-For example, `?farmTest` will present a detailed documentation with inputs, outputs and examples of the function `farmTest`.
+For example, `?farm.test` will present a detailed documentation with inputs, outputs and examples of the function `farm.test`.
 
 ## Common error messages
 
@@ -43,7 +43,7 @@ The package `FarmTest` is implemented in `Rcpp` and `RcppArmadillo`, so the foll
 
 ## Functions
 
-There are three functions to conduct FarmTest:
+There are three functions in this package:
 
 * `farm.test`: Factor-adjusted robust multiple testing.
 * `farm.mean`: Tuning-free Huber mean estimation.
@@ -53,7 +53,7 @@ There are three functions to conduct FarmTest:
 
 This package is built based on an earlier version written by Bose, K., Ke, Y. and Zhou, W.-X., see [here](https://cran.r-project.org/web/packages/FarmTest/index.html) for its R-CRAN link and [here](https://github.com/kbose28/FarmTest) for its GitHub link. 
 
-Besides, the tuning-free procedure for mean and covariance estimation is from the [tfHuber](https://github.com/XiaoouPan/tfHuber) package.
+Besides, the tuning-free procedure for mean and covariance estimation is also implemented in [tfHuber](https://github.com/XiaoouPan/tfHuber) package.
 
 ## Reference
 
