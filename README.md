@@ -51,7 +51,7 @@ There are three functions in this package:
 
 ## Testing examples
 
-Here we generate data from factor model *X = &mu; + Bf + &epsilon;* with 3 factors. Our data has sample size 50 and dimensionality 100. The first five means are set to 1, while the other ones are 0.
+Here we generate data from factor model *X = &mu; + Bf + &epsilon;* with 3 factors. Our data has sample size 50 and dimensionality 100. The first five means are set to 2, while the others are 0.
 
 ```r
 library(FarmTest)
@@ -59,7 +59,7 @@ n = 50
 p = 100
 K = 3
 muX = rep(0, p)
-muX[1:5] = 1
+muX[1:5] = 2
 set.seed(2019)
 epsilonX = matrix(rnorm(p * n, 0, 1), nrow = n)
 BX = matrix(runif(p * K, -2, 2), nrow = p)
@@ -67,7 +67,7 @@ fX = matrix(rnorm(K * n, 0, 1), nrow = n)
 X = rep(1, n) %*% t(muX) + fX %*% t(BX) + epsilonX
 ```
 
-Then we conduct FarmTest for *&mu; = 0* with a two-sided alternative hypothesis, *&alpha;* level is 0.05. Factor matrix is unknown, and the number of factors will be internally estimated. 
+Then we conduct FarmTest for *&mu; = 0* with a two-sided alternative hypothesis, *&alpha;* level is 0.05. Factor matrix is unknown, and the number of factors will be estimated internally. 
 
 ```r
 output = farm.test(X)
@@ -81,6 +81,12 @@ output$pValues
 output$nfactors
 output$means
 ```
+
+To get a comprehensive impression of the performance, we repeat the above experiment for 100 times and present the average values of true positive rate (TPR), false positive rate (FPR) and false discover rate (FDR). These results can be easily reproduced.
+
+| TPR | FPR | FDR |
+| :---: | :---: | :---: | 
+| 1.000 | 0.002 | 0.031 |
 
 ## Notes 
 
