@@ -126,12 +126,24 @@ Huber mean estimator can be obtained by `farm.mean` function. In the following e
 
 ```r
 library(FarmTest)
+set.seed(1)
 n = 1000
 X = rlnorm(n, 0, 1.5) - exp(1.5^2 / 2)
 huberMean = farm.mean(X)
 ```
 
+Huber-type covariance matrix estimator can be achieved by `farm.cov` function. In the next example, we generate data matrix from standardized *t* distribution with 3 degree of freedom, which is heavy-tailed, and estimate its covariance matrix:
 
+```r
+library(FarmTest)
+set.seed(1)
+n = 100
+d = 50
+X = matrix(rt(n * d, df = 3), n, d) / sqrt(3)
+huberCov = farm.cov(X)
+```
+
+To get a big picture of these two estimators, users can run 200 independent Monte Carlo simulation and compare them with sample mean and covariance matrix produced by `mean` and `cov` functions. 
 
 ## Notes 
 
