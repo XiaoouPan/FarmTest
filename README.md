@@ -8,6 +8,8 @@ This package updates an [earlier version](https://github.com/kbose28/FarmTest) o
 
 FarmTest includes a robust procedure to estimate distribution parameters and accounts for strong dependence among coordinates. This method is particularly suitable for high-dimensional data when there are thousands of variables but only a small number of observations available. Moreover, the method is tailored to cases when the underlying distribution deviates from Gaussianity, which is commonly assumed in the literature.
 
+As by-products, this package also contains functions for Huber mean and Huber-type covariance matrix estimation.
+
 ## Main updates 
 
 FarmTest introduces a robustification parameter *&tau;* while estimating mean and covariance of data sample. In the previous version, the value of *&tau;* is either specified by users or determined by cross-validation. Recently, motivated by the work of [Wang et al., 2018](https://www.math.ucsd.edu/~wez243/Tuning_Free.pdf) and [Ke et al., 2019](https://arxiv.org/abs/1811.01520), estimation of mean and covariance can be completed via a tuning-free principle, so that cross-validation, which was computationally expensive, can be avoided without lossing estimation accuracy or stability of the algorithm.
@@ -117,6 +119,19 @@ fY = matrix(rnorm(K * n, 0, 1), nrow = n)
 Y = rep(1, n) %*% t(muY) + fY %*% t(BY) + epsilonY
 output = farm.test(X, Y = Y)
 ```
+
+## Huber-type estimation examples
+
+Huber mean estimator can be obtained by `farm.mean` function. In the following example, we generate data from a centered log-normal distribution, which is asymmetric and heavy-tailed, and then estimate its mean:
+
+```r
+library(FarmTest)
+n = 1000
+X = rlnorm(n, 0, 1.5) - exp(1.5^2 / 2)
+huberMean = farm.mean(X)
+```
+
+
 
 ## Notes 
 
