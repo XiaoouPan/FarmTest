@@ -10,7 +10,7 @@ farm.cov(X)
 \item{X}{An \eqn{n} by \eqn{p} data matrix.}
 }
 \value{
-An \eqn{p} by \eqn{p} Huber-type covariance matrix estimator will be returned.
+A \eqn{p} by \eqn{p} Huber-type covariance matrix estimator will be returned.
 }
 \description{
 The function calculates adaptive Huber-type covariance estimator from a data sample, with robustification parameter \eqn{\tau} determined by a tuning-free principle.

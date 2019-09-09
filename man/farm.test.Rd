@@ -27,13 +27,60 @@ farm.test(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1,
 
 \item{alpha}{An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.}
 }
+\value{
+An object with S3 class \code{farm.test} containing:
+\itemize{
+\item \code{means} Estimated means, a vector with length \eqn{p}.
+\item \code{stdDev} Estimated standard deviations, a vector with length \eqn{p}.
+\item \code{loadings} Estimated factor loadings, a matrix with dimension \eqn{p} by \eqn{K}, where \eqn{K} is the number of factos.
+\item \code{nfactors} Estimated number of factors, a positive integer.
+\item \code{tStat} Values of test statistics, a vector with length \eqn{p}.
+\item \code{pValues} P-values of tests, a vector with length \eqn{p}.
+\item \code{significant} Boolean values indicating whether each test is significant, with 1 for significant and 0 for non-significant, a vector with length \eqn{p}.
+\item \code{reject} Indices of tests that are rejected. It will show "no hypotheses rejected" if none of the tests are rejects.
+\item \code{type} Indicates whether factor is known or unknown.
+\item \code{h0} Null hypothesis, a vector with length \eqn{p}.
+\item \code{alpha} Alpha value.
+\item \code{alternative} Althernative hypothesis.
+}
+}
 \description{
 This function conducts factor-adjusted robust multiple testing (FarmTest) for means of multivariate data proposed in Fan et al. (2019).
 }
-\references{
-Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.
+\details{
+For two-sample FarmTest, \code{means}, \code{stdDev}, \code{loadings} and \code{nfactors} will be returned as lists of items for sample X and Y separately.
 
+\code{alternative = "greater"} is the alternative that \eqn{\mu > \mu_0} for one-sample test or \eqn{\mu_X > \mu_Y} for two-sample test.
+}
+\examples{
+n = 50
+p = 100
+K = 3
+muX = rep(0, p)
+muX[1:5] = 2
+set.seed(2019)
+epsilonX = matrix(rnorm(p * n, 0, 1), nrow = n)
+BX = matrix(runif(p * K, -2, 2), nrow = p)
+fX = matrix(rnorm(K * n, 0, 1), nrow = n)
+X = rep(1, n) \%*\% t(muX) + fX \%*\% t(BX) + epsilonX
+output = farm.test(X)
+output$reject
+output = farm.test(X, alternative = "less")
+output = farm.test(X, fX = fX)
+
+# Two-sample FarmTest
+muY = rep(0, p)
+muY[1:5] = 4
+epsilonY = matrix(rnorm(p * n, 0, 1), nrow = n)
+BY = matrix(runif(p * K, -2, 2), nrow = p)
+fY = matrix(rnorm(K * n, 0, 1), nrow = n)
+Y = rep(1, n) \%*\% t(muY) + fY \%*\% t(BY) + epsilonY
+output = farm.test(X, Y = Y)
+}
+\references{
 Fan, J., Ke, Y., Sun, Q. and Zhou, W-X. (2019). FarmTest: Factor-adjusted robust multiple testing with approximate false discovery control. J. Amer. Statist. Assoc., to appear.
+
+Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.
 
 Zhou, W-X., Bose, K., Fan, J. and Liu, H. (2018). A new perspective on robust M-estimation: Finite sample theory and applications to dependence-adjusted multiple testing. Ann. Statist. 46 1904-1931.
 }

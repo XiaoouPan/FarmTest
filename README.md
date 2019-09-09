@@ -143,7 +143,7 @@ X = matrix(rt(n * d, df = 3), n, d) / sqrt(3)
 huberCov = farm.cov(X)
 ```
 
-To get a big picture of these two estimators, users can run 200 independent Monte Carlo simulation and compare them with sample mean and covariance matrix produced by `mean` and `cov` functions. 
+To get big pictures of these two estimators, users can run 200 independent Monte Carlo simulation and compare them with sample mean and covariance matrix produced by `mean` and `cov` functions. 
 
 ## Notes 
 
