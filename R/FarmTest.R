@@ -84,9 +84,12 @@ farm.cov = function(X) {
 #' BX = matrix(runif(p * K, -2, 2), nrow = p)
 #' fX = matrix(rnorm(K * n, 0, 1), nrow = n)
 #' X = rep(1, n) %*% t(muX) + fX %*% t(BX) + epsilonX
+#' # One-sample FarmTest with two sided alternative
 #' output = farm.test(X)
 #' output$reject
+#' # One-sample FarmTest with one sided alternative
 #' output = farm.test(X, alternative = "less")
+#' # One-sample FarmTest with known factors
 #' output = farm.test(X, fX = fX)
 #' 
 #' # Two-sample FarmTest
