@@ -82,11 +82,41 @@ output$nfactors
 output$means
 ```
 
-To get a comprehensive impression of the performance, we repeat the above experiment for 100 times and present the average values of true positive rate (TPR), false positive rate (FPR) and false discover rate (FDR). These results can be easily reproduced.
+To get a comprehensive impression of the performance, we repeat the above experiment for 100 times and report the average values of true positive rate (TPR), false positive rate (FPR) and false discover rate (FDR). These results can be easily reproduced.
 
 | TPR | FPR | FDR |
 | :---: | :---: | :---: | 
 | 1.000 | 0.002 | 0.031 |
+
+Finally, we present some examples to illustrate FarmTest with different purpose. For one-sided testing, just modify the `alternative` argument to be `less` or `greater`:
+
+```r
+output = farm.test(X, alternative = "less")
+```
+
+The number of factors can be specified with argument `KX` to be a positive number less than data dimension, so that `farm.test` will not estimate it. However, without any prior knowledge of the data, this is not recommended:
+
+```r
+output = farm.test(X, KX = 10)
+```
+
+For FarmTest with known factors, put the factor matrix into argument `fX`:
+
+```r
+output = farm.test(X, fX = fX)
+```
+
+For two-sample FarmTest, we generate another sample Y with same dimensionality 100, and conduct a two-sided test with unknown factors.
+
+```r
+muY = rep(0, p)
+muY[1:5] = 4
+epsilonY = matrix(rnorm(p * n, 0, 1), nrow = n)
+BY = matrix(runif(p * K, -2, 2), nrow = p)
+fY = matrix(rnorm(K * n, 0, 1), nrow = n)
+Y = rep(1, n) %*% t(muY) + fY %*% t(BY) + epsilonY
+output = farm.test(X, Y = Y)
+```
 
 ## Notes 
 

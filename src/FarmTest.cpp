@@ -196,9 +196,9 @@ arma::vec getP(const arma::vec& T, const std::string alternative) {
   if (alternative == "two.sided") {
     rst = 2 * arma::normcdf(-arma::abs(T));
   } else if (alternative == "less") {
-    rst = arma::normcdf(-T);
-  } else {
     rst = arma::normcdf(T);
+  } else {
+    rst = arma::normcdf(-T);
   }
   return rst;
 }
