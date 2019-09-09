@@ -3,8 +3,6 @@
 #' @exportPattern "^[[:alpha:]]+"
 NULL
 
-Sys.setenv("PKG_CXXFLAGS" = "-std=c++11")
-
 #' @title Tuning-free Huber mean estimation
 #' @description The function calculates adaptive Huber mean estimator from a data sample, with robustification parameter \eqn{\tau} determined by a tuning-free principle.
 #' @param X An \eqn{n}-dimensional data vector.
@@ -73,17 +71,32 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
     stop("Alpha should be between 0 and 1")
   }
   output = NULL
+  reject = "no hypotheses rejected"
   if (is.null(Y) && !is.null(fX)) {
     if (nrow(fX) != nrow(X)) {
       stop("Number of rows of X and fX must be the same")
     } else {
-      output = farmTestFac(X, fX, h0, alpha, alternative)
+      rst.list = farmTestFac(X, fX, h0, alpha, alternative)
+      if (sum(rst.list$significant) > 0) {
+        reject = which(rst.list$significant == 1)
+      }
+      output = list(means = rst.list$means, stdDev = rst.list$stdDev, loadings = rst.list$loadings,
+                    nfactors = rst.list$nfactors, tStat = rst.list$tStat, pValues = rst.list$pValues,
+                    significant = rst.list$significant, reject = reject, type = "known", h0 = h0, 
+                    alpha = alpha, alternative = alternative)
     }
   } else if (is.null(Y) && is.null(fX)) {
     if (KX > p) {
       stop("KX must be smaller than number of columns of X")
     } else {
-      output = farmTest(X, h0, KX, alpha, alternative)
+      rst.list = farmTest(X, h0, KX, alpha, alternative)
+      if (sum(rst.list$significant) > 0) {
+        reject = which(rst.list$significant == 1)
+      }
+      output = list(means = rst.list$means, stdDev = rst.list$stdDev, loadings = rst.list$loadings,
+                    nfactors = rst.list$nfactors, tStat = rst.list$tStat, pValues = rst.list$pValues,
+                    significant = rst.list$significant, reject = reject, type = "unknown", h0 = h0, 
+                    alpha = alpha, alternative = alternative)
     }
   } else if (!is.null(Y) && !is.null(fX)) {
     if (ncol(X) != ncol(Y)) {
@@ -95,7 +108,17 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
     } else if (nrow(fY) != nrow(Y)) {
       stop("Number of rows of Y and fY must be the same")
     } else {
-      output = farmTestTwoFac(X, fX, Y, fY, h0, alpha, alternative)
+      rst.list = farmTestTwoFac(X, fX, Y, fY, h0, alpha, alternative)
+      if (sum(rst.list$significant) > 0) {
+        reject = which(rst.list$significant == 1)
+      }
+      means = list(X.mean = rst.list$meansX, Y.mean = rst.list$meansY)
+      stdDev = list(X.stdDev = rst.list$stdDevX, Y.stdDev = rst.list$stdDevY)
+      loadings = list(X.loadings = rst.list$loadingsX, Y.loadings = rst.list$loadingsY)
+      nfactors = list(X.nfactors = rst.list$nfactorsX, Y.nfactors = rst.list$nfactorsY)
+      output = list(means = means, stdDev = stdDev, loadings = loadings, nfactors = nfactors, 
+                    tStat = rst.list$tStat, pValues = rst.list$pValues, significant = rst.list$significant, 
+                    reject = reject, type = "known", h0 = h0, alpha = alpha, alternative = alternative)
     }
   } else {
     if (ncol(X) != ncol(Y)) {
@@ -105,7 +128,17 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
     } else if (KX > p || KY > p) {
       stop("KX and KY must be smaller than number of columns of X and Y")
     } else {
-      output = farmTestTwo(X, Y, h0, KX, KY, alpha, alternative)
+      rst.list = farmTestTwo(X, Y, h0, KX, KY, alpha, alternative)
+      if (sum(rst.list$significant) > 0) {
+        reject = which(rst.list$significant == 1)
+      }
+      means = list(X.mean = rst.list$meansX, Y.mean = rst.list$meansY)
+      stdDev = list(X.stdDev = rst.list$stdDevX, Y.stdDev = rst.list$stdDevY)
+      loadings = list(X.loadings = rst.list$loadingsX, Y.loadings = rst.list$loadingsY)
+      nfactors = list(X.nfactors = rst.list$nfactorsX, Y.nfactors = rst.list$nfactorsY)
+      output = list(means = means, stdDev = stdDev, loadings = loadings, nfactors = nfactors, 
+                    tStat = rst.list$tStat, pValues = rst.list$pValues, significant = rst.list$significant, 
+                    reject = reject, type = "unknown", h0 = h0, alpha = alpha, alternative = alternative)
     } 
   }
   attr(output, "class") = "farm.test"

@@ -241,7 +241,7 @@ Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const d
   arma::vec eigenVal;
   arma::mat eigenVec;
   arma::eig_sym(eigenVal, eigenVec, sigmaHat);
-  if (K < 0) {
+  if (K <= 0) {
     K = estK(eigenVal, n, p);
   }
   arma::mat B(p, K);
@@ -260,12 +260,11 @@ Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const d
   sigma = arma::sqrt(sigma / n);
   arma::vec T = (mu - h0) / sigma;
   arma::vec Prob = getP(T, alternative);
-  arma::uvec reject = getRej(Prob, alpha, p);
+  arma::uvec significant = getRej(Prob, alpha, p);
   return Rcpp::List::create(Rcpp::Named("means") = mu, Rcpp::Named("stdDev") = sigma,
-                            Rcpp::Named("loadings") = B, Rcpp::Named("tStat") = T, 
-                            Rcpp::Named("pValues") = Prob, Rcpp::Named("reject") = reject, 
-                            Rcpp::Named("alpha") = alpha, Rcpp::Named("nfactors") = K, 
-                            Rcpp::Named("alternative") = alternative);
+                            Rcpp::Named("loadings") = B, Rcpp::Named("nfactors") = K, 
+                            Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, 
+                            Rcpp::Named("significant") = significant);
 }
 
 // [[Rcpp::export]]
@@ -279,7 +278,7 @@ Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& 
   arma::vec eigenVal;
   arma::mat eigenVec;
   arma::eig_sym(eigenVal, eigenVec, sigmaHat);
-  if (KX < 0) {
+  if (KX <= 0) {
     KX = estK(eigenVal, nX, p);
   }
   arma::mat BX(p, KX);
@@ -293,7 +292,7 @@ Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& 
   sigmaHat = Rcpp::as<arma::mat>(listCov["cov"]);
   arma::vec sigmaY = sigmaHat.diag();
   arma::eig_sym(eigenVal, eigenVec, sigmaHat);
-  if (KY < 0) {
+  if (KY <= 0) {
     KY = estK(eigenVal, nY, p);
   }
   arma::mat BY(p, KY);
@@ -318,14 +317,13 @@ Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& 
   sigmaX = arma::sqrt(sigmaX / nX);
   sigmaY = arma::sqrt(sigmaY / nY);
   arma::vec Prob = getP(T, alternative);
-  arma::uvec reject = getRej(Prob, alpha, p);
+  arma::uvec significant = getRej(Prob, alpha, p);
   return Rcpp::List::create(Rcpp::Named("meansX") = muX, Rcpp::Named("meansY") = muY, 
                             Rcpp::Named("stdDevX") = sigmaX, Rcpp::Named("stdDevY") = sigmaY,
-                            Rcpp::Named("loadingsX") = BX, Rcpp::Named("loadingsY") = BY, 
-                            Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, 
-                            Rcpp::Named("reject") = reject, Rcpp::Named("alpha") = alpha, 
+                            Rcpp::Named("loadingsX") = BX, Rcpp::Named("loadingsY") = BY,
                             Rcpp::Named("nfactorsX") = KX, Rcpp::Named("nfactorsY") = KY,
-                            Rcpp::Named("alternative") = alternative);
+                            Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, 
+                            Rcpp::Named("significant") = significant);
 }
 
 // [[Rcpp::export]]
@@ -335,10 +333,12 @@ Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, const arma::vec
   arma::mat Sigma = arma::sqrtmat_sympd(arma::cov(fac));
   arma::vec mu(p), sigma(p);
   arma::vec theta, beta;
+  arma::mat B(p, K);
   for (int j = 0; j < p; j++) {
     theta = huberRegItcp(fac, X.col(j), n, K);
     mu(j) = theta(0);
     beta = theta.rows(1, K);
+    B.row(j) = beta.t();
     double sig = huberMean(arma::square(X.col(j)), n);
     double temp = mu(j) * mu(j);
     if (sig > temp) {
@@ -353,11 +353,11 @@ Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, const arma::vec
   sigma = arma::sqrt(sigma / n);
   arma::vec T = (mu - h0) / sigma;
   arma::vec Prob = getP(T, alternative);
-  arma::uvec reject = getRej(Prob, alpha, p);
+  arma::uvec significant = getRej(Prob, alpha, p);
   return Rcpp::List::create(Rcpp::Named("means") = mu, Rcpp::Named("stdDev") = sigma,
+                            Rcpp::Named("loadings") = B, Rcpp::Named("nfactors") = K,
                             Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, 
-                            Rcpp::Named("reject") = reject, Rcpp::Named("alpha") = alpha, 
-                            Rcpp::Named("alternative") = alternative);
+                            Rcpp::Named("significant") = significant);
 }
 
 // [[Rcpp::export]]
@@ -369,10 +369,12 @@ Rcpp::List farmTestTwoFac(const arma::mat& X, const arma::mat& facX, const arma:
   arma::mat SigmaY = arma::sqrtmat_sympd(arma::cov(facY));
   arma::vec muX(p), sigmaX(p), muY(p), sigmaY(p);
   arma::vec theta, beta;
+  arma::mat BX(p, KX), BY(p, KY);
   for (int j = 0; j < p; j++) {
     theta = huberRegItcp(facX, X.col(j), nX, KX);
     muX(j) = theta(0);
     beta = theta.rows(1, KX);
+    BX.row(j) = beta.t();
     double sig = huberMean(arma::square(X.col(j)), nX);
     double temp = muX(j) * muX(j);
     if (sig > temp) {
@@ -386,6 +388,7 @@ Rcpp::List farmTestTwoFac(const arma::mat& X, const arma::mat& facX, const arma:
     theta = huberRegItcp(facY, Y.col(j), nY, KY);
     muY(j) = theta(0);
     beta = theta.rows(1, KY);
+    BY.row(j) = beta.t();
     sig = huberMean(arma::square(Y.col(j)), nY);
     temp = muY(j) * muY(j);
     if (sig > temp) {
@@ -401,10 +404,11 @@ Rcpp::List farmTestTwoFac(const arma::mat& X, const arma::mat& facX, const arma:
   sigmaY = arma::sqrt(sigmaY / nY);
   arma::vec T = (muX - muY - h0) / arma::sqrt(sigmaX / nX + sigmaY / nY);
   arma::vec Prob = getP(T, alternative);
-  arma::uvec reject = getRej(Prob, alpha, p);
+  arma::uvec significant = getRej(Prob, alpha, p);
   return Rcpp::List::create(Rcpp::Named("meansX") = muX, Rcpp::Named("meansY") = muY, 
                             Rcpp::Named("stdDevX") = sigmaX, Rcpp::Named("stdDevY") = sigmaY,
+                            Rcpp::Named("loadingsX") = BX, Rcpp::Named("loadingsY") = BY,
+                            Rcpp::Named("nfactorsX") = KX, Rcpp::Named("nfactorsY") = KY,
                             Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, 
-                            Rcpp::Named("reject") = reject, Rcpp::Named("alpha") = alpha, 
-                            Rcpp::Named("alternative") = alternative);
+                            Rcpp::Named("significant") = significant);
 }
