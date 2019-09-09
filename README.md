@@ -10,7 +10,7 @@ FarmTest includes a robust procedure to estimate distribution parameters and acc
 
 ## Main updates 
 
-FarmTest introduces a robustification parameter *&tau;* while estimating mean and covariance of data sample. In the previous version, the value of *&tau;* is determined by cross-validation. Recently, motivated by the work of [Wang et al., 2018](https://www.math.ucsd.edu/~wez243/Tuning_Free.pdf) and [Ke et al., 2019](https://arxiv.org/abs/1811.01520), estimation of mean and covariance can be completed via a tuning-free principle, so that cross-validation, which used to be computationally expensive, can be avoided without lossing estimation accuracy or stability of the algorithm.
+FarmTest introduces a robustification parameter *&tau;* while estimating mean and covariance of data sample. In the previous version, the value of *&tau;* is either specified by users or determined by cross-validation. Recently, motivated by the work of [Wang et al., 2018](https://www.math.ucsd.edu/~wez243/Tuning_Free.pdf) and [Ke et al., 2019](https://arxiv.org/abs/1811.01520), estimation of mean and covariance can be completed via a tuning-free principle, so that cross-validation, which was computationally expensive, can be avoided without lossing estimation accuracy or stability of the algorithm.
 
 ## Installation
 
@@ -49,7 +49,38 @@ There are three functions in this package:
 * `farm.mean`: Tuning-free Huber mean estimation.
 * `farm.cov`: Tuning-free Huber-type covariance estimation.
 
-## FarmTest 
+## Testing examples
+
+Here we generate data from factor model *X = &mu; + Bf + &epsilon;* with 3 factors. Our data has sample size 50 and dimensionality 100. The first five means are set to 1, while the other ones are 0.
+
+```r
+library(FarmTest)
+n = 50
+p = 100
+K = 3
+muX = rep(0, p)
+muX[1:5] = 1
+set.seed(2019)
+epsilonX = matrix(rnorm(p * n, 0, 1), nrow = n)
+BX = matrix(runif(p * K, -2, 2), nrow = p)
+fX = matrix(rnorm(K * n, 0, 1), nrow = n)
+X = rep(1, n) %*% t(muX) + fX %*% t(BX) + epsilonX
+```
+
+Then we conduct FarmTest for *&mu; = 0* with a two-sided alternative hypothesis, *&alpha;* level is 0.05. Factor matrix is unknown, and the number of factors will be internally estimated. 
+
+```r
+output = farm.test(X)
+```
+
+We can check the results by extracting the indices that it rejects, p-values, estimated number of factors, estimated means and so on.
+
+```r
+output$reject
+output$pValues
+output$nfactors
+output$means
+```
 
 ## Notes 
 
