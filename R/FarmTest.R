@@ -43,7 +43,7 @@ farm.cov = function(X) {
 }
 
 #' @title Factor-adjusted robust multiple testing
-#' @description This function conducts factor-adjusted robust multiple testing (FarmTest) for means of multivariate data proposed in Fan et al. (2019).
+#' @description This function conducts factor-adjusted robust multiple testing (FarmTest) for means of multivariate data proposed in Fan et al. (2019) via a tuning-free procedure.
 #' @param X An \eqn{n} by \eqn{p} data matrix with each row being a sample.
 #' @param fX An \strong{optional} factor matrix with each column being a factor for \code{X}. The number of rows of \code{fX} and \code{X} must be the same.
 #' @param KX An \strong{optional} positive number of factors to be estimated for \code{X} when \code{fX} is not specified. \code{KX} cannot exceed the number of columns of \code{X}. If \code{KX} is not specified, it will be estimated internally.
@@ -64,11 +64,13 @@ farm.cov = function(X) {
 #' \item \code{significant} Boolean values indicating whether each test is significant, with 1 for significant and 0 for non-significant, a vector with length \eqn{p}.
 #' \item \code{reject} Indices of tests that are rejected. It will show "no hypotheses rejected" if none of the tests are rejects.
 #' \item \code{type} Indicates whether factor is known or unknown.
+#' \item \code{n} Sample size.
+#' \item \code{p} Data dimension.
 #' \item \code{h0} Null hypothesis, a vector with length \eqn{p}.
 #' \item \code{alpha} Alpha value.
 #' \item \code{alternative} Althernative hypothesis.
 #' }
-#' @details For two-sample FarmTest, \code{means}, \code{stdDev}, \code{loadings} and \code{nfactors} will be returned as lists of items for sample X and Y separately.
+#' @details For two-sample FarmTest, \code{means}, \code{stdDev}, \code{loadings}, \code{nfactors} and \code{n} will be lists of items for sample X and Y separately.
 #' @details \code{alternative = "greater"} is the alternative that \eqn{\mu > \mu_0} for one-sample test or \eqn{\mu_X > \mu_Y} for two-sample test.
 #' @references Fan, J., Ke, Y., Sun, Q. and Zhou, W-X. (2019). FarmTest: Factor-adjusted robust multiple testing with approximate false discovery control. J. Amer. Statist. Assoc., to appear.
 #' @references Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.
@@ -126,8 +128,8 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       }
       output = list(means = rst.list$means, stdDev = rst.list$stdDev, loadings = rst.list$loadings,
                     nfactors = rst.list$nfactors, tStat = rst.list$tStat, pValues = rst.list$pValues,
-                    significant = rst.list$significant, reject = reject, type = "known", h0 = h0, 
-                    alpha = alpha, alternative = alternative)
+                    significant = rst.list$significant, reject = reject, type = "known", n = nrow(X),
+                    p = p, h0 = h0, alpha = alpha, alternative = alternative)
     }
   } else if (is.null(Y) && is.null(fX)) {
     if (KX > p) {
@@ -139,8 +141,8 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       }
       output = list(means = rst.list$means, stdDev = rst.list$stdDev, loadings = rst.list$loadings,
                     nfactors = rst.list$nfactors, tStat = rst.list$tStat, pValues = rst.list$pValues,
-                    significant = rst.list$significant, reject = reject, type = "unknown", h0 = h0, 
-                    alpha = alpha, alternative = alternative)
+                    significant = rst.list$significant, reject = reject, type = "unknown", n = nrow(X),
+                    p = p, h0 = h0, alpha = alpha, alternative = alternative)
     }
   } else if (!is.null(Y) && !is.null(fX)) {
     if (ncol(X) != ncol(Y)) {
@@ -160,9 +162,10 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       stdDev = list(X.stdDev = rst.list$stdDevX, Y.stdDev = rst.list$stdDevY)
       loadings = list(X.loadings = rst.list$loadingsX, Y.loadings = rst.list$loadingsY)
       nfactors = list(X.nfactors = rst.list$nfactorsX, Y.nfactors = rst.list$nfactorsY)
+      n = list(X.n = nrow(X), Y.n = nrow(Y))
       output = list(means = means, stdDev = stdDev, loadings = loadings, nfactors = nfactors, 
                     tStat = rst.list$tStat, pValues = rst.list$pValues, significant = rst.list$significant, 
-                    reject = reject, type = "known", h0 = h0, alpha = alpha, alternative = alternative)
+                    reject = reject, type = "known", n = n, p = p, h0 = h0, alpha = alpha, alternative = alternative)
     }
   } else {
     if (ncol(X) != ncol(Y)) {
@@ -180,9 +183,10 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       stdDev = list(X.stdDev = rst.list$stdDevX, Y.stdDev = rst.list$stdDevY)
       loadings = list(X.loadings = rst.list$loadingsX, Y.loadings = rst.list$loadingsY)
       nfactors = list(X.nfactors = rst.list$nfactorsX, Y.nfactors = rst.list$nfactorsY)
+      n = list(X.n = nrow(X), Y.n = nrow(Y))
       output = list(means = means, stdDev = stdDev, loadings = loadings, nfactors = nfactors, 
                     tStat = rst.list$tStat, pValues = rst.list$pValues, significant = rst.list$significant, 
-                    reject = reject, type = "unknown", h0 = h0, alpha = alpha, alternative = alternative)
+                    reject = reject, type = "unknown", n = n, p = p, h0 = h0, alpha = alpha, alternative = alternative)
     } 
   }
   attr(output, "class") = "farm.test"

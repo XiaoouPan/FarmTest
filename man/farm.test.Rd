@@ -39,16 +39,18 @@ An object with S3 class \code{farm.test} containing:
 \item \code{significant} Boolean values indicating whether each test is significant, with 1 for significant and 0 for non-significant, a vector with length \eqn{p}.
 \item \code{reject} Indices of tests that are rejected. It will show "no hypotheses rejected" if none of the tests are rejects.
 \item \code{type} Indicates whether factor is known or unknown.
+\item \code{n} Sample size.
+\item \code{p} Data dimension.
 \item \code{h0} Null hypothesis, a vector with length \eqn{p}.
 \item \code{alpha} Alpha value.
 \item \code{alternative} Althernative hypothesis.
 }
 }
 \description{
-This function conducts factor-adjusted robust multiple testing (FarmTest) for means of multivariate data proposed in Fan et al. (2019).
+This function conducts factor-adjusted robust multiple testing (FarmTest) for means of multivariate data proposed in Fan et al. (2019) via a tuning-free procedure.
 }
 \details{
-For two-sample FarmTest, \code{means}, \code{stdDev}, \code{loadings} and \code{nfactors} will be returned as lists of items for sample X and Y separately.
+For two-sample FarmTest, \code{means}, \code{stdDev}, \code{loadings}, \code{nfactors} and \code{n} will be lists of items for sample X and Y separately.
 
 \code{alternative = "greater"} is the alternative that \eqn{\mu > \mu_0} for one-sample test or \eqn{\mu_X > \mu_Y} for two-sample test.
 }
@@ -63,9 +65,12 @@ epsilonX = matrix(rnorm(p * n, 0, 1), nrow = n)
 BX = matrix(runif(p * K, -2, 2), nrow = p)
 fX = matrix(rnorm(K * n, 0, 1), nrow = n)
 X = rep(1, n) \%*\% t(muX) + fX \%*\% t(BX) + epsilonX
+# One-sample FarmTest with two sided alternative
 output = farm.test(X)
 output$reject
+# One-sample FarmTest with one sided alternative
 output = farm.test(X, alternative = "less")
+# One-sample FarmTest with known factors
 output = farm.test(X, fX = fX)
 
 # Two-sample FarmTest
