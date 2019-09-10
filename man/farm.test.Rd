@@ -33,7 +33,7 @@ An object with S3 class \code{farm.test} containing:
 \item \code{means} Estimated means, a vector with length \eqn{p}.
 \item \code{stdDev} Estimated standard deviations, a vector with length \eqn{p}.
 \item \code{loadings} Estimated factor loadings, a matrix with dimension \eqn{p} by \eqn{K}, where \eqn{K} is the number of factos.
-\item \code{nfactors} Estimated number of factors, a positive integer.
+\item \code{nFactors} Estimated number of factors, a positive integer.
 \item \code{tStat} Values of test statistics, a vector with length \eqn{p}.
 \item \code{pValues} P-values of tests, a vector with length \eqn{p}.
 \item \code{significant} Boolean values indicating whether each test is significant, with 1 for significant and 0 for non-significant, a vector with length \eqn{p}.

@@ -58,7 +58,7 @@ farm.cov = function(X) {
 #' \item \code{means} Estimated means, a vector with length \eqn{p}.
 #' \item \code{stdDev} Estimated standard deviations, a vector with length \eqn{p}.
 #' \item \code{loadings} Estimated factor loadings, a matrix with dimension \eqn{p} by \eqn{K}, where \eqn{K} is the number of factos.
-#' \item \code{nfactors} Estimated number of factors, a positive integer.
+#' \item \code{nFactors} Estimated number of factors, a positive integer.
 #' \item \code{tStat} Values of test statistics, a vector with length \eqn{p}.
 #' \item \code{pValues} P-values of tests, a vector with length \eqn{p}.
 #' \item \code{significant} Boolean values indicating whether each test is significant, with 1 for significant and 0 for non-significant, a vector with length \eqn{p}.
@@ -127,7 +127,7 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
         reject = which(rst.list$significant == 1)
       }
       output = list(means = rst.list$means, stdDev = rst.list$stdDev, loadings = rst.list$loadings,
-                    nfactors = rst.list$nfactors, tStat = rst.list$tStat, pValues = rst.list$pValues,
+                    nFactors = rst.list$nfactors, tStat = rst.list$tStat, pValues = rst.list$pValues,
                     significant = rst.list$significant, reject = reject, type = "known", n = nrow(X),
                     p = p, h0 = h0, alpha = alpha, alternative = alternative)
     }
@@ -140,7 +140,7 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
         reject = which(rst.list$significant == 1)
       }
       output = list(means = rst.list$means, stdDev = rst.list$stdDev, loadings = rst.list$loadings,
-                    nfactors = rst.list$nfactors, tStat = rst.list$tStat, pValues = rst.list$pValues,
+                    nFactors = rst.list$nfactors, tStat = rst.list$tStat, pValues = rst.list$pValues,
                     significant = rst.list$significant, reject = reject, type = "unknown", n = nrow(X),
                     p = p, h0 = h0, alpha = alpha, alternative = alternative)
     }
@@ -161,9 +161,9 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       means = list(X.mean = rst.list$meansX, Y.mean = rst.list$meansY)
       stdDev = list(X.stdDev = rst.list$stdDevX, Y.stdDev = rst.list$stdDevY)
       loadings = list(X.loadings = rst.list$loadingsX, Y.loadings = rst.list$loadingsY)
-      nfactors = list(X.nfactors = rst.list$nfactorsX, Y.nfactors = rst.list$nfactorsY)
+      nfactors = list(X.nFactors = rst.list$nfactorsX, Y.nFactors = rst.list$nfactorsY)
       n = list(X.n = nrow(X), Y.n = nrow(Y))
-      output = list(means = means, stdDev = stdDev, loadings = loadings, nfactors = nfactors, 
+      output = list(means = means, stdDev = stdDev, loadings = loadings, nFactors = nfactors, 
                     tStat = rst.list$tStat, pValues = rst.list$pValues, significant = rst.list$significant, 
                     reject = reject, type = "known", n = n, p = p, h0 = h0, alpha = alpha, alternative = alternative)
     }
@@ -182,9 +182,9 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       means = list(X.mean = rst.list$meansX, Y.mean = rst.list$meansY)
       stdDev = list(X.stdDev = rst.list$stdDevX, Y.stdDev = rst.list$stdDevY)
       loadings = list(X.loadings = rst.list$loadingsX, Y.loadings = rst.list$loadingsY)
-      nfactors = list(X.nfactors = rst.list$nfactorsX, Y.nfactors = rst.list$nfactorsY)
+      nfactors = list(X.nFactors = rst.list$nfactorsX, Y.nFactors = rst.list$nfactorsY)
       n = list(X.n = nrow(X), Y.n = nrow(Y))
-      output = list(means = means, stdDev = stdDev, loadings = loadings, nfactors = nfactors, 
+      output = list(means = means, stdDev = stdDev, loadings = loadings, nFactors = nfactors, 
                     tStat = rst.list$tStat, pValues = rst.list$pValues, significant = rst.list$significant, 
                     reject = reject, type = "unknown", n = n, p = p, h0 = h0, alpha = alpha, alternative = alternative)
     } 
