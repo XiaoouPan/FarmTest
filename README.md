@@ -80,7 +80,7 @@ We can check the results by extracting the indices that it rejects, p-values, es
 ```r
 output$reject
 output$pValues
-output$nfactors
+output$nFactors
 output$means
 ```
 
@@ -143,7 +143,7 @@ X = matrix(rt(n * d, df = 3), n, d) / sqrt(3)
 huberCov = farm.cov(X)
 ```
 
-To get big pictures of these two estimators, users can run 200 independent Monte Carlo simulation and compare them with sample mean and covariance matrix produced by `mean` and `cov` functions. 
+To get big pictures of these two estimators, users can run 200 independent Monte Carlo simulation as above and compare them with sample mean and covariance matrix produced by `mean` and `cov` functions. 
 
 ## Notes 
 

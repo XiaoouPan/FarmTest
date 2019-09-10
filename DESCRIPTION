@@ -9,7 +9,7 @@ Maintainer: Xiaoou Pan <xip024@ucsd.edu>,
             Yuan Ke <Yuan.Ke@uga.edu>,
             Wen-Xin Zhou <wez243@ucsd.edu>
 Description: This package performs robust multiple testing for means in the presence of known and unknown latent factors. 
-             It implements a robust procedure to estimate distribution parameters using Huber loss function and accounts for strong dependence among coordinates via an approximate factor model. 
+             It implements a robust procedure to estimate distribution parameters using Huber loss function with a tuning-free principle and accounts for strong dependence among coordinates via an approximate factor model. 
              This method is particularly suitable for high dimensional data when there are many variables but only a small number of observations available. 
              Moreover, the method is tailored to cases when the underlying distribution deviates from Gaussian, which is commonly assumed in the literature. 
              Besides the results of hypotheses testing, the estimated underlying factors and diagnostic plots are also output. 
