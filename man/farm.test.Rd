@@ -67,7 +67,6 @@ fX = matrix(rnorm(K * n, 0, 1), nrow = n)
 X = rep(1, n) \%*\% t(muX) + fX \%*\% t(BX) + epsilonX
 # One-sample FarmTest with two sided alternative
 output = farm.test(X)
-output$reject
 # One-sample FarmTest with one sided alternative
 output = farm.test(X, alternative = "less")
 # One-sample FarmTest with known factors
@@ -88,4 +87,7 @@ Fan, J., Ke, Y., Sun, Q. and Zhou, W-X. (2019). FarmTest: Factor-adjusted robust
 Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.
 
 Zhou, W-X., Bose, K., Fan, J. and Liu, H. (2018). A new perspective on robust M-estimation: Finite sample theory and applications to dependence-adjusted multiple testing. Ann. Statist. 46 1904-1931.
+}
+\seealso{
+\code{\link{print.farm.test}}
 }

@@ -91,6 +91,7 @@ farm.cov = function(X) {
 #' @references Fan, J., Ke, Y., Sun, Q. and Zhou, W-X. (2019). FarmTest: Factor-adjusted robust multiple testing with approximate false discovery control. J. Amer. Statist. Assoc., to appear.
 #' @references Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.
 #' @references Zhou, W-X., Bose, K., Fan, J. and Liu, H. (2018). A new perspective on robust M-estimation: Finite sample theory and applications to dependence-adjusted multiple testing. Ann. Statist. 46 1904-1931.
+#' @seealso \code{\link{print.farm.test}}
 #' @examples 
 #' n = 50
 #' p = 100
@@ -104,7 +105,6 @@ farm.cov = function(X) {
 #' X = rep(1, n) %*% t(muX) + fX %*% t(BX) + epsilonX
 #' # One-sample FarmTest with two sided alternative
 #' output = farm.test(X)
-#' output$reject
 #' # One-sample FarmTest with one sided alternative
 #' output = farm.test(X, alternative = "less")
 #' # One-sample FarmTest with known factors
@@ -207,4 +207,42 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
   }
   attr(output, "class") = "farm.test"
   return (output)
+}
+
+#' @title Summarize and print the results of FarmTest
+#' @description Print function for objects with class "\code{farm.test}".
+#' @param x A \code{farm.test} object.
+#' @return A general summary of FarmTest will be displayed.
+#' @seealso \code{\link{farm.test}}
+#' @examples 
+#' n = 50
+#' p = 100
+#' K = 3
+#' muX = rep(0, p)
+#' muX[1:5] = 2
+#' set.seed(2019)
+#' epsilonX = matrix(rnorm(p * n, 0, 1), nrow = n)
+#' BX = matrix(runif(p * K, -2, 2), nrow = p)
+#' fX = matrix(rnorm(K * n, 0, 1), nrow = n)
+#' X = rep(1, n) %*% t(muX) + fX %*% t(BX) + epsilonX
+#' output = farm.test(X)
+#' output
+#' @export
+print.farm.test = function(x) {
+  if (x$type == "known" && length(x$n) == 1) {
+    cat(paste("One-sample FarmTest with known factors \n"))
+    cat(paste("n = ", x$n, ", p = ", x$p, ", nFactors = ", x$nFactors, "\n", sep = ""))
+  } else if (x$type == "known" && length(x$n) == 2) {
+    cat(paste("Two-sample FarmTest with known factors \n"))
+    cat(paste("X.n = ", x$n$X.n, ", Y.n = ", x$n$Y.n, ", p = ", x$p, ", X.nFactors = ", x$nFactors$X.nFactors, ", Y.nFactors = ", x$nFactors$Y.nFactors, "\n", sep = ""))
+  } else if (x$type == "unknown" && length(x$n) == 1) {
+    cat(paste("One-sample FarmTest with unknown factors \n"))
+    cat(paste("n = ", x$n, ", p = ", x$p, ", nFactors = ", x$nFactors, "\n", sep = ""))
+  } else {
+    cat(paste("Two-sample FarmTest with unknown factors \n"))
+    cat(paste("X.n = ", x$n$X.n, ", Y.n = ", x$n$Y.n, ", p = ", x$p, ", X.nFactors = ", x$nFactors$X.nFactors, ", Y.nFactors = ", x$nFactors$Y.nFactors, "\n", sep = ""))
+  }
+  cat(paste("FDR to be controlled at: ", x$alpha, "\n", sep = ""))
+  cat(paste("Alternative hypothesis: ",  x$alternative, "\n", sep = ""))
+  cat(paste("Hypothesis rejected: ", paste(test.list$reject, collapse = " "), "\n", sep = ""))
 }
