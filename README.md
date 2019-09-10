@@ -45,9 +45,10 @@ The package `FarmTest` is implemented in `Rcpp` and `RcppArmadillo`, so the foll
 
 ## Functions
 
-There are three functions in this package:
+There are four functions in this package:
 
 * `farm.test`: Factor-adjusted robust multiple testing.
+* `print.farm.test`: Print function for output of `farm.test`.
 * `farm.mean`: Tuning-free Huber mean estimation.
 * `farm.cov`: Tuning-free Huber-type covariance estimation.
 
@@ -75,13 +76,9 @@ Then we conduct FarmTest for *&mu; = 0* with a two-sided alternative hypothesis,
 output = farm.test(X)
 ```
 
-We can check the results by extracting the indices that it rejects, p-values, estimated number of factors, estimated means and so on.
-
+The package includes a `print.farm.test` function, which will summarize the results of `farm.test`: 
 ```r
-output$reject
-output$pValues
-output$nFactors
-output$means
+output
 ```
 
 To get a comprehensive impression of the performance, we repeat the above experiment for 100 times and report the average values of true positive rate (TPR), false positive rate (FPR) and false discover rate (FDR). These results can be easily reproduced.
