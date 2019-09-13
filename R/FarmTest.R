@@ -244,5 +244,5 @@ print.farm.test = function(x) {
   }
   cat(paste("FDR to be controlled at: ", x$alpha, "\n", sep = ""))
   cat(paste("Alternative hypothesis: ",  x$alternative, "\n", sep = ""))
-  cat(paste("Hypothesis rejected: ", paste(test.list$reject, collapse = " "), "\n", sep = ""))
+  cat(paste("Hypothesis rejected: ", paste(x$reject, collapse = " "), "\n", sep = ""))
 }
