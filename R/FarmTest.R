@@ -73,7 +73,7 @@ farm.cov = function(X) {
 #' \itemize{
 #' \item \code{means} Estimated means, a vector with length \eqn{p}.
 #' \item \code{stdDev} Estimated standard deviations, a vector with length \eqn{p}.
-#' \item \code{loadings} Estimated factor loadings, a matrix with dimension \eqn{p} by \eqn{K}, where \eqn{K} is the number of factos.
+#' \item \code{loadings} Estimated factor loadings, a matrix with dimension \eqn{p} by \eqn{K}, where \eqn{K} is the number of factors.
 #' \item \code{nFactors} Estimated or input number of factors, a positive integer.
 #' \item \code{tStat} Values of test statistics, a vector with length \eqn{p}.
 #' \item \code{pValues} P-values of tests, a vector with length \eqn{p}.
