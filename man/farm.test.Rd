@@ -28,12 +28,12 @@ farm.test(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1,
 \item{alpha}{An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.}
 }
 \value{
-An object with S3 class \code{farm.test} containing:
+An object with S3 class \code{farm.test} containing the following items will be returned:
 \itemize{
 \item \code{means} Estimated means, a vector with length \eqn{p}.
 \item \code{stdDev} Estimated standard deviations, a vector with length \eqn{p}.
 \item \code{loadings} Estimated factor loadings, a matrix with dimension \eqn{p} by \eqn{K}, where \eqn{K} is the number of factos.
-\item \code{nFactors} Estimated number of factors, a positive integer.
+\item \code{nFactors} Estimated or input number of factors, a positive integer.
 \item \code{tStat} Values of test statistics, a vector with length \eqn{p}.
 \item \code{pValues} P-values of tests, a vector with length \eqn{p}.
 \item \code{significant} Boolean values indicating whether each test is significant, with 1 for significant and 0 for non-significant, a vector with length \eqn{p}.
