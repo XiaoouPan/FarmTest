@@ -217,6 +217,9 @@ arma::uvec getRej(const arma::vec& Prob, const double alpha, const int p) {
 }
 
 int estK(const arma::vec& eigenVal, const int n, const int p) {
+  if (std::min(n, p) < 4) {
+    return std::min(n, p);
+  }
   int len = std::min(n, p) >> 1;
   double comp = eigenVal(p - 1) / eigenVal(p - 2);
   int K = 1;
