@@ -39,9 +39,11 @@ The package `FarmTest` is implemented in `Rcpp` and `RcppArmadillo`, so the foll
 
 * Error: "library not found for -lgfortran/-lquadmath": It means your gfortran binaries are out of date. This is a common environment specific issue. 
 
-    1. In R 3.0.0 - R 3.3.0: Upgrading to R 3.4 is strongly recommended. Then go to the next step. Alternatively, you can try the instructions [here](http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/).
+  1. In R 3.0.0 - R 3.3.0: Upgrading to R 3.4 is strongly recommended. Then go to the next step. Alternatively, you can try the instructions [here](http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/).
 
-    2. For >= R 3.4.* : download the installer [here](https://gcc.gnu.org/wiki/GFortranBinaries#MacOS). Then run the installer.
+  2. For R version >= 3.4.* : download the installer [here](https://gcc.gnu.org/wiki/GFortranBinaries#MacOS). Then run the installer.
+    
+* Error: "cannot remove prior installation of package 'Rcpp'": This issue happens occasionally when you have installed an old version of package `Rcpp` before. Updating `Rcpp` with command `install.packages("Rcpp")` will solve the problem.
 
 ## Functions
 
