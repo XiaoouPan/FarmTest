@@ -267,7 +267,7 @@ Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const d
   return Rcpp::List::create(Rcpp::Named("means") = mu, Rcpp::Named("stdDev") = sigma,
                             Rcpp::Named("loadings") = B, Rcpp::Named("nfactors") = K, 
                             Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, 
-                            Rcpp::Named("significant") = significant);
+                            Rcpp::Named("significant") = significant, Rcpp::Named("eigens") = eigenVal);
 }
 
 // [[Rcpp::export]]
@@ -278,15 +278,15 @@ Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& 
   arma::vec muX = listCov["means"];
   arma::mat sigmaHat = listCov["cov"];
   arma::vec sigmaX = sigmaHat.diag();
-  arma::vec eigenVal;
+  arma::vec eigenValX, eigenValY;
   arma::mat eigenVec;
-  arma::eig_sym(eigenVal, eigenVec, sigmaHat);
+  arma::eig_sym(eigenValX, eigenVec, sigmaHat);
   if (KX <= 0) {
-    KX = estK(eigenVal, nX, p);
+    KX = estK(eigenValX, nX, p);
   }
   arma::mat BX(p, KX);
   for (int i = 1; i <= KX; i++) {
-    double lambda = std::sqrt((long double)std::max(eigenVal(p - i), 0.0));
+    double lambda = std::sqrt((long double)std::max(eigenValX(p - i), 0.0));
     BX.col(i - 1) = lambda * eigenVec.col(p - i);
   }
   arma::vec fX = huberReg(BX, arma::mean(X, 0).t(), p, KX);
@@ -294,13 +294,13 @@ Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& 
   arma::vec muY = listCov["means"];
   sigmaHat = Rcpp::as<arma::mat>(listCov["cov"]);
   arma::vec sigmaY = sigmaHat.diag();
-  arma::eig_sym(eigenVal, eigenVec, sigmaHat);
+  arma::eig_sym(eigenValY, eigenVec, sigmaHat);
   if (KY <= 0) {
-    KY = estK(eigenVal, nY, p);
+    KY = estK(eigenValY, nY, p);
   }
   arma::mat BY(p, KY);
   for (int i = 1; i <= KY; i++) {
-    double lambda = std::sqrt((long double)std::max(eigenVal(p - i), 0.0));
+    double lambda = std::sqrt((long double)std::max(eigenValY(p - i), 0.0));
     BY.col(i - 1) = lambda * eigenVec.col(p - i);
   }
   arma::vec fY = huberReg(BY, arma::mean(Y, 0).t(), p, KY);
@@ -326,7 +326,8 @@ Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& 
                             Rcpp::Named("loadingsX") = BX, Rcpp::Named("loadingsY") = BY,
                             Rcpp::Named("nfactorsX") = KX, Rcpp::Named("nfactorsY") = KY,
                             Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, 
-                            Rcpp::Named("significant") = significant);
+                            Rcpp::Named("significant") = significant, Rcpp::Named("eigensX") = eigenValX,
+                            Rcpp::Named("eigensY") = eigenValY);
 }
 
 // [[Rcpp::export]]
