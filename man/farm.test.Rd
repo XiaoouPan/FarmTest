@@ -42,7 +42,7 @@ An object with S3 class \code{farm.test} containing the following items will be 
 \item \code{n} Sample size.
 \item \code{p} Data dimension.
 \item \code{h0} Null hypothesis, a vector with length \eqn{p}.
-\item \code{alpha} Alpha value.
+\item \code{alpha} \eqn{\alpha} value.
 \item \code{alternative} Althernative hypothesis.
 }
 }

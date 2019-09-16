@@ -83,7 +83,7 @@ farm.cov = function(X) {
 #' \item \code{n} Sample size.
 #' \item \code{p} Data dimension.
 #' \item \code{h0} Null hypothesis, a vector with length \eqn{p}.
-#' \item \code{alpha} Alpha value.
+#' \item \code{alpha} \eqn{\alpha} value.
 #' \item \code{alternative} Althernative hypothesis.
 #' }
 #' @details For two-sample FarmTest, \code{means}, \code{stdDev}, \code{loadings}, \code{nfactors} and \code{n} will be lists of items for sample X and Y separately.
