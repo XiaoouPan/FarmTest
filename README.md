@@ -25,12 +25,6 @@ devtools::install_github("XiaoouPan/FarmTest")
 library(FarmTest)
 ```
 
-## Getting help
-
-Help on the functions can be accessed by typing `?`, followed by function name at the R command prompt. 
-
-For example, `?farm.test` will present a detailed documentation with inputs, outputs and examples of the function `farm.test`.
-
 ## Common error messages
 
 The package `FarmTest` is implemented in `Rcpp` and `RcppArmadillo`, so the following error messages might appear when you first install it (we'll keep updating common error messages with feedback from users):
@@ -53,6 +47,12 @@ There are four functions in this package:
 * `print.farm.test`: Print function for output of `farm.test`.
 * `farm.mean`: Tuning-free Huber mean estimation.
 * `farm.cov`: Tuning-free Huber-type covariance estimation.
+
+## Getting help
+
+Help on the functions can be accessed by typing `?`, followed by function name at the R command prompt. 
+
+For example, `?farm.test` will present a detailed documentation with inputs, outputs and examples of the function `farm.test`.
 
 ## Testing examples
 
