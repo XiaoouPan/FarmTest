@@ -125,16 +125,12 @@ Robust mean and covariance matrix estimation is not only an important step in th
 library(FarmTest)
 set.seed(1)
 n = 1000
-X = rlnorm(n, 0, 1.5) - exp(1.5^2 / 2)
+X = rlnorm(n, 0, 1.5)
 huberMean = farm.mean(X)
-```
 
-```r
-library(FarmTest)
-set.seed(1)
 n = 100
 d = 50
-X = matrix(rt(n * d, df = 3), n, d) / sqrt(3)
+X = matrix(rt(n * d, df = 3), n, d)
 huberCov = farm.cov(X)
 ```
 
