@@ -136,21 +136,21 @@ huberCov = farm.cov(X)
 
 ## Remark 
 
-This library is built upon an earlier version written by Bose, K., Ke, Y. and Zhou, W.-X. ( [CRAN](https://cran.r-project.org/web/packages/FarmTest/index.html), [GitHub](https://github.com/kbose28/FarmTest)). Another library named tfHuber that implements data-driven robust mean and covariance matrix estimation as well as standard and l1-regularized Huber regression can be found [here](https://github.com/XiaoouPan/tfHuber).
+This library is built upon an earlier version written by Bose, K., Ke, Y. and Zhou, W.-X. ([CRAN](https://cran.r-project.org/web/packages/FarmTest/index.html), [GitHub](https://github.com/kbose28/FarmTest)). Another library named tfHuber that implements data-driven robust mean and covariance matrix estimation as well as standard and l1-regularized Huber regression can be found [here](https://github.com/XiaoouPan/tfHuber).
 
 ## License
 
 GPL (>= 2)
 
-## Author
+## Author(s)
 
-Xiaoou Pan <xip024@ucsd.edu>, Yuan Ke <Yuan.Ke@uga.edu>, Wen-Xin Zhou <wez243@ucsd.edu> 
+Xiaoou Pan <xip024@ucsd.edu>, Yuan Ke <yuan.ke@uga.edu>, Wen-Xin Zhou <wez243@ucsd.edu> 
 
 ## Maintainer
 
 Xiaoou Pan <xip024@ucsd.edu>
 
-## Reference
+## References
 
 Ahn, S. C. and Horenstein, A. R. (2013). Eigenvalue ratio rest for the number of factors. Econometrica **81**(3) 1203–1227. [Paper](https://onlinelibrary.wiley.com/doi/abs/10.3982/ECTA8968)
 
