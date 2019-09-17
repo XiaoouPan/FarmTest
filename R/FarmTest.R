@@ -66,10 +66,10 @@ farm.cov = function(X) {
 #' @description This function conducts factor-adjusted robust multiple testing (FarmTest) for means of multivariate data proposed in Fan et al. (2019) via a tuning-free procedure.
 #' @param X An \eqn{n} by \eqn{p} data matrix with each row being a sample.
 #' @param fX An \strong{optional} factor matrix with each column being a factor for \code{X}. The number of rows of \code{fX} and \code{X} must be the same.
-#' @param KX An \strong{optional} positive number of factors to be estimated for \code{X} when \code{fX} is not specified. \code{KX} cannot exceed the number of columns of \code{X}. If \code{KX} is not specified, it will be estimated internally.
+#' @param KX An \strong{optional} positive number of factors to be estimated for \code{X} when \code{fX} is not specified. \code{KX} cannot exceed the number of columns of \code{X}. If \code{KX} is not specified or specified to be non-positive, it will be estimated internally.
 #' @param Y An \strong{optional} data matrix used for two-sample FarmTest. The number of columns of \code{X} and \code{Y} must be the same.
 #' @param fY An \strong{optional} factor matrix for two-sample FarmTest with each column being a factor for \code{Y}. The number of rows of \code{fY} and \code{Y} must be the same.
-#' @param KY An \strong{optional} positive number of factors to be estimated for \code{Y} for two-sample FarmTest when \code{fY} is not specified. \code{KY} cannot exceed the number of columns of \code{Y}. If \code{KY} is not specified, it will be estimated internally.
+#' @param KY An \strong{optional} positive number of factors to be estimated for \code{Y} for two-sample FarmTest when \code{fY} is not specified. \code{KY} cannot exceed the number of columns of \code{Y}. If \code{KY} is not specified or specified to be non-positive, it will be estimated internally.
 #' @param h0 An \strong{optional} \eqn{p}-vector of true means, or difference in means for two-sample FarmTest. The default is a zero vector.
 #' @param alternative An \strong{optional} character string specifying the alternate hypothesis, must be one of "two.sided" (default), "less" or "greater".
 #' @param alpha An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.
@@ -78,6 +78,8 @@ farm.cov = function(X) {
 #' \item \code{means} Estimated means, a vector with length \eqn{p}.
 #' \item \code{stdDev} Estimated standard deviations, a vector with length \eqn{p}.
 #' \item \code{loadings} Estimated factor loadings, a matrix with dimension \eqn{p} by \eqn{K}, where \eqn{K} is the number of factors.
+#' \item \code{eigenVal} Eigenvalues of estimated covariance matrix, a vector with length \eqn{p}. It's only available when factors \code{fX} and \code{fY} are not given.
+#' \item \code{eigenRatio} Ratios of \code{eigenVal} to estimate \code{nFactors}, a vector with length \eqn{min(n, p) / 2}. It's only available when number of factors \code{KX} and \code{KY} are not given.
 #' \item \code{nFactors} Estimated or input number of factors, a positive integer.
 #' \item \code{tStat} Values of test statistics, a vector with length \eqn{p}.
 #' \item \code{pValues} P-values of tests, a vector with length \eqn{p}.
@@ -90,7 +92,7 @@ farm.cov = function(X) {
 #' \item \code{alpha} \eqn{\alpha} value.
 #' \item \code{alternative} Althernative hypothesis.
 #' }
-#' @details For two-sample FarmTest, \code{means}, \code{stdDev}, \code{loadings}, \code{nfactors} and \code{n} will be lists of items for sample X and Y separately.
+#' @details For two-sample FarmTest, \code{means}, \code{stdDev}, \code{loadings}, \code{eigenVal}, \code{eigenRatio}, \code{nfactors} and \code{n} will be lists of items for sample X and Y separately.
 #' @details \code{alternative = "greater"} is the alternative that \eqn{\mu > \mu_0} for one-sample test or \eqn{\mu_X > \mu_Y} for two-sample test.
 #' @references Ahn, S. C. and Horenstein, A. R. (2013). Eigenvalue ratio rest for the number of factors. Econometrica, 81(3) 1203–1227.
 #' @references Benjamini, Y. and Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. J. R. Stat. Soc. Ser. B. Stat. Methodol. 57 289–300.
@@ -138,10 +140,12 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
     stop("Length of h0 must be the same as number of columns of X")
   }
   if(alpha >= 1 || alpha <= 0) {
-    stop("Alpha should be between 0 and 1")
+    stop("Alpha should be strictly between 0 and 1")
   }
   output = NULL
   reject = "no hypotheses rejected"
+  eigenVal = "only available when factors are unknown"
+  eigenRatio = "only available when number of factors are not specified"
   if (is.null(Y) && !is.null(fX)) {
     if (nrow(fX) != nrow(X)) {
       stop("Number of rows of X and fX must be the same")
@@ -151,9 +155,10 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
         reject = which(rst.list$significant == 1)
       }
       output = list(means = rst.list$means, stdDev = rst.list$stdDev, loadings = rst.list$loadings,
-                    nFactors = rst.list$nfactors, tStat = rst.list$tStat, pValues = rst.list$pValues,
-                    significant = rst.list$significant, reject = reject, type = "known", n = nrow(X),
-                    p = p, h0 = h0, alpha = alpha, alternative = alternative)
+                    eigenVal = eigenVal, eigenRatio = eigenRatio, nFactors = rst.list$nfactors, 
+                    tStat = rst.list$tStat, pValues = rst.list$pValues, significant = rst.list$significant, 
+                    reject = reject, type = "known", n = nrow(X), p = p, h0 = h0, alpha = alpha, 
+                    alternative = alternative)
     }
   } else if (is.null(Y) && is.null(fX)) {
     if (KX > p) {
@@ -163,10 +168,14 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       if (sum(rst.list$significant) > 0) {
         reject = which(rst.list$significant == 1)
       }
+      if (KX <= 0) {
+        eigenRatio = rst.list&ratio
+      }
       output = list(means = rst.list$means, stdDev = rst.list$stdDev, loadings = rst.list$loadings,
-                    nFactors = rst.list$nfactors, tStat = rst.list$tStat, pValues = rst.list$pValues,
-                    significant = rst.list$significant, reject = reject, type = "unknown", n = nrow(X),
-                    p = p, h0 = h0, alpha = alpha, alternative = alternative)
+                    eigenVal = rst.list$eigens, eigenRatio = eigenRatio, nFactors = rst.list$nfactors, 
+                    tStat = rst.list$tStat, pValues = rst.list$pValues, significant = rst.list$significant, 
+                    reject = reject, type = "unknown", n = nrow(X), p = p, h0 = h0, alpha = alpha, 
+                    alternative = alternative)
     }
   } else if (!is.null(Y) && !is.null(fX)) {
     if (ncol(X) != ncol(Y)) {
@@ -187,9 +196,10 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       loadings = list(X.loadings = rst.list$loadingsX, Y.loadings = rst.list$loadingsY)
       nfactors = list(X.nFactors = rst.list$nfactorsX, Y.nFactors = rst.list$nfactorsY)
       n = list(X.n = nrow(X), Y.n = nrow(Y))
-      output = list(means = means, stdDev = stdDev, loadings = loadings, nFactors = nfactors, 
-                    tStat = rst.list$tStat, pValues = rst.list$pValues, significant = rst.list$significant, 
-                    reject = reject, type = "known", n = n, p = p, h0 = h0, alpha = alpha, alternative = alternative)
+      output = list(means = means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal, 
+                    eigenRatio = eigenRatio, nFactors = nfactors, tStat = rst.list$tStat, 
+                    pValues = rst.list$pValues, significant = rst.list$significant, reject = reject, 
+                    type = "known", n = n, p = p, h0 = h0, alpha = alpha, alternative = alternative)
     }
   } else {
     if (ncol(X) != ncol(Y)) {
@@ -207,10 +217,20 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       stdDev = list(X.stdDev = rst.list$stdDevX, Y.stdDev = rst.list$stdDevY)
       loadings = list(X.loadings = rst.list$loadingsX, Y.loadings = rst.list$loadingsY)
       nfactors = list(X.nFactors = rst.list$nfactorsX, Y.nFactors = rst.list$nfactorsY)
+      eigenVal = list(X.eigenVal = rst.list$eigensX, Y.eigenVal = rst.list$eigensY)
       n = list(X.n = nrow(X), Y.n = nrow(Y))
-      output = list(means = means, stdDev = stdDev, loadings = loadings, nFactors = nfactors, 
-                    tStat = rst.list$tStat, pValues = rst.list$pValues, significant = rst.list$significant, 
-                    reject = reject, type = "unknown", n = n, p = p, h0 = h0, alpha = alpha, alternative = alternative)
+      ratioX = ratioY = "only available when number of factors are not specified"
+      if (KX <= 0) {
+        ratioX = rst.list$rstioX
+      }
+      if (KY <= 0) {
+        rstioY = rst.list$ratioY
+      }
+      eigenRatio = list(X.eigenRatio = ratioX, Y.eigenRatio = ratioY)
+      output = list(means = means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal,
+                    eigenRatio = eigenRatio, nFactors = nfactors, tStat = rst.list$tStat, 
+                    pValues = rst.list$pValues, significant = rst.list$significant, reject = reject, 
+                    type = "unknown", n = n, p = p, h0 = h0, alpha = alpha, alternative = alternative)
     } 
   }
   attr(output, "class") = "farm.test"

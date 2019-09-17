@@ -216,21 +216,21 @@ arma::uvec getRej(const arma::vec& Prob, const double alpha, const int p) {
   return Prob <= pAlpha;
 }
 
-int estK(const arma::vec& eigenVal, const int n, const int p) {
-  if (std::min(n, p) < 4) {
-    return std::min(n, p);
+arma::vec getRatio(const arma::vec& eigenVal, const int n, const int p) {
+  int temp = std::min(n, p);
+  int len = temp < 4 ? temp - 1 : temp >> 1;
+  if (len == 0) {
+    arma::vec rst(1);
+    rst(0) = eigenVal(p - 1);
+    return rst;
   }
-  int len = std::min(n, p) >> 1;
+  arma::vec ratio(len);
   double comp = eigenVal(p - 1) / eigenVal(p - 2);
-  int K = 1;
+  ratio(0) = comp;
   for (int i = 1; i < len; i++) {
-    double ratio = eigenVal(p - 1 - i) / eigenVal(p - 2 - i);
-    if (ratio > comp) {
-      K = i + 1;
-      comp = ratio;
-    }
+    ratio(i) = eigenVal(p - 1 - i) / eigenVal(p - 2 - i);
   }
-  return K;
+  return ratio;
 }
 
 // [[Rcpp::export]]
@@ -244,8 +244,10 @@ Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const d
   arma::vec eigenVal;
   arma::mat eigenVec;
   arma::eig_sym(eigenVal, eigenVec, sigmaHat);
+  arma::vec ratio;
   if (K <= 0) {
-    K = estK(eigenVal, n, p);
+    ratio = getRatio(eigenVal, n, p);
+    K = arma::index_max(ratio) + 1;
   }
   arma::mat B(p, K);
   for (int i = 1; i <= K; i++) {
@@ -267,7 +269,8 @@ Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const d
   return Rcpp::List::create(Rcpp::Named("means") = mu, Rcpp::Named("stdDev") = sigma,
                             Rcpp::Named("loadings") = B, Rcpp::Named("nfactors") = K, 
                             Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, 
-                            Rcpp::Named("significant") = significant, Rcpp::Named("eigens") = eigenVal);
+                            Rcpp::Named("significant") = significant, Rcpp::Named("eigens") = eigenVal,
+                            Rcpp::Named("ratio") = ratio);
 }
 
 // [[Rcpp::export]]
@@ -281,8 +284,10 @@ Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& 
   arma::vec eigenValX, eigenValY;
   arma::mat eigenVec;
   arma::eig_sym(eigenValX, eigenVec, sigmaHat);
+  arma::vec ratioX, ratioY;
   if (KX <= 0) {
-    KX = estK(eigenValX, nX, p);
+    ratioX = getRatio(eigenValX, nX, p);
+    KX = arma::index_max(ratioX) + 1;
   }
   arma::mat BX(p, KX);
   for (int i = 1; i <= KX; i++) {
@@ -296,7 +301,8 @@ Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& 
   arma::vec sigmaY = sigmaHat.diag();
   arma::eig_sym(eigenValY, eigenVec, sigmaHat);
   if (KY <= 0) {
-    KY = estK(eigenValY, nY, p);
+    ratioY = getRatio(eigenValY, nY, p);
+    KY = arma::index_max(ratioY) + 1;
   }
   arma::mat BY(p, KY);
   for (int i = 1; i <= KY; i++) {
@@ -327,7 +333,8 @@ Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& 
                             Rcpp::Named("nfactorsX") = KX, Rcpp::Named("nfactorsY") = KY,
                             Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, 
                             Rcpp::Named("significant") = significant, Rcpp::Named("eigensX") = eigenValX,
-                            Rcpp::Named("eigensY") = eigenValY);
+                            Rcpp::Named("eigensY") = eigenValY, Rcpp::Named("ratioX") = ratioX,
+                            Rcpp::Named("ratioY") = ratioY);
 }
 
 // [[Rcpp::export]]

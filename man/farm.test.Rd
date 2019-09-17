@@ -13,13 +13,13 @@ farm.test(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1,
 
 \item{fX}{An \strong{optional} factor matrix with each column being a factor for \code{X}. The number of rows of \code{fX} and \code{X} must be the same.}
 
-\item{KX}{An \strong{optional} positive number of factors to be estimated for \code{X} when \code{fX} is not specified. \code{KX} cannot exceed the number of columns of \code{X}. If \code{KX} is not specified, it will be estimated internally.}
+\item{KX}{An \strong{optional} positive number of factors to be estimated for \code{X} when \code{fX} is not specified. \code{KX} cannot exceed the number of columns of \code{X}. If \code{KX} is not specified or specified to be non-positive, it will be estimated internally.}
 
 \item{Y}{An \strong{optional} data matrix used for two-sample FarmTest. The number of columns of \code{X} and \code{Y} must be the same.}
 
 \item{fY}{An \strong{optional} factor matrix for two-sample FarmTest with each column being a factor for \code{Y}. The number of rows of \code{fY} and \code{Y} must be the same.}
 
-\item{KY}{An \strong{optional} positive number of factors to be estimated for \code{Y} for two-sample FarmTest when \code{fY} is not specified. \code{KY} cannot exceed the number of columns of \code{Y}. If \code{KY} is not specified, it will be estimated internally.}
+\item{KY}{An \strong{optional} positive number of factors to be estimated for \code{Y} for two-sample FarmTest when \code{fY} is not specified. \code{KY} cannot exceed the number of columns of \code{Y}. If \code{KY} is not specified or specified to be non-positive, it will be estimated internally.}
 
 \item{h0}{An \strong{optional} \eqn{p}-vector of true means, or difference in means for two-sample FarmTest. The default is a zero vector.}
 
@@ -33,6 +33,8 @@ An object with S3 class \code{farm.test} containing the following items will be 
 \item \code{means} Estimated means, a vector with length \eqn{p}.
 \item \code{stdDev} Estimated standard deviations, a vector with length \eqn{p}.
 \item \code{loadings} Estimated factor loadings, a matrix with dimension \eqn{p} by \eqn{K}, where \eqn{K} is the number of factors.
+\item \code{eigenVal} Eigenvalues of estimated covariance matrix, a vector with length \eqn{p}. It's only available when factors \code{fX} and \code{fY} are not given.
+\item \code{eigenRatio} Ratios of \code{eigenVal} to estimate \code{nFactors}, a vector with length \eqn{min(n, p) / 2}. It's only available when number of factors \code{KX} and \code{KY} are not given.
 \item \code{nFactors} Estimated or input number of factors, a positive integer.
 \item \code{tStat} Values of test statistics, a vector with length \eqn{p}.
 \item \code{pValues} P-values of tests, a vector with length \eqn{p}.
@@ -50,7 +52,7 @@ An object with S3 class \code{farm.test} containing the following items will be 
 This function conducts factor-adjusted robust multiple testing (FarmTest) for means of multivariate data proposed in Fan et al. (2019) via a tuning-free procedure.
 }
 \details{
-For two-sample FarmTest, \code{means}, \code{stdDev}, \code{loadings}, \code{nfactors} and \code{n} will be lists of items for sample X and Y separately.
+For two-sample FarmTest, \code{means}, \code{stdDev}, \code{loadings}, \code{eigenVal}, \code{eigenRatio}, \code{nfactors} and \code{n} will be lists of items for sample X and Y separately.
 
 \code{alternative = "greater"} is the alternative that \eqn{\mu > \mu_0} for one-sample test or \eqn{\mu_X > \mu_Y} for two-sample test.
 }
