@@ -26,24 +26,24 @@ library(FarmTest)
 
 ## Common error messages
 
-The package `FarmTest` is implemented in `Rcpp` and `RcppArmadillo`, so the following error messages might appear when you first install it (we'll keep updating common error messages with feedback from users):
+The library `FarmTest` is coded in `Rcpp` and `RcppArmadillo`. The following error messages might arise when you first install it (we'll keep updating common error messages based on user feedback):
 
-* Error: "...could not find build tools necessary to build FarmTest": For Windows you need Rtools, for Mac OS X you need to install Command Line Tools for XCode. See [this link](https://support.rstudio.com/hc/en-us/articles/200486498-Package-Development-Prerequisites) for details. 
+* Error: "...could not find build tools necessary to build FarmTest": For Windows OS you need Rtools; for Mac OS X you need to install Command Line Tools for XCode. See [this link](https://support.rstudio.com/hc/en-us/articles/200486498-Package-Development-Prerequisites) for details. 
 
-* Error: "library not found for -lgfortran/-lquadmath": It means your gfortran binaries are out of date. This is a common environment specific issue. 
+* Error: "library not found for -lgfortran/-lquadmath": It means your gfortran binaries are out-of-date. This is a common environment specific issue. 
 
   1. In R 3.0.0 - R 3.3.0: Upgrading to R 3.4 is strongly recommended. Then go to the next step. Alternatively, you can try the instructions [here](http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/).
 
-  2. For R version >= 3.4.* : download the installer [here](https://gcc.gnu.org/wiki/GFortranBinaries#MacOS). Then run the installer.
+  2. For R version >= 3.4.* : Download and run the installer [here](https://gcc.gnu.org/wiki/GFortranBinaries#MacOS).
     
-* Error: "cannot remove prior installation of package 'Rcpp'": This issue happens occasionally when you have installed an old version of package `Rcpp` before. Updating `Rcpp` with command `install.packages("Rcpp")` will solve the problem.
+* Error: "cannot remove prior installation of package 'Rcpp'": This issue happens occasionally when you have installed an old version of the package `Rcpp` before. Update `Rcpp` with command `install.packages("Rcpp")` will solve the problem.
 
 ## Functions
 
-There are four functions in this package:
+There are four functions in this library:
 
 * `farm.test`: Factor-adjusted robust multiple testing.
-* `print.farm.test`: Print function for output of `farm.test`.
+* `print.farm.test`: Print function for the outputs of `farm.test`.
 * `farm.mean`: Tuning-free Huber mean estimation.
 * `farm.cov`: Tuning-free Huber-type covariance estimation.
 
@@ -53,9 +53,9 @@ Help on the functions can be accessed by typing `?`, followed by function name a
 
 For example, `?farm.test` will present a detailed documentation with inputs, outputs and examples of the function `farm.test`.
 
-## Testing examples
+## Examples
 
-Here we generate data from factor model *X = &mu; + Bf + &epsilon;* with 3 factors. Our data has sample size 50 and dimensionality 100. The first five means are set to 2, while the others are 0.
+First generate data from a three-factor model *X = &mu; + Bf + &epsilon;*. The sample size and dimension (the number of hypotheses) are taken to be 50 and 100, respectively. The number of nonnulls is 5.
 
 ```r
 library(FarmTest)
@@ -71,42 +71,43 @@ fX = matrix(rnorm(K * n, 0, 1), nrow = n)
 X = rep(1, n) %*% t(muX) + fX %*% t(BX) + epsilonX
 ```
 
-Then we conduct FarmTest for *&mu; = 0* with a two-sided alternative hypothesis, *&alpha;* level is 0.05. Factor matrix is unknown, and the number of factors will be estimated internally. 
+In this case, the factors are unobservable and thus need to be recovered from data. Assume one is interested in simultaneous inference on the means with two-sided alternatives. For a desired FDR level *&alpha;=0.05*, run FarmTest as follows:
 
 ```r
 output = farm.test(X)
 ```
 
-The package includes a `print.farm.test` function, which will summarize the results of `farm.test`: 
+The library includes a `print.farm.test` function, which summarizes the results of `farm.test`: 
+
 ```r
 output
 ```
 
-To get a comprehensive impression of the performance, we repeat the above experiment for 100 times and report the average values of true positive rate (TPR), false positive rate (FPR) and false discover rate (FDR). These results can be easily reproduced.
+Based on 100 simulations, we report below the average values of the true positive rate (TPR), false positive rate (FPR) and false discover rate (FDR).
 
 | TPR | FPR | FDR |
 | :---: | :---: | :---: | 
 | 1.000 | 0.002 | 0.031 |
 
-Finally, we present some examples to illustrate FarmTest with different purpose. For one-sided testing, just modify the `alternative` argument to be `less` or `greater`:
+In addition, we illustrate the use of FarmTest under different circumstances. For one-sided alternatives, modify the `alternative` argument to be `less` or `greater`:
 
 ```r
 output = farm.test(X, alternative = "less")
 ```
 
-The number of factors can be specified with argument `KX` to be a positive number less than data dimension, so that `farm.test` will not estimate it. However, without any prior knowledge of the data, this is not recommended:
+The number of factors can be user-specified. It should be a positive integer that is less than the minumum between sample size and number of hypotheses. Without any subjective ground of the data, this is not recommended.
 
 ```r
 output = farm.test(X, KX = 10)
 ```
 
-For FarmTest with known factors, put the factor matrix into argument `fX`:
+In a case with observable factors, put the *n* by *K* factor matrix into argument `fX`:
 
 ```r
 output = farm.test(X, fX = fX)
 ```
 
-For two-sample FarmTest, we generate another sample Y with same dimensionality 100, and conduct a two-sided test with unknown factors.
+As an extension to two-sample problems, we generate another sample Y with the same dimension 100, and conduct a two-sided test with latent factors.
 
 ```r
 muY = rep(0, p)
@@ -117,10 +118,8 @@ fY = matrix(rnorm(K * n, 0, 1), nrow = n)
 Y = rep(1, n) %*% t(muY) + fY %*% t(BY) + epsilonY
 output = farm.test(X, Y = Y)
 ```
-
-## Huber-type estimation examples
-
-Huber mean estimator can be obtained by `farm.mean` function. In the following example, we generate data from a centered log-normal distribution, which is asymmetric and heavy-tailed, and then estimate its mean:
+ 
+Robust mean and covariance matrix estimation is not only an important step in the FarmTest, but also of independent interest in many other problems. We write separate functions `farm.mean` and `farm.cov` for this purpose.
 
 ```r
 library(FarmTest)
@@ -129,8 +128,6 @@ n = 1000
 X = rlnorm(n, 0, 1.5) - exp(1.5^2 / 2)
 huberMean = farm.mean(X)
 ```
-
-Huber-type covariance matrix estimator can be achieved by `farm.cov` function. In the next example, we generate data matrix from standardized *t* distribution with 3 degree of freedom, which is heavy-tailed, and estimate its covariance matrix:
 
 ```r
 library(FarmTest)
@@ -141,13 +138,9 @@ X = matrix(rt(n * d, df = 3), n, d) / sqrt(3)
 huberCov = farm.cov(X)
 ```
 
-To get big pictures of these two estimators, users can run 200 independent Monte Carlo simulation as above and compare them with sample mean and covariance matrix produced by `mean` and `cov` functions. 
-
 ## Remark 
 
-This library is built upon an earlier version written by Bose, K., Ke, Y. and Zhou, W.-X. [CRAN](https://cran.r-project.org/web/packages/FarmTest/index.html), [GitHub](https://github.com/kbose28/FarmTest).
-
-Besides, the tuning-free procedure for mean and covariance estimation is also implemented in [tfHuber](https://github.com/XiaoouPan/tfHuber) package.
+This library is built upon an earlier version written by Bose, K., Ke, Y. and Zhou, W.-X. ( [CRAN](https://cran.r-project.org/web/packages/FarmTest/index.html), [GitHub](https://github.com/kbose28/FarmTest)). Another library named tfHuber that implements data-driven robust mean and covariance matrix estimation as well as standard and l1-regularized Huber regression can be found [here](https://github.com/XiaoouPan/tfHuber).
 
 ## License
 
@@ -161,7 +154,7 @@ Xiaoou Pan <xip024@ucsd.edu>, Yuan Ke <Yuan.Ke@uga.edu>, Wen-Xin Zhou <wez243@uc
 
 Xiaoou Pan <xip024@ucsd.edu>
 
-## References
+## Reference
 
 Ahn, S. C. and Horenstein, A. R. (2013). Eigenvalue ratio rest for the number of factors. Econometrica **81**(3) 1203–1227. [Paper](https://onlinelibrary.wiley.com/doi/abs/10.3982/ECTA8968)
 
