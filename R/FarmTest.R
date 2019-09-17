@@ -144,8 +144,8 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
   }
   output = NULL
   reject = "no hypotheses rejected"
-  eigenVal = "only available when factors are unknown"
-  eigenRatio = "only available when number of factors are not specified"
+  eigenVal = "only available when fX (fY) are unknown"
+  eigenRatio = "only available when fX (fY) are unknown and KX (KY) are not specified"
   if (is.null(Y) && !is.null(fX)) {
     if (nrow(fX) != nrow(X)) {
       stop("Number of rows of X and fX must be the same")
@@ -169,7 +169,7 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
         reject = which(rst.list$significant == 1)
       }
       if (KX <= 0) {
-        eigenRatio = rst.list&ratio
+        eigenRatio = rst.list$ratio
       }
       output = list(means = rst.list$means, stdDev = rst.list$stdDev, loadings = rst.list$loadings,
                     eigenVal = rst.list$eigens, eigenRatio = eigenRatio, nFactors = rst.list$nfactors, 
@@ -191,7 +191,7 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       if (sum(rst.list$significant) > 0) {
         reject = which(rst.list$significant == 1)
       }
-      means = list(X.mean = rst.list$meansX, Y.mean = rst.list$meansY)
+      means = list(X.means = rst.list$meansX, Y.means = rst.list$meansY)
       stdDev = list(X.stdDev = rst.list$stdDevX, Y.stdDev = rst.list$stdDevY)
       loadings = list(X.loadings = rst.list$loadingsX, Y.loadings = rst.list$loadingsY)
       nfactors = list(X.nFactors = rst.list$nfactorsX, Y.nFactors = rst.list$nfactorsY)
@@ -213,18 +213,18 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       if (sum(rst.list$significant) > 0) {
         reject = which(rst.list$significant == 1)
       }
-      means = list(X.mean = rst.list$meansX, Y.mean = rst.list$meansY)
+      means = list(X.means = rst.list$meansX, Y.means = rst.list$meansY)
       stdDev = list(X.stdDev = rst.list$stdDevX, Y.stdDev = rst.list$stdDevY)
       loadings = list(X.loadings = rst.list$loadingsX, Y.loadings = rst.list$loadingsY)
       nfactors = list(X.nFactors = rst.list$nfactorsX, Y.nFactors = rst.list$nfactorsY)
       eigenVal = list(X.eigenVal = rst.list$eigensX, Y.eigenVal = rst.list$eigensY)
       n = list(X.n = nrow(X), Y.n = nrow(Y))
-      ratioX = ratioY = "only available when number of factors are not specified"
+      ratioX = ratioY = "only available when fX (fY) are unknown and KX (KY) are not specified"
       if (KX <= 0) {
-        ratioX = rst.list$rstioX
+        ratioX = rst.list$ratioX
       }
       if (KY <= 0) {
-        rstioY = rst.list$ratioY
+        ratioY = rst.list$ratioY
       }
       eigenRatio = list(X.eigenRatio = ratioX, Y.eigenRatio = ratioY)
       output = list(means = means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal,
