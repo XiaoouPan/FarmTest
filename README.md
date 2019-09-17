@@ -4,14 +4,14 @@
 
 ## Description
 
-The FarmTest library implements the **f**actor-**a**djusted **r**obust **m**ultiple **test**ing (FarmTest) method proposed by [Fan et al., 2019](https://www.tandfonline.com/doi/full/10.1080/01621459.2018.1527700). An earlier version can be found [here](https://github.com/kbose28/FarmTest). Let *X* be a *p*-dimensional random vector with mean *&mu;*. This library carries out simultaneous inference on the *p* hypotheses *H<sub>0j</sub> : &mu;<sub>j</sub> = &mu;<sub>0j</sub>*.
-To explicitly caputre the strong dependency among features, we assume that the data vectors *X<sub>i</sub>* that are independently drawn from *X* follow a factor model: *X<sub>i</sub> = &mu; + Bf<sub>i</sub> + &epsilon;<sub>i</sub>*, where *f<sub>i</sub>* are the common factors, *B* denotes the factor loading matrix, and *&epsilon;<sub>i</sub>* are idiosyncratic errors. Specifically, we consider three different scenarios with observable factors, latent factors and a mixture of covariates and latent factors. Assume *f<sub>i</sub>* and *&epsilon;<sub>i</sub>* are independent and have zero means. The number of hypotheses *p* is allowed to exceeds the sample size *n*.
+The FarmTest library implements the **F**actor-**A**djusted **R**obust **M**ultiple **Test**ing method proposed by [Fan et al., 2019](https://www.tandfonline.com/doi/full/10.1080/01621459.2018.1527700). An earlier version can be found [here](https://github.com/kbose28/FarmTest). Let *X* be a *p*-dimensional random vector with mean *&mu;*. This library carries out simultaneous inference on the *p* hypotheses *H<sub>0j</sub> : &mu;<sub>j</sub> = &mu;<sub>0j</sub>*.
+To explicitly caputre the strong dependency among features, we assume that the data vectors *X<sub>i</sub>* that are independently drawn from *X* follow a factor model: *X<sub>i</sub> = &mu; + Bf<sub>i</sub> + &epsilon;<sub>i</sub>*, where *f<sub>i</sub>* are the common factors, *B* denotes the factor loading matrix, and *&epsilon;<sub>i</sub>* are idiosyncratic errors. Specifically, we consider three different scenarios with observable factors, latent factors and a mixture of covariates and latent factors. Assume *f<sub>i</sub>* and *&epsilon;<sub>i</sub>* are independent and have zero means. The number of hypotheses *p* may be comparable to or considerably exceed the sample size *n*.
 
-FarmTest implements a series of adaptive Huber methods combined with fast data-drive tuning schemes to estimate model parameters and construct test statistics that are robust against heavy-tailed and/or assymetric error distributions. Extensions to two-sample simultaneous mean comparison problems are also included. As by-products, this library also contains functions to compute adaptive Huber mean and covariance matrix estimators that are of independent interest.
+FarmTest implements a series of adaptive Huber methods combined with fast data-drive tuning schemes to estimate model parameters and construct test statistics that are robust against heavy-tailed and/or assymetric error distributions. Extensions to two-sample simultaneous mean comparison problems are also included. As by-products, this library also contains functions that compute adaptive Huber mean and covariance matrix estimators that are of independent interest.
 
 ## Main updates 
 
-FarmTest introduces a robustification parameter *&tau;* while estimating mean and covariance of data sample. In the previous version, the value of *&tau;* is either specified by users or determined by cross-validation. Recently, motivated by the work of [Wang et al., 2018](https://www.math.ucsd.edu/~wez243/Tuning_Free.pdf) and [Ke et al., 2019](https://arxiv.org/abs/1811.01520), estimation of mean and covariance can be completed via a tuning-free principle, so that cross-validation, which was computationally expensive, can be avoided without lossing estimation accuracy or stability of the algorithm.
+The FarmTest method involves multiple tuning parameters for fitting the factor models. In the case of latent factors, the algorithm first computes a robust covariance matrix estimator, and then use the eigenvalue ratio method along with SVD to estimate the number of factors and loading vectors. It is therefore computationally expenstive to select all the tuning parameters via cross-validation. Instead, the current version makes use of the fast data-driven tuning scheme proposed by [Ke et al., 2019](https://arxiv.org/abs/1811.01520), which significantly reduces the computational cost.
 
 ## Installation
 
@@ -143,9 +143,9 @@ huberCov = farm.cov(X)
 
 To get big pictures of these two estimators, users can run 200 independent Monte Carlo simulation as above and compare them with sample mean and covariance matrix produced by `mean` and `cov` functions. 
 
-## Notes 
+## Remark 
 
-This package is built based on an earlier version written by Bose, K., Ke, Y. and Zhou, W.-X., see [here](https://cran.r-project.org/web/packages/FarmTest/index.html) for its R-CRAN link and [here](https://github.com/kbose28/FarmTest) for its GitHub link. 
+This library is built upon an earlier version written by Bose, K., Ke, Y. and Zhou, W.-X. [CRAN](https://cran.r-project.org/web/packages/FarmTest/index.html), [GitHub](https://github.com/kbose28/FarmTest).
 
 Besides, the tuning-free procedure for mean and covariance estimation is also implemented in [tfHuber](https://github.com/XiaoouPan/tfHuber) package.
 
@@ -153,32 +153,34 @@ Besides, the tuning-free procedure for mean and covariance estimation is also im
 
 GPL (>= 2)
 
-## Authors
+## Author
 
-Xiaoou Pan <xip024@ucsd.edu>, Koushiki Bose <koush.bose@gmail.com>, Yuan Ke <Yuan.Ke@uga.edu>, Wen-Xin Zhou <wez243@ucsd.edu> 
+Xiaoou Pan <xip024@ucsd.edu>, Yuan Ke <Yuan.Ke@uga.edu>, Wen-Xin Zhou <wez243@ucsd.edu> 
 
-## Reference
+## Maintainer
 
-Ahn, S. C. and Horenstein, A. R. (2013). Eigenvalue ratio rest for the number of factors. Econometrica, 81(3) 1203–1227. [Paper](https://onlinelibrary.wiley.com/doi/abs/10.3982/ECTA8968)
+Xiaoou Pan <xip024@ucsd.edu>
 
-Benjamini, Y. and Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. J. R. Stat. Soc. Ser. B. Stat. Methodol. 57 289–300. [Paper](https://www.jstor.org/stable/2346101?seq=1#metadata_info_tab_contents)
+## References
 
-Eddelbuettel, D. and Francois, R. (2011). Rcpp: Seamless R and C++ integration. J. Stat. Softw. 40(8) 1-18. [Paper](http://dirk.eddelbuettel.com/code/rcpp/Rcpp-introduction.pdf)
+Ahn, S. C. and Horenstein, A. R. (2013). Eigenvalue ratio rest for the number of factors. Econometrica **81**(3) 1203–1227. [Paper](https://onlinelibrary.wiley.com/doi/abs/10.3982/ECTA8968)
+
+Benjamini, Y. and Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. J. R. Stat. Soc. Ser. B. Stat. Methodol. **57** 289–300. [Paper](https://www.jstor.org/stable/2346101?seq=1#metadata_info_tab_contents)
+
+Eddelbuettel, D. and Francois, R. (2011). Rcpp: Seamless R and C++ integration. J. Stat. Softw. **40**(8) 1-18. [Paper](http://dirk.eddelbuettel.com/code/rcpp/Rcpp-introduction.pdf)
 
 Eddelbuettel, D. and Sanderson, C. (2014). RcppArmadillo: Accelerating R with high-performance C++ linear algebra. Comput. Statist. Data Anal. 71 1054-1063. [Paper](http://dirk.eddelbuettel.com/papers/RcppArmadillo.pdf)
 
 Fan, J., Ke, Y., Sun, Q. and Zhou, W.-X. (2019). FarmTest: Factor-adjusted robust multiple testing with approximate false discovery control. J. Amer. Statist. Assoc., to appear. [Paper](https://www.tandfonline.com/doi/full/10.1080/01621459.2018.1527700) 
 
-Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist. 35 73-101. [Paper](https://projecteuclid.org/euclid.aoms/1177703732)
+Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist. **35** 73-101. [Paper](https://projecteuclid.org/euclid.aoms/1177703732)
 
-Ke, Y., Minsker, S., Ren, Z., Sun, Q. and Zhou, W.-X. (2019). User-friendly covariance estimation for heavy-tailed distributions: A survey and recent results. Statis. Sci. To appear. [Paper](https://arxiv.org/abs/1811.01520)
+Ke, Y., Minsker, S., Ren, Z., Sun, Q. and Zhou, W.-X. (2019). User-friendly covariance estimation for heavy-tailed distributions: A survey and recent results. Statis. Sci., to appear. [Paper](https://arxiv.org/abs/1811.01520)
 
-Sanderson, C. and Curtin, R. (2016). Armadillo: A template-based C++ library for linear algebra. J. Open Source Softw. 1 26. [Paper](http://conradsanderson.id.au/pdfs/sanderson_armadillo_joss_2016.pdf)
+Sanderson, C. and Curtin, R. (2016). Armadillo: A template-based C++ library for linear algebra. J. Open Source Softw. **1** 26. [Paper](http://conradsanderson.id.au/pdfs/sanderson_armadillo_joss_2016.pdf)
 
-Storey, J. D. (2002). A direct approach to false discovery rates. J. R. Stat. Soc. Ser. B. Stat. Methodol. 64, 479–498. [Paper](https://www.jstor.org/stable/3088784?seq=1#metadata_info_tab_contents)
+Storey, J. D. (2002). A direct approach to false discovery rates. J. R. Stat. Soc. Ser. B. Stat. Methodol. **64** 479–498. [Paper](https://www.jstor.org/stable/3088784?seq=1#metadata_info_tab_contents)
 
 Sun, Q., Zhou, W.-X. and Fan, J. (2019). Adaptive Huber regression. J. Amer. Statist. Assoc., to appear. [Paper](https://www.tandfonline.com/doi/abs/10.1080/01621459.2018.1543124)
 
-Wang, L., Zheng, C., Zhou, W. and Zhou, W.-X. (2018). A new principle for tuning-free Huber regression. Preprint. [Paper](https://www.math.ucsd.edu/~wez243/Tuning_Free.pdf)
-
-Zhou, W.-X., Bose, K., Fan, J. and Liu, H. (2018) A new perspective on robust M-estimation: Finite sample theory and applications to dependence-adjusted multiple testing. Ann. Statist. 46 1904-1931. [Paper](https://projecteuclid.org/euclid.aos/1534492823)
+Zhou, W.-X., Bose, K., Fan, J. and Liu, H. (2018). A new perspective on robust M-estimation: Finite sample theory and applications to dependence-adjusted multiple testing. Ann. Statist. **46** 1904-1931. [Paper](https://projecteuclid.org/euclid.aos/1534492823)
