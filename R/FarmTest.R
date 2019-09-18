@@ -272,5 +272,6 @@ print.farm.test = function(x) {
   }
   cat(paste("FDR to be controlled at: ", x$alpha, "\n", sep = ""))
   cat(paste("Alternative hypothesis: ",  x$alternative, "\n", sep = ""))
-  cat(paste("Hypothesis rejected: ", paste(x$reject, collapse = " "), "\n", sep = ""))
+  cat(paste("Number of hypothesis rejected: ", sum(x$significant), "\n", sep = ""))
+  cat(paste("Indices of hypothesis rejected: ", paste(x$reject, collapse = " "), "\n", sep = ""))
 }
