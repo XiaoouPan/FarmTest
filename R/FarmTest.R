@@ -4,11 +4,10 @@
 NULL
 
 #' @title FarmTest: Factor-Adjusted Robust Multiple Testing
-#' @description This package performs robust multiple testing for means in the presence of known and unknown latent factors. 
-#' It implements a robust procedure to estimate distribution parameters using Huber loss function with a tuning-free principle and accounts for strong dependence among coordinates via an approximate factor model. 
-#' This method is particularly suitable for high dimensional data when there are many variables but only a small number of observations available. 
-#' Moreover, the method is tailored to cases when the underlying distribution deviates from Gaussian, which is commonly assumed in the literature.
-#' Besides the results of hypotheses testing, the estimated underlying factors and diagnostic plots are also output. 
+#' @description FarmTest package performs robust multiple testing for means in the presence of known and unknown latent factors.
+#' It implements a series of adaptive Huber methods combined with fast data-drive tuning schemes to estimate model parameters and construct test statistics that are robust against heavy-tailed and/or assymetric error distributions. 
+#' Extensions to two-sample simultaneous mean comparison problems are also included. 
+#' As by-products, this package also contains functions that compute adaptive Huber mean and covariance matrix estimators that are of independent interest.
 #' @details For detailed information on how to use and install see its GitHub page \url{https://github.com/XiaoouPan/FarmTest}.
 #' @references Ahn, S. C. and Horenstein, A. R. (2013). Eigenvalue ratio rest for the number of factors. Econometrica, 81(3) 1203–1227.
 #' @references Benjamini, Y. and Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. J. R. Stat. Soc. Ser. B. Stat. Methodol. 57 289–300.

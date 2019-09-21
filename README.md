@@ -36,16 +36,17 @@ The library `FarmTest` is coded in `Rcpp` and `RcppArmadillo`. The following err
 
   2. For R version >= 3.4.* : Download and run the installer [here](https://gcc.gnu.org/wiki/GFortranBinaries#MacOS).
     
-* Error: "cannot remove prior installation of package 'Rcpp'": This issue happens occasionally when you have installed an old version of the package `Rcpp` before. Update `Rcpp` with command `install.packages("Rcpp")` will solve the problem.
+* Error: "cannot remove prior installation of package 'Rcpp'": This issue happens occasionally when you have installed an old version of the package `Rcpp` before. Updating `Rcpp` with command `install.packages("Rcpp")` will solve the problem.
 
 ## Functions
 
-There are four functions in this library:
+There are five functions in this library:
 
 * `farm.test`: Factor-adjusted robust multiple testing.
-* `print.farm.test`: Print function for the outputs of `farm.test`.
+* `print.farm.test`: Print function for `farm.test`.
 * `farm.mean`: Tuning-free Huber mean estimation.
 * `farm.cov`: Tuning-free Huber-type covariance estimation.
+* `farm.fdr`: FDR control given a sequence of p-values.
 
 ## Getting help
 
