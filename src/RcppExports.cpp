@@ -33,6 +33,35 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rmTest
+Rcpp::List rmTest(const arma::mat& X, const arma::vec& h0, const double alpha, const std::string alternative);
+RcppExport SEXP _FarmTest_rmTest(SEXP XSEXP, SEXP h0SEXP, SEXP alphaSEXP, SEXP alternativeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type h0(h0SEXP);
+    Rcpp::traits::input_parameter< const double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type alternative(alternativeSEXP);
+    rcpp_result_gen = Rcpp::wrap(rmTest(X, h0, alpha, alternative));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rmTestTwo
+Rcpp::List rmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& h0, const double alpha, const std::string alternative);
+RcppExport SEXP _FarmTest_rmTestTwo(SEXP XSEXP, SEXP YSEXP, SEXP h0SEXP, SEXP alphaSEXP, SEXP alternativeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type h0(h0SEXP);
+    Rcpp::traits::input_parameter< const double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type alternative(alternativeSEXP);
+    rcpp_result_gen = Rcpp::wrap(rmTestTwo(X, Y, h0, alpha, alternative));
+    return rcpp_result_gen;
+END_RCPP
+}
 // farmTest
 Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K, const double alpha, const std::string alternative);
 RcppExport SEXP _FarmTest_farmTest(SEXP XSEXP, SEXP h0SEXP, SEXP KSEXP, SEXP alphaSEXP, SEXP alternativeSEXP) {
@@ -101,6 +130,8 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_FarmTest_huberMean", (DL_FUNC) &_FarmTest_huberMean, 4},
     {"_FarmTest_huberCov", (DL_FUNC) &_FarmTest_huberCov, 3},
+    {"_FarmTest_rmTest", (DL_FUNC) &_FarmTest_rmTest, 4},
+    {"_FarmTest_rmTestTwo", (DL_FUNC) &_FarmTest_rmTestTwo, 5},
     {"_FarmTest_farmTest", (DL_FUNC) &_FarmTest_farmTest, 5},
     {"_FarmTest_farmTestTwo", (DL_FUNC) &_FarmTest_farmTestTwo, 7},
     {"_FarmTest_farmTestFac", (DL_FUNC) &_FarmTest_farmTestFac, 5},

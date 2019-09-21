@@ -9,6 +9,14 @@ huberCov <- function(X, n, p) {
     .Call('_FarmTest_huberCov', PACKAGE = 'FarmTest', X, n, p)
 }
 
+rmTest <- function(X, h0, alpha = 0.05, alternative = "two.sided") {
+    .Call('_FarmTest_rmTest', PACKAGE = 'FarmTest', X, h0, alpha, alternative)
+}
+
+rmTestTwo <- function(X, Y, h0, alpha = 0.05, alternative = "two.sided") {
+    .Call('_FarmTest_rmTestTwo', PACKAGE = 'FarmTest', X, Y, h0, alpha, alternative)
+}
+
 farmTest <- function(X, h0, K = -1L, alpha = 0.05, alternative = "two.sided") {
     .Call('_FarmTest_farmTest', PACKAGE = 'FarmTest', X, h0, K, alpha, alternative)
 }

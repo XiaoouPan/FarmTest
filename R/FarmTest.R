@@ -66,10 +66,10 @@ farm.cov = function(X) {
 #' @description This function conducts factor-adjusted robust multiple testing (FarmTest) for means of multivariate data proposed in Fan et al. (2019) via a tuning-free procedure.
 #' @param X An \eqn{n} by \eqn{p} data matrix with each row being a sample.
 #' @param fX An \strong{optional} factor matrix with each column being a factor for \code{X}. The number of rows of \code{fX} and \code{X} must be the same.
-#' @param KX An \strong{optional} positive number of factors to be estimated for \code{X} when \code{fX} is not specified. \code{KX} cannot exceed the number of columns of \code{X}. If \code{KX} is not specified or specified to be non-positive, it will be estimated internally.
+#' @param KX An \strong{optional} positive number of factors to be estimated for \code{X} when \code{fX} is not specified. \code{KX} cannot exceed the number of columns of \code{X}. If \code{KX} is not specified or specified to be negative, it will be estimated internally. If \code{KX} is specified to be 0, no factor will be adjusted.
 #' @param Y An \strong{optional} data matrix used for two-sample FarmTest. The number of columns of \code{X} and \code{Y} must be the same.
 #' @param fY An \strong{optional} factor matrix for two-sample FarmTest with each column being a factor for \code{Y}. The number of rows of \code{fY} and \code{Y} must be the same.
-#' @param KY An \strong{optional} positive number of factors to be estimated for \code{Y} for two-sample FarmTest when \code{fY} is not specified. \code{KY} cannot exceed the number of columns of \code{Y}. If \code{KY} is not specified or specified to be non-positive, it will be estimated internally.
+#' @param KY An \strong{optional} positive number of factors to be estimated for \code{Y} for two-sample FarmTest when \code{fY} is not specified. \code{KY} cannot exceed the number of columns of \code{Y}. If \code{KY} is not specified or specified to be negative, it will be estimated internally. If \code{KY} is specified to be 0, no factor will be adjusted.
 #' @param h0 An \strong{optional} \eqn{p}-vector of true means, or difference in means for two-sample FarmTest. The default is a zero vector.
 #' @param alternative An \strong{optional} character string specifying the alternate hypothesis, must be one of "two.sided" (default), "less" or "greater".
 #' @param alpha An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.
@@ -94,7 +94,7 @@ farm.cov = function(X) {
 #' }
 #' @details For two-sample FarmTest, \code{means}, \code{stdDev}, \code{loadings}, \code{eigenVal}, \code{eigenRatio}, \code{nfactors} and \code{n} will be lists of items for sample X and Y separately.
 #' @details \code{alternative = "greater"} is the alternative that \eqn{\mu > \mu_0} for one-sample test or \eqn{\mu_X > \mu_Y} for two-sample test.
-#' @references Ahn, S. C. and Horenstein, A. R. (2013). Eigenvalue ratio rest for the number of factors. Econometrica, 81(3) 1203–1227.
+#' @references Ahn, S. C. and Horenstein, A. R. (2013). Eigenvalue ratio test for the number of factors. Econometrica, 81(3) 1203–1227.
 #' @references Benjamini, Y. and Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. J. R. Stat. Soc. Ser. B. Stat. Methodol. 57 289–300.
 #' @references Fan, J., Ke, Y., Sun, Q. and Zhou, W-X. (2019). FarmTest: Factor-adjusted robust multiple testing with approximate false discovery control. J. Amer. Statist. Assoc., to appear.
 #' @references Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.
@@ -144,12 +144,12 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
   }
   output = NULL
   reject = "no hypotheses rejected"
-  eigenVal = "only available when fX (fY) are unknown"
-  eigenRatio = "only available when fX (fY) are unknown and KX (KY) are not specified"
   if (is.null(Y) && !is.null(fX)) {
     if (nrow(fX) != nrow(X)) {
       stop("Number of rows of X and fX must be the same")
     } else {
+      eigenVal = "not available when fX is known"
+      eigenRatio = "not available when fX is known"
       rst.list = farmTestFac(X, fX, h0, alpha, alternative)
       if (sum(rst.list$significant) > 0) {
         reject = which(rst.list$significant == 1)
@@ -163,12 +163,25 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
   } else if (is.null(Y) && is.null(fX)) {
     if (KX > p) {
       stop("KX must be smaller than number of columns of X")
+    } else if (KX == 0) {
+      loadings = "not available when KX = 0"
+      eigenVal = "not available when KX = 0"
+      eigenRatio = "not available when KX = 0"
+      rst.list = rmTest(X, h0, alpha, alternative)
+      if (sum(rst.list$significant) > 0) {
+        reject = which(rst.list$significant == 1)
+      }
+      output = list(means = rst.list$means, stdDev = rst.list$stdDev, loadings = loadings,
+                    eigenVal = eigenVal, eigenRatio = eigenRatio, nFactors = 0, tStat = rst.list$tStat, 
+                    pValues = rst.list$pValues, significant = rst.list$significant, reject = reject, 
+                    type = "unknown", n = nrow(X), p = p, h0 = h0, alpha = alpha, alternative = alternative)
     } else {
+      eigenRatio = "not available when KX is specified"
       rst.list = farmTest(X, h0, KX, alpha, alternative)
       if (sum(rst.list$significant) > 0) {
         reject = which(rst.list$significant == 1)
       }
-      if (KX <= 0) {
+      if (KX < 0) {
         eigenRatio = rst.list$ratio
       }
       output = list(means = rst.list$means, stdDev = rst.list$stdDev, loadings = rst.list$loadings,
@@ -187,6 +200,8 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
     } else if (nrow(fY) != nrow(Y)) {
       stop("Number of rows of Y and fY must be the same")
     } else {
+      eigenVal = "not available when fX and fY are known"
+      eigenRatio = "not available when fX and fY are known"
       rst.list = farmTestTwoFac(X, fX, Y, fY, h0, alpha, alternative)
       if (sum(rst.list$significant) > 0) {
         reject = which(rst.list$significant == 1)
@@ -208,6 +223,24 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       stop("Must provide factors for both or neither data matrices")
     } else if (KX > p || KY > p) {
       stop("KX and KY must be smaller than number of columns of X and Y")
+    } else if ((KX == 0 && KY != 0) || (KX != 0 && KY == 0)) {
+      stop("KX and KY must be both or neither 0")
+    } else if (KX == 0 && KY == 0) {
+      loadings = "not available when KX = 0 and KY = 0"
+      eigenVal = "not available when KX = 0 and KY = 0"
+      eigenRatio = "not available when KX = 0 and KY = 0"
+      rst.list = rmTestTwo(X, Y, h0, alpha, alternative)
+      if (sum(rst.list$significant) > 0) {
+        reject = which(rst.list$significant == 1)
+      }
+      means = list(X.means = rst.list$meansX, Y.means = rst.list$meansY)
+      stdDev = list(X.stdDev = rst.list$stdDevX, Y.stdDev = rst.list$stdDevY)
+      nfactors = list(X.nFactors = 0, Y.nFactors = 0)
+      n = list(X.n = nrow(X), Y.n = nrow(Y))
+      output = list(means = means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal,
+                    eigenRatio = eigenRatio, nFactors = nfactors, tStat = rst.list$tStat, 
+                    pValues = rst.list$pValues, significant = rst.list$significant, reject = reject, 
+                    type = "unknown", n = n, p = p, h0 = h0, alpha = alpha, alternative = alternative)
     } else {
       rst.list = farmTestTwo(X, Y, h0, KX, KY, alpha, alternative)
       if (sum(rst.list$significant) > 0) {
@@ -219,11 +252,12 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       nfactors = list(X.nFactors = rst.list$nfactorsX, Y.nFactors = rst.list$nfactorsY)
       eigenVal = list(X.eigenVal = rst.list$eigensX, Y.eigenVal = rst.list$eigensY)
       n = list(X.n = nrow(X), Y.n = nrow(Y))
-      ratioX = ratioY = "only available when fX (fY) are unknown and KX (KY) are not specified"
-      if (KX <= 0) {
+      ratioX = "not available when KX is specified"
+      ratioY = "not available when KY is specified"
+      if (KX < 0) {
         ratioX = rst.list$ratioX
       }
-      if (KY <= 0) {
+      if (KY < 0) {
         ratioY = rst.list$ratioY
       }
       eigenRatio = list(X.eigenRatio = ratioX, Y.eigenRatio = ratioY)

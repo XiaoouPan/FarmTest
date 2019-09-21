@@ -234,6 +234,61 @@ arma::vec getRatio(const arma::vec& eigenVal, const int n, const int p) {
 }
 
 // [[Rcpp::export]]
+Rcpp::List rmTest(const arma::mat& X, const arma::vec& h0, const double alpha = 0.05, 
+                  const std::string alternative = "two.sided") {
+  int n = X.n_rows, p = X.n_cols;
+  arma::vec mu(p), sigma(p);
+  for (int j = 0; j < p; j++) {
+    mu(j) = huberMean(X.col(j), n);
+    double theta = huberMean(arma::square(X.col(j)), n);
+    double temp = mu(j) * mu(j);
+    if (theta > temp) {
+      theta -= temp;
+    }
+    sigma(j) = theta;
+  }
+  sigma = arma::sqrt(sigma / n);
+  arma::vec T = (mu - h0) / sigma;
+  arma::vec Prob = getP(T, alternative);
+  arma::uvec significant = getRej(Prob, alpha, p);
+  return Rcpp::List::create(Rcpp::Named("means") = mu, Rcpp::Named("stdDev") = sigma,
+                            Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, 
+                            Rcpp::Named("significant") = significant);
+}
+
+// [[Rcpp::export]]
+Rcpp::List rmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& h0, 
+                     const double alpha = 0.05, const std::string alternative = "two.sided") {
+  int nX = X.n_rows, nY = Y.n_rows, p = X.n_cols;
+  arma::vec muX(p), sigmaX(p), muY(p), sigmaY(p);
+  for (int j = 0; j < p; j++) {
+    muX(j) = huberMean(X.col(j), nX);
+    muY(j) = huberMean(Y.col(j), nY);
+    double theta = huberMean(arma::square(X.col(j)), nX);
+    double temp = muX(j) * muX(j);
+    if (theta > temp) {
+      theta -= temp;
+    }
+    sigmaX(j) = theta;
+    theta = huberMean(arma::square(Y.col(j)), nY);
+    temp = muY(j) * muY(j);
+    if (theta > temp) {
+      theta -= temp;
+    }
+    sigmaY(j) = theta;
+  }
+  arma::vec T = (muX - muY - h0) / arma::sqrt(sigmaX / nX + sigmaY / nY);
+  sigmaX = arma::sqrt(sigmaX / nX);
+  sigmaY = arma::sqrt(sigmaY / nY);
+  arma::vec Prob = getP(T, alternative);
+  arma::uvec significant = getRej(Prob, alpha, p);
+  return Rcpp::List::create(Rcpp::Named("meansX") = muX, Rcpp::Named("meansY") = muY, 
+                            Rcpp::Named("stdDevX") = sigmaX, Rcpp::Named("stdDevY") = sigmaY,
+                            Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, 
+                            Rcpp::Named("significant") = significant);
+}
+
+// [[Rcpp::export]]
 Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const double alpha = 0.05, 
                     const std::string alternative = "two.sided") {
   int n = X.n_rows, p = X.n_cols;
@@ -341,7 +396,7 @@ Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& 
 Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, const arma::vec& h0, 
                        const double alpha = 0.05, const std::string alternative = "two.sided") {
   int n = X.n_rows, p = X.n_cols, K = fac.n_cols;
-  arma::mat Sigma = arma::sqrtmat_sympd(arma::cov(fac));
+  arma::mat Sigma = arma::cov(fac);
   arma::vec mu(p), sigma(p);
   arma::vec theta, beta;
   arma::mat B(p, K);
@@ -355,7 +410,7 @@ Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, const arma::vec
     if (sig > temp) {
       sig -= temp;
     }
-    temp = arma::norm(Sigma * beta, 2);
+    temp = arma::as_scalar(beta.t() * Sigma * beta);
     if (sig > temp * temp) {
       sig -= temp * temp;
     }
@@ -376,8 +431,8 @@ Rcpp::List farmTestTwoFac(const arma::mat& X, const arma::mat& facX, const arma:
                           const arma::mat& facY, const arma::vec& h0, const double alpha = 0.05, 
                           const std::string alternative = "two.sided") {
   int nX = X.n_rows, nY = Y.n_rows, p = X.n_cols, KX = facX.n_cols, KY = facY.n_cols;
-  arma::mat SigmaX = arma::sqrtmat_sympd(arma::cov(facX));
-  arma::mat SigmaY = arma::sqrtmat_sympd(arma::cov(facY));
+  arma::mat SigmaX = arma::cov(facX);
+  arma::mat SigmaY = arma::cov(facY);
   arma::vec muX(p), sigmaX(p), muY(p), sigmaY(p);
   arma::vec theta, beta;
   arma::mat BX(p, KX), BY(p, KY);
@@ -391,7 +446,7 @@ Rcpp::List farmTestTwoFac(const arma::mat& X, const arma::mat& facX, const arma:
     if (sig > temp) {
       sig -= temp;
     }
-    temp = arma::norm(SigmaX * beta, 2);
+    temp = arma::as_scalar(beta.t() * SigmaX * beta);
     if (sig > temp * temp) {
       sig -= temp * temp;
     }
@@ -405,15 +460,15 @@ Rcpp::List farmTestTwoFac(const arma::mat& X, const arma::mat& facX, const arma:
     if (sig > temp) {
       sig -= temp;
     }
-    temp = arma::norm(SigmaY * beta, 2);
+    temp = arma::as_scalar(beta.t() * SigmaY * beta);
     if (sig > temp * temp) {
       sig -= temp * temp;
     }
     sigmaY(j) = sig;
   }
+  arma::vec T = (muX - muY - h0) / arma::sqrt(sigmaX / nX + sigmaY / nY);
   sigmaX = arma::sqrt(sigmaX / nX);
   sigmaY = arma::sqrt(sigmaY / nY);
-  arma::vec T = (muX - muY - h0) / arma::sqrt(sigmaX / nX + sigmaY / nY);
   arma::vec Prob = getP(T, alternative);
   arma::uvec significant = getRej(Prob, alpha, p);
   return Rcpp::List::create(Rcpp::Named("meansX") = muX, Rcpp::Named("meansY") = muY, 
