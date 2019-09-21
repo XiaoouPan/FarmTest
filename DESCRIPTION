@@ -4,10 +4,7 @@ Title: Factor Adjustd Robust Multiple Testing
 Version: 2.0.0
 Date: 2019-09-07
 Author: Xiaoou Pan, Koushiki Bose, Yuan Ke and Wen-Xin Zhou
-Maintainer: Xiaoou Pan <xip024@ucsd.edu>,
-            Koushiki Bose <koush.bose@gmail.com>,
-            Yuan Ke <Yuan.Ke@uga.edu>,
-            Wen-Xin Zhou <wez243@ucsd.edu>
+Maintainer: Xiaoou Pan <xip024@ucsd.edu>
 Description: This package performs robust multiple testing for means in the presence of known and unknown latent factors. 
              It implements a robust procedure to estimate distribution parameters using Huber loss function with a tuning-free principle and accounts for strong dependence among coordinates via an approximate factor model. 
              This method is particularly suitable for high dimensional data when there are many variables but only a small number of observations available. 
