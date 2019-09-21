@@ -39,7 +39,7 @@ An object with S3 class \code{farm.test} containing the following items will be 
 \item \code{tStat} Values of test statistics, a vector with length \eqn{p}.
 \item \code{pValues} P-values of tests, a vector with length \eqn{p}.
 \item \code{significant} Boolean values indicating whether each test is significant, with 1 for significant and 0 for non-significant, a vector with length \eqn{p}.
-\item \code{reject} Indices of tests that are rejected. It will show "no hypotheses rejected" if none of the tests are rejects.
+\item \code{reject} Indices of tests that are rejected. It will show "no hypotheses rejected" if none of the tests are rejected.
 \item \code{type} Indicates whether factor is known or unknown.
 \item \code{n} Sample size.
 \item \code{p} Data dimension.
@@ -100,4 +100,6 @@ Zhou, W-X., Bose, K., Fan, J. and Liu, H. (2018). A new perspective on robust M-
 }
 \seealso{
 \code{\link{print.farm.test}}
+
+\code{\link{farm.fdr}}
 }

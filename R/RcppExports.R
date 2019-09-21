@@ -9,6 +9,10 @@ huberCov <- function(X, n, p) {
     .Call('_FarmTest_huberCov', PACKAGE = 'FarmTest', X, n, p)
 }
 
+getRej <- function(Prob, alpha, p) {
+    .Call('_FarmTest_getRej', PACKAGE = 'FarmTest', Prob, alpha, p)
+}
+
 rmTest <- function(X, h0, alpha = 0.05, alternative = "two.sided") {
     .Call('_FarmTest_rmTest', PACKAGE = 'FarmTest', X, h0, alpha, alternative)
 }

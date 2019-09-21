@@ -203,6 +203,7 @@ arma::vec getP(const arma::vec& T, const std::string alternative) {
   return rst;
 }
 
+// [[Rcpp::export]]
 arma::uvec getRej(const arma::vec& Prob, const double alpha, const int p) {
   double piHat = (double)arma::sum(Prob > alpha) / ((1 - alpha) * p);
   arma::vec z = arma::sort(Prob);

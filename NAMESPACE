@@ -2,6 +2,7 @@
 
 S3method(print,farm.test)
 export(farm.cov)
+export(farm.fdr)
 export(farm.mean)
 export(farm.test)
 exportPattern("^[[:alpha:]]+")

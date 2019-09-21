@@ -84,7 +84,7 @@ farm.cov = function(X) {
 #' \item \code{tStat} Values of test statistics, a vector with length \eqn{p}.
 #' \item \code{pValues} P-values of tests, a vector with length \eqn{p}.
 #' \item \code{significant} Boolean values indicating whether each test is significant, with 1 for significant and 0 for non-significant, a vector with length \eqn{p}.
-#' \item \code{reject} Indices of tests that are rejected. It will show "no hypotheses rejected" if none of the tests are rejects.
+#' \item \code{reject} Indices of tests that are rejected. It will show "no hypotheses rejected" if none of the tests are rejected.
 #' \item \code{type} Indicates whether factor is known or unknown.
 #' \item \code{n} Sample size.
 #' \item \code{p} Data dimension.
@@ -102,6 +102,7 @@ farm.cov = function(X) {
 #' @references Sun, Q., Zhou, W.-X. and Fan, J. (2019). Adaptive Huber regression. J. Amer. Statist. Assoc., to appear.
 #' @references Zhou, W-X., Bose, K., Fan, J. and Liu, H. (2018). A new perspective on robust M-estimation: Finite sample theory and applications to dependence-adjusted multiple testing. Ann. Statist. 46 1904-1931.
 #' @seealso \code{\link{print.farm.test}}
+#' @seealso \code{\link{farm.fdr}}
 #' @examples 
 #' n = 50
 #' p = 100
@@ -271,10 +272,10 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
   return (output)
 }
 
-#' @title Summarize and print the results of FarmTest
-#' @description Print function for objects with class "\code{farm.test}".
+#' @title Summary and print function of FarmTest
+#' @description This is the print function of S3 objects with class "\code{farm.test}". It summarizes and prints the outputs of \code{farm.test} function.
 #' @param x A \code{farm.test} object.
-#' @return A general summary of FarmTest will be displayed.
+#' @return No variable will be returned, but a general summary of FarmTest will be displayed.
 #' @seealso \code{\link{farm.test}}
 #' @examples 
 #' n = 50
@@ -308,4 +309,36 @@ print.farm.test = function(x) {
   cat(paste("Alternative hypothesis: ",  x$alternative, "\n", sep = ""))
   cat(paste("Number of hypothesis rejected: ", sum(x$significant), "\n", sep = ""))
   cat(paste("Indices of hypothesis rejected: ", paste(x$reject, collapse = " "), "\n", sep = ""))
+}
+
+#' @title FDR control given a sequence of p-values
+#' @description Given a sequence of p-values, this function conducts multiple testing and outputs the indices of rejected hypotheses using an adaptive Benjamini-Hochberg procedure proposed by Storey (2002).
+#' @param pValues A sequence of p-values, each entry of \code{pValues} must be between 0 and 1.
+#' @param alpha An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be strictly between 0 and 1. The default value is 0.05.
+#' @return Indices of tests that are rejected will be returned. It will show "no hypotheses rejected" if none of the tests are rejected.
+#' @references Benjamini, Y. and Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. J. R. Stat. Soc. Ser. B. Stat. Methodol. 57 289–300.
+#' @references Storey, J. D. (2002). A direct approach to false discovery rates. J. R. Stat. Soc. Ser. B. Stat. Methodol. 64, 479–498.
+#' @examples 
+#' set.seed(100)
+#' n = 50
+#' p = 100
+#' X = matrix(rnorm(n * p), n, p)
+#' pValues = apply(X, 2, function(x) t.test(x)$p.value)
+#' farm.fdr(pValues)
+#' @seealso \code{\link{farm.test}}
+#' @export
+farm.fdr = function(pValues, alpha = 0.05) {
+  if((sum(pValues < 0) != 0) || (sum(pValues > 1) != 0)) {
+    stop("Each p-value must be between 0 and 1")
+  } else if (alpha >= 1 || alpha <= 0) {
+    stop("Alpha should be strictly between 0 and 1")
+  } else {
+    p = length(pValues)
+    significant = getRej(pValues, alpha, p)
+    reject = "no hypotheses rejected"
+    if (sum(significant) > 0) {
+      reject = which(significant == 1)
+    }
+    return (reject)
+  }
 }

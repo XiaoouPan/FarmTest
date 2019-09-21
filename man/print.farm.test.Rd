@@ -2,7 +2,7 @@
 % Please edit documentation in R/FarmTest.R
 \name{print.farm.test}
 \alias{print.farm.test}
-\title{Summarize and print the results of FarmTest}
+\title{Summary and print function of FarmTest}
 \usage{
 \method{print}{farm.test}(x)
 }
@@ -10,10 +10,10 @@
 \item{x}{A \code{farm.test} object.}
 }
 \value{
-A general summary of FarmTest will be displayed.
+No variable will be returned, but a general summary of FarmTest will be displayed.
 }
 \description{
-Print function for objects with class "\code{farm.test}".
+This is the print function of S3 objects with class "\code{farm.test}". It summarizes and prints the outputs of \code{farm.test} function.
 }
 \examples{
 n = 50
