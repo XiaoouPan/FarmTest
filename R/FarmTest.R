@@ -85,7 +85,7 @@ farm.cov = function(X) {
 #' \item \code{pValues} P-values of tests, a vector with length \eqn{p}.
 #' \item \code{significant} Boolean values indicating whether each test is significant, with 1 for significant and 0 for non-significant, a vector with length \eqn{p}.
 #' \item \code{reject} Indices of tests that are rejected. It will show "no hypotheses rejected" if none of the tests are rejected.
-#' \item \code{type} Indicates whether factor is known or unknown.
+#' \item \code{type} Indicator of whether factor is known or unknown.
 #' \item \code{n} Sample size.
 #' \item \code{p} Data dimension.
 #' \item \code{h0} Null hypothesis, a vector with length \eqn{p}.
@@ -275,7 +275,7 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
 #' @title Summary and print function of FarmTest
 #' @description This is the print function of S3 objects with class "\code{farm.test}". It summarizes and prints the outputs of \code{farm.test} function.
 #' @param x A \code{farm.test} object.
-#' @return No variable will be returned, but a general summary of FarmTest will be displayed.
+#' @return No variable will be returned, but a brief summary of FarmTest will be displayed.
 #' @seealso \code{\link{farm.test}}
 #' @examples 
 #' n = 50
@@ -307,8 +307,7 @@ print.farm.test = function(x) {
   }
   cat(paste("FDR to be controlled at: ", x$alpha, "\n", sep = ""))
   cat(paste("Alternative hypothesis: ",  x$alternative, "\n", sep = ""))
-  cat(paste("Number of hypothesis rejected: ", sum(x$significant), "\n", sep = ""))
-  cat(paste("Indices of hypothesis rejected: ", paste(x$reject, collapse = " "), "\n", sep = ""))
+  cat(paste("Number of hypotheses rejected: ", sum(x$significant), "\n", sep = ""))
 }
 
 #' @title FDR control given a sequence of p-values

@@ -10,7 +10,7 @@
 \item{x}{A \code{farm.test} object.}
 }
 \value{
-No variable will be returned, but a general summary of FarmTest will be displayed.
+No variable will be returned, but a brief summary of FarmTest will be displayed.
 }
 \description{
 This is the print function of S3 objects with class "\code{farm.test}". It summarizes and prints the outputs of \code{farm.test} function.
