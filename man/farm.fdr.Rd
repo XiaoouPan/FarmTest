@@ -21,7 +21,7 @@ Given a sequence of p-values, this function conducts multiple testing and output
 set.seed(100)
 n = 50
 p = 100
-X = matrix(rnorm(n * p), n, p)
+X = cbind(matrix(rnorm(n * 10, 1, 1), n, 10), matrix(rnorm(n * (p - 10)), n, p - 10))
 pValues = apply(X, 2, function(x) t.test(x)$p.value)
 farm.fdr(pValues)
 }
