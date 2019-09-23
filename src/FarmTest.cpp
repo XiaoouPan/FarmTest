@@ -51,7 +51,6 @@ double rootf2(const arma::vec& resSq, const int n, const int d, const int N, dou
   return (low + up) / 2;
 }
 
-// [[Rcpp::export]]
 double huberMean(const arma::vec& X, const int n, const double epsilon = 0.0001, const int iteMax = 500) {
   double muOld = 0;
   double muNew = arma::mean(X);
@@ -93,7 +92,6 @@ double hMeanCov(const arma::vec& Z, const int n, const int d, const int N,
   return muNew;
 }
 
-// [[Rcpp::export]]
 Rcpp::List huberCov(const arma::mat& X, const int n, const int p) {
   arma::vec mu(p);
   arma::mat sigmaHat(p, p);
@@ -203,7 +201,6 @@ arma::vec getP(const arma::vec& T, const std::string alternative) {
   return rst;
 }
 
-// [[Rcpp::export]]
 arma::uvec getRej(const arma::vec& Prob, const double alpha, const int p) {
   double piHat = (double)arma::sum(Prob > alpha) / ((1 - alpha) * p);
   arma::vec z = arma::sort(Prob);
@@ -234,7 +231,6 @@ arma::vec getRatio(const arma::vec& eigenVal, const int n, const int p) {
   return ratio;
 }
 
-// [[Rcpp::export]]
 Rcpp::List rmTest(const arma::mat& X, const arma::vec& h0, const double alpha = 0.05, 
                   const std::string alternative = "two.sided") {
   int n = X.n_rows, p = X.n_cols;
@@ -257,7 +253,6 @@ Rcpp::List rmTest(const arma::mat& X, const arma::vec& h0, const double alpha = 
                             Rcpp::Named("significant") = significant);
 }
 
-// [[Rcpp::export]]
 Rcpp::List rmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& h0, 
                      const double alpha = 0.05, const std::string alternative = "two.sided") {
   int nX = X.n_rows, nY = Y.n_rows, p = X.n_cols;
@@ -289,7 +284,6 @@ Rcpp::List rmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& h0
                             Rcpp::Named("significant") = significant);
 }
 
-// [[Rcpp::export]]
 Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const double alpha = 0.05, 
                     const std::string alternative = "two.sided") {
   int n = X.n_rows, p = X.n_cols;
@@ -329,7 +323,6 @@ Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const d
                             Rcpp::Named("ratio") = ratio);
 }
 
-// [[Rcpp::export]]
 Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& h0, int KX = -1, 
                        int KY = -1, const double alpha = 0.05, const std::string alternative = "two.sided") {
   int nX = X.n_rows, nY = Y.n_rows, p = X.n_cols;
@@ -393,7 +386,6 @@ Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& 
                             Rcpp::Named("ratioY") = ratioY);
 }
 
-// [[Rcpp::export]]
 Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, const arma::vec& h0, 
                        const double alpha = 0.05, const std::string alternative = "two.sided") {
   int n = X.n_rows, p = X.n_cols, K = fac.n_cols;
@@ -427,7 +419,6 @@ Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, const arma::vec
                             Rcpp::Named("significant") = significant);
 }
 
-// [[Rcpp::export]]
 Rcpp::List farmTestTwoFac(const arma::mat& X, const arma::mat& facX, const arma::mat& Y, 
                           const arma::mat& facY, const arma::vec& h0, const double alpha = 0.05, 
                           const std::string alternative = "two.sided") {
