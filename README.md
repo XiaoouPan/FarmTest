@@ -28,15 +28,17 @@ library(FarmTest)
 
 First of all, to avoid most unexpected error messages, it is **strongly** recommended to update `R` to version >= 3.6.1.
 
-Besides, since the library `FarmTest` is coded in `Rcpp` and `RcppArmadillo`, the following error messages might arise when you first install it (we'll keep updating common error messages based on user feedback):
+Besides, since the library `FarmTest` is coded in `Rcpp` and `RcppArmadillo`, when you first install it, the following two build tools are required:
 
-* Error: "...could not find build tools necessary to build FarmTest": For Windows OS you need Rtools; for Mac OS X you need to install Command Line Tools for XCode. See [this link](https://support.rstudio.com/hc/en-us/articles/200486498-Package-Development-Prerequisites) for details. 
+1. Rtools for Windows OS or XCode Command Line Tools for Mac OS. See [this link](https://support.rstudio.com/hc/en-us/articles/200486498-Package-Development-Prerequisites) for details.
 
-* Error: "library not found for -lgfortran/..": It means your gfortran binaries are out-of-date. This is a common environment specific issue. 
+2. gfortran binaries: see [here](https://gcc.gnu.org/wiki/GFortranBinaries#MacOS) for instructions.
 
-  1. In R 3.0.0 - R 3.3.0: Upgrading to R 3.4 is strongly recommended. Then go to the next step. Alternatively, you can try the instructions [here](http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/).
+`FarmTest` should be working well after these steps. Some common error messages along with their solutions are collected below, and we'll keep updating them based on users' feedback:
 
-  2. For R version >= 3.4.* : Download and run the installer [here](https://gcc.gnu.org/wiki/GFortranBinaries#MacOS).
+* Error: "...could not find build tools necessary to build FarmTest": Please see step 1 above.
+
+* Error: "library not found for -lgfortran/..": Please see step 2 above.
     
 * Error: "cannot remove prior installation of package 'Rcpp'": This issue happens occasionally when you have installed an old version of the package `Rcpp` before. Updating `Rcpp` with command `install.packages("Rcpp")` will solve the problem.
 
