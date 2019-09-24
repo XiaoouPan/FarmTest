@@ -26,11 +26,13 @@ library(FarmTest)
 
 ## Common error messages
 
-The library `FarmTest` is coded in `Rcpp` and `RcppArmadillo`. The following error messages might arise when you first install it (we'll keep updating common error messages based on user feedback):
+First of all, to avoid most unexpected error messages, it is **strongly** recommended to update `R` to version >= 3.6.1.
+
+Besides, since the library `FarmTest` is coded in `Rcpp` and `RcppArmadillo`, the following error messages might arise when you first install it (we'll keep updating common error messages based on user feedback):
 
 * Error: "...could not find build tools necessary to build FarmTest": For Windows OS you need Rtools; for Mac OS X you need to install Command Line Tools for XCode. See [this link](https://support.rstudio.com/hc/en-us/articles/200486498-Package-Development-Prerequisites) for details. 
 
-* Error: "library not found for -lgfortran/-lquadmath": It means your gfortran binaries are out-of-date. This is a common environment specific issue. 
+* Error: "library not found for -lgfortran/..": It means your gfortran binaries are out-of-date. This is a common environment specific issue. 
 
   1. In R 3.0.0 - R 3.3.0: Upgrading to R 3.4 is strongly recommended. Then go to the next step. Alternatively, you can try the instructions [here](http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/).
 
