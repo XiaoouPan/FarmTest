@@ -298,11 +298,21 @@ print.farm.test = function(x) {
     cat(paste("Two-sample FarmTest with known factors \n"))
     cat(paste("X.n = ", x$n$X.n, ", Y.n = ", x$n$Y.n, ", p = ", x$p, ", X.nFactors = ", x$nFactors$X.nFactors, ", Y.nFactors = ", x$nFactors$Y.nFactors, "\n", sep = ""))
   } else if (x$type == "unknown" && length(x$n) == 1) {
-    cat(paste("One-sample FarmTest with unknown factors \n"))
-    cat(paste("n = ", x$n, ", p = ", x$p, ", nFactors = ", x$nFactors, "\n", sep = ""))
+    if (x$nFactors == 0) {
+      cat(paste("One-sample robust multiple test without factor-adjustment \n"))
+      cat(paste("n = ", x$n, ", p = ", x$p, "\n", sep = ""))
+    } else {
+      cat(paste("One-sample FarmTest with unknown factors \n"))
+      cat(paste("n = ", x$n, ", p = ", x$p, ", nFactors = ", x$nFactors, "\n", sep = ""))
+    }
   } else {
-    cat(paste("Two-sample FarmTest with unknown factors \n"))
-    cat(paste("X.n = ", x$n$X.n, ", Y.n = ", x$n$Y.n, ", p = ", x$p, ", X.nFactors = ", x$nFactors$X.nFactors, ", Y.nFactors = ", x$nFactors$Y.nFactors, "\n", sep = ""))
+    if (x$nFactors$X.nFactors == 0) {
+      cat(paste("Two-sample robust multiple test without factor-adjustment \n"))
+      cat(paste("X.n = ", x$n$X.n, ", Y.n = ", x$n$Y.n, ", p = ", x$p, "\n", sep = ""))
+    } else {
+      cat(paste("Two-sample FarmTest with unknown factors \n"))
+      cat(paste("X.n = ", x$n$X.n, ", Y.n = ", x$n$Y.n, ", p = ", x$p, ", X.nFactors = ", x$nFactors$X.nFactors, ", Y.nFactors = ", x$nFactors$Y.nFactors, "\n", sep = ""))
+    }
   }
   cat(paste("FDR to be controlled at: ", x$alpha, "\n", sep = ""))
   cat(paste("Alternative hypothesis: ",  x$alternative, "\n", sep = ""))
