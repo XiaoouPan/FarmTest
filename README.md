@@ -11,11 +11,11 @@ FarmTest implements a series of adaptive Huber methods combined with fast data-d
 
 ## Main updates 
 
-The FarmTest method involves multiple tuning parameters for fitting the factor models. In the case of latent factors, the algorithm first computes a robust covariance matrix estimator, and then use the eigenvalue ratio method ([Ahn and Horenstein, 2013](https://onlinelibrary.wiley.com/doi/abs/10.3982/ECTA8968))along with SVD to estimate the number of factors and loading vectors. It is therefore computationally expenstive to select all the tuning parameters via cross-validation. Instead, the current version makes use of the fast data-driven tuning scheme proposed by [Ke et al., 2019](https://arxiv.org/abs/1811.01520), which significantly reduces the computational cost.
+The FarmTest method involves multiple tuning parameters for fitting the factor models. In the case of latent factors, the algorithm first computes a robust covariance matrix estimator, and then use the eigenvalue ratio method ([Ahn and Horenstein, 2013](https://onlinelibrary.wiley.com/doi/abs/10.3982/ECTA8968)) along with SVD to estimate the number of factors and loading vectors. It is therefore computationally expenstive to select all the tuning parameters via cross-validation. Instead, the current version makes use of the fast data-driven tuning scheme proposed by [Ke et al., 2019](https://arxiv.org/abs/1811.01520), which significantly reduces the computational cost.
 
 ## Installation
 
-Install `FarmTest` from GitHub:
+`FarmTest` can be installed into `R` environment from the GitHub repository:
 
 ```r
 install.packages("devtools")
@@ -54,7 +54,7 @@ There are five functions in this library:
 
 ## Getting help
 
-Help on the functions can be accessed by typing `?`, followed by function name at the R command prompt. 
+Help on the functions can be accessed by typing `?`, followed by function name at the `R` command prompt. 
 
 For example, `?farm.test` will present a detailed documentation with inputs, outputs and examples of the function `farm.test`.
 
@@ -100,19 +100,25 @@ In addition, we illustrate the use of FarmTest under different circumstances. Fo
 output = farm.test(X, alternative = "less")
 ```
 
-The number of factors can be user-specified. It should be a positive integer that is less than the minumum between sample size and number of hypotheses. Without any subjective ground of the data, this is not recommended.
+The number of factors can be user-specified. It should be a non-negative integer that is less than the minumum between sample size and number of hypotheses. However, without any subjective ground of the data, this is not recommended.
 
 ```r
 output = farm.test(X, KX = 10)
 ```
 
-In a case with observable factors, put the *n* by *K* factor matrix into argument `fX`:
+As a special case, when we set number of factors to be zero, a robust test without factor adjustment will be conducted.
+
+```r
+output = farm.test(X, KX = 0)
+```
+
+In the situation with observable factors, put the *n* by *K* factor matrix into argument `fX`:
 
 ```r
 output = farm.test(X, fX = fX)
 ```
 
-As an extension to two-sample problems, we generate another sample Y with the same dimension 100, and conduct a two-sided test with latent factors.
+Finally, as an extension to two-sample problems, we generate another sample *Y* with the same dimension 100, and conduct a two-sided test with latent factors.
 
 ```r
 muY = rep(0, p)
