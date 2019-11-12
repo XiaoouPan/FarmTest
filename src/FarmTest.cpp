@@ -5,7 +5,7 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 
 double f1(const double x, const arma::vec& resSq, const int n) {
-  return arma::sum(arma::min(resSq, x * arma::ones(n))) / (n * x) - std::log(n) / n;
+  return arma::accu(arma::min(resSq, x * arma::ones(n))) / (n * x) - std::log(n) / n;
 }
 
 double rootf1(const arma::vec& resSq, const int n, double low, double up, 
@@ -28,8 +28,7 @@ double rootf1(const arma::vec& resSq, const int n, double low, double up,
 }
 
 double f2(const double x, const arma::vec& resSq, const int n, const int d, const int N) {
-  return arma::sum(arma::min(resSq, x * arma::ones(N))) / (N * x) - 
-    (2 * std::log(d) + std::log(n)) / n;
+  return arma::accu(arma::min(resSq, x * arma::ones(N))) / (N * x) - (2 * std::log(d) + std::log(n)) / n;
 }
 
 double rootf2(const arma::vec& resSq, const int n, const int d, const int N, double low, double up, 
@@ -62,11 +61,11 @@ double huberMean(const arma::vec& X, const int n, const double epsilon = 0.0001,
   while (((std::abs(muNew - muOld) > epsilon) || (std::abs(tauNew - tauOld) > epsilon)) && iteNum < iteMax) {
     muOld = muNew;
     tauOld = tauNew;
-    res = X - muOld * arma::ones(n);
+    res = X - muOld;
     resSq = arma::square(res);
-    tauNew = std::sqrt((long double)rootf1(resSq, n, arma::min(resSq), arma::sum(resSq)));
-    w = arma::min(tauNew * arma::ones(n) / arma::abs(res), arma::ones(n));
-    muNew = arma::as_scalar(X.t() * w) / arma::sum(w);
+    tauNew = std::sqrt((long double)rootf1(resSq, n, arma::min(resSq), arma::accu(resSq)));
+    w = arma::min(tauNew / arma::abs(res), arma::ones(n));
+    muNew = arma::as_scalar(X.t() * w) / arma::accu(w);
     iteNum++;
   }
   return muNew;
@@ -83,11 +82,11 @@ double hMeanCov(const arma::vec& Z, const int n, const int d, const int N,
   while (((std::abs(muNew - muOld) > epsilon) || (std::abs(tauNew - tauOld) > epsilon)) && iteNum < iteMax) {
     muOld = muNew;
     tauOld = tauNew;
-    res = Z - muOld * arma::ones(N);
+    res = Z - muOld;
     resSq = arma::square(res);
-    tauNew = std::sqrt((long double)rootf2(resSq, n, d, N, arma::min(resSq), arma::sum(resSq)));
-    w = arma::min(tauNew * arma::ones(N) / arma::abs(res), arma::ones(N));
-    muNew = arma::as_scalar(Z.t() * w) / arma::sum(w);
+    tauNew = std::sqrt((long double)rootf2(resSq, n, d, N, arma::min(resSq), arma::accu(resSq)));
+    w = arma::min(tauNew / arma::abs(res), arma::ones(N));
+    muNew = arma::as_scalar(Z.t() * w) / arma::accu(w);
     iteNum++;
   }
   return muNew;
@@ -126,7 +125,7 @@ arma::vec huberReg(const arma::mat& X, const arma::vec& Y, const int n, const in
   arma::vec thetaOld = arma::zeros(d);
   arma::vec thetaNew = arma::solve(X.t() * X, X.t() * Y);
   double tauOld = 0;
-  double tauNew = std::sqrt((long double)arma::sum(arma::square(Y - X * thetaNew)) / (n - d)) *
+  double tauNew = std::sqrt((long double)arma::accu(arma::square(Y - X * thetaNew)) / (n - d)) *
     std::sqrt((long double)n / std::log((long double)(d + std::log(n * d))));
   double mad;
   int iteNum = 0;
@@ -162,7 +161,7 @@ arma::vec huberRegItcp(const arma::mat& X, const arma::vec& Y, const int n, cons
   arma::vec thetaOld = arma::zeros(d + 1);
   arma::vec thetaNew = arma::solve(Z.t() * Z, Z.t() * Y);
   double tauOld = 0;
-  double tauNew = std::sqrt((long double)arma::sum(arma::square(Y - Z * thetaNew)) / (n - d)) *
+  double tauNew = std::sqrt((long double)arma::accu(arma::square(Y - Z * thetaNew)) / (n - d)) *
     std::sqrt((long double)n / std::log((long double)(d + std::log(n * d))));
   double mad;
   int iteNum = 0;
@@ -205,7 +204,7 @@ arma::vec getP(const arma::vec& T, const std::string alternative) {
 
 // [[Rcpp::export]]
 arma::uvec getRej(const arma::vec& Prob, const double alpha, const int p) {
-  double piHat = (double)arma::sum(Prob > alpha) / ((1 - alpha) * p);
+  double piHat = (double)arma::accu(Prob > alpha) / ((1 - alpha) * p);
   arma::vec z = arma::sort(Prob);
   double pAlpha = -1.0;
   for (int i = p - 1; i >= 0; i--) {
