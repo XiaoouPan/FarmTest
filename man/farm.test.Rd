@@ -6,7 +6,7 @@
 \usage{
 farm.test(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1,
   h0 = NULL, alternative = c("two.sided", "less", "greater"),
-  alpha = 0.05)
+  alpha = 0.05, p.method = c("bootstrap", "normal"), nBoot = 500)
 }
 \arguments{
 \item{X}{An \eqn{n} by \eqn{p} data matrix with each row being a sample.}
@@ -26,17 +26,21 @@ farm.test(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1,
 \item{alternative}{An \strong{optional} character string specifying the alternate hypothesis, must be one of "two.sided" (default), "less" or "greater".}
 
 \item{alpha}{An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.}
+
+\item{p.method}{An \strong{optional} character string specifying the method to calculate p-values when \code{fX} is known or when \code{KX = 0}, possible options are multiplier bootstrap or normal approximation. It must be one of "bootstrap" (default) or "normal".}
+
+\item{nBoot}{An \strong{optional} positive integer specifying the size of bootstrap sample, only available when \code{p.method = "bootstrap"}. The dafault value is 500.}
 }
 \value{
 An object with S3 class \code{farm.test} containing the following items will be returned:
 \itemize{
 \item \code{means} Estimated means, a vector with length \eqn{p}.
-\item \code{stdDev} Estimated standard deviations, a vector with length \eqn{p}.
+\item \code{stdDev} Estimated standard deviations, a vector with length \eqn{p}. It's not available for bootstrap method.
 \item \code{loadings} Estimated factor loadings, a matrix with dimension \eqn{p} by \eqn{K}, where \eqn{K} is the number of factors.
 \item \code{eigenVal} Eigenvalues of estimated covariance matrix, a vector with length \eqn{p}. It's only available when factors \code{fX} and \code{fY} are not given.
 \item \code{eigenRatio} Ratios of \code{eigenVal} to estimate \code{nFactors}, a vector with length \eqn{min(n, p) / 2}. It's only available when number of factors \code{KX} and \code{KY} are not given.
 \item \code{nFactors} Estimated or input number of factors, a positive integer.
-\item \code{tStat} Values of test statistics, a vector with length \eqn{p}.
+\item \code{tStat} Values of test statistics, a vector with length \eqn{p}. It's not available for bootstrap method.
 \item \code{pValues} P-values of tests, a vector with length \eqn{p}.
 \item \code{significant} Boolean values indicating whether each test is significant, with 1 for significant and 0 for non-significant, a vector with length \eqn{p}.
 \item \code{reject} Indices of tests that are rejected. It will show "no hypotheses rejected" if none of the tests are rejected.
@@ -55,6 +59,8 @@ This function conducts factor-adjusted robust multiple testing (FarmTest) for me
 For two-sample FarmTest, \code{means}, \code{stdDev}, \code{loadings}, \code{eigenVal}, \code{eigenRatio}, \code{nfactors} and \code{n} will be lists of items for sample X and Y separately.
 
 \code{alternative = "greater"} is the alternative that \eqn{\mu > \mu_0} for one-sample test or \eqn{\mu_X > \mu_Y} for two-sample test.
+
+Setting \code{p.method = "bootstrap"} for factor-known model will slow down the program, but it will achieve lower empirical FDP than setting \code{p.method = "normal"}.
 }
 \examples{
 n = 50

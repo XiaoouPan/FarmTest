@@ -72,15 +72,17 @@ farm.cov = function(X) {
 #' @param h0 An \strong{optional} \eqn{p}-vector of true means, or difference in means for two-sample FarmTest. The default is a zero vector.
 #' @param alternative An \strong{optional} character string specifying the alternate hypothesis, must be one of "two.sided" (default), "less" or "greater".
 #' @param alpha An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.
+#' @param p.method An \strong{optional} character string specifying the method to calculate p-values when \code{fX} is known or when \code{KX = 0}, possible options are multiplier bootstrap or normal approximation. It must be one of "bootstrap" (default) or "normal".
+#' @param nBoot An \strong{optional} positive integer specifying the size of bootstrap sample, only available when \code{p.method = "bootstrap"}. The dafault value is 500.
 #' @return An object with S3 class \code{farm.test} containing the following items will be returned:
 #' \itemize{
 #' \item \code{means} Estimated means, a vector with length \eqn{p}.
-#' \item \code{stdDev} Estimated standard deviations, a vector with length \eqn{p}.
+#' \item \code{stdDev} Estimated standard deviations, a vector with length \eqn{p}. It's not available for bootstrap method.
 #' \item \code{loadings} Estimated factor loadings, a matrix with dimension \eqn{p} by \eqn{K}, where \eqn{K} is the number of factors.
 #' \item \code{eigenVal} Eigenvalues of estimated covariance matrix, a vector with length \eqn{p}. It's only available when factors \code{fX} and \code{fY} are not given.
 #' \item \code{eigenRatio} Ratios of \code{eigenVal} to estimate \code{nFactors}, a vector with length \eqn{min(n, p) / 2}. It's only available when number of factors \code{KX} and \code{KY} are not given.
 #' \item \code{nFactors} Estimated or input number of factors, a positive integer.
-#' \item \code{tStat} Values of test statistics, a vector with length \eqn{p}.
+#' \item \code{tStat} Values of test statistics, a vector with length \eqn{p}. It's not available for bootstrap method.
 #' \item \code{pValues} P-values of tests, a vector with length \eqn{p}.
 #' \item \code{significant} Boolean values indicating whether each test is significant, with 1 for significant and 0 for non-significant, a vector with length \eqn{p}.
 #' \item \code{reject} Indices of tests that are rejected. It will show "no hypotheses rejected" if none of the tests are rejected.
@@ -93,6 +95,7 @@ farm.cov = function(X) {
 #' }
 #' @details For two-sample FarmTest, \code{means}, \code{stdDev}, \code{loadings}, \code{eigenVal}, \code{eigenRatio}, \code{nfactors} and \code{n} will be lists of items for sample X and Y separately.
 #' @details \code{alternative = "greater"} is the alternative that \eqn{\mu > \mu_0} for one-sample test or \eqn{\mu_X > \mu_Y} for two-sample test.
+#' @details Setting \code{p.method = "bootstrap"} for factor-known model will slow down the program, but it will achieve lower empirical FDP than setting \code{p.method = "normal"}.
 #' @references Ahn, S. C. and Horenstein, A. R. (2013). Eigenvalue ratio test for the number of factors. Econometrica, 81(3) 1203–1227.
 #' @references Benjamini, Y. and Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. J. R. Stat. Soc. Ser. B. Stat. Methodol. 57 289–300.
 #' @references Fan, J., Ke, Y., Sun, Q. and Zhou, W-X. (2019). FarmTest: Factor-adjusted robust multiple testing with approximate false discovery control. J. Amer. Statist. Assoc., to appear.
@@ -130,9 +133,11 @@ farm.cov = function(X) {
 #' output = farm.test(X, Y = Y)
 #' @export 
 farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = NULL, 
-                     alternative = c("two.sided", "less", "greater"), alpha = 0.05) {
+                     alternative = c("two.sided", "less", "greater"), alpha = 0.05, 
+                     p.method = c("bootstrap", "normal"), nBoot = 500) {
   p = ncol(X)
   alternative = match.arg(alternative)
+  p.method = match.arg(p.method)
   if (is.null(h0)) {
     h0 = rep(0, p)
   }
@@ -143,6 +148,7 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
     stop("Alpha should be strictly between 0 and 1")
   }
   output = NULL
+  rst.list = NULL
   reject = "no hypotheses rejected"
   if (is.null(Y) && !is.null(fX)) {
     if (nrow(fX) != nrow(X)) {
@@ -150,15 +156,24 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
     } else {
       eigenVal = "not available when fX is known"
       eigenRatio = "not available when fX is known"
-      rst.list = farmTestFac(X, fX, h0, alpha, alternative)
+      stdDev = "not available for bootstrap method"
+      loadings = "not available for bootstrap method"
+      tStat = "not available for bootstrap method"
+      if (p.method == "bootstrap") {
+        rst.list = farmTestFacBoot(X, fX, h0, alpha, alternative, nBoot)
+      } else {
+        rst.list = farmTestFac(X, fX, h0, alpha, alternative)
+        stdDev = rst.list$stdDev
+        loadings = rst.list$loadings
+        tStat = rst.list$tStat
+      }
       if (sum(rst.list$significant) > 0) {
         reject = which(rst.list$significant == 1)
       }
-      output = list(means = rst.list$means, stdDev = rst.list$stdDev, loadings = rst.list$loadings,
-                    eigenVal = eigenVal, eigenRatio = eigenRatio, nFactors = rst.list$nfactors, 
-                    tStat = rst.list$tStat, pValues = rst.list$pValues, significant = rst.list$significant, 
-                    reject = reject, type = "known", n = nrow(X), p = p, h0 = h0, alpha = alpha, 
-                    alternative = alternative)
+      output = list(means = rst.list$means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal, 
+                    eigenRatio = eigenRatio, nFactors = rst.list$nfactors, tStat = tStat, 
+                    pValues = rst.list$pValues, significant = rst.list$significant, reject = reject, 
+                    type = "known", n = nrow(X), p = p, h0 = h0, alpha = alpha, alternative = alternative)
     }
   } else if (is.null(Y) && is.null(fX)) {
     if (KX > p) {
@@ -167,14 +182,22 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       loadings = "not available when KX = 0"
       eigenVal = "not available when KX = 0"
       eigenRatio = "not available when KX = 0"
-      rst.list = rmTest(X, h0, alpha, alternative)
+      stdDev = "not available for bootstrap method"
+      tStat = "not available for bootstrap method"
+      if (p.method == "bootstrap") {
+        rst.list = rmTestBoot(X, h0, alpha, alternative, nBoot)
+      } else {
+        rst.list = rmTest(X, h0, alpha, alternative)
+        stdDev = rst.list$stdDev
+        tStat = rst.list$tStat
+      }
       if (sum(rst.list$significant) > 0) {
         reject = which(rst.list$significant == 1)
       }
-      output = list(means = rst.list$means, stdDev = rst.list$stdDev, loadings = loadings,
-                    eigenVal = eigenVal, eigenRatio = eigenRatio, nFactors = 0, tStat = rst.list$tStat, 
-                    pValues = rst.list$pValues, significant = rst.list$significant, reject = reject, 
-                    type = "unknown", n = nrow(X), p = p, h0 = h0, alpha = alpha, alternative = alternative)
+      output = list(means = rst.list$means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal, 
+                    eigenRatio = eigenRatio, nFactors = 0, tStat = tStat, pValues = rst.list$pValues, 
+                    significant = rst.list$significant, reject = reject, type = "unknown", 
+                    n = nrow(X), p = p, h0 = h0, alpha = alpha, alternative = alternative)
     } else {
       eigenRatio = "not available when KX is specified"
       rst.list = farmTest(X, h0, KX, alpha, alternative)
@@ -202,17 +225,25 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
     } else {
       eigenVal = "not available when fX and fY are known"
       eigenRatio = "not available when fX and fY are known"
-      rst.list = farmTestTwoFac(X, fX, Y, fY, h0, alpha, alternative)
+      stdDev = "not available for bootstrap method"
+      loadings = "not available for bootstrap method"
+      tStat = "not available for bootstrap method"
+      if (p.method == "bootstrap") {
+        rst.list = farmTestTwoFacBoot(X, fX, Y, fY, h0, alpha, alternative, nBoot)
+      } else {
+        rst.list = farmTestTwoFac(X, fX, Y, fY, h0, alpha, alternative)
+        stdDev = list(X.stdDev = rst.list$stdDevX, Y.stdDev = rst.list$stdDevY)
+        loadings = list(X.loadings = rst.list$loadingsX, Y.loadings = rst.list$loadingsY)
+        tStat = rst.list$tStat
+      }
       if (sum(rst.list$significant) > 0) {
         reject = which(rst.list$significant == 1)
       }
       means = list(X.means = rst.list$meansX, Y.means = rst.list$meansY)
-      stdDev = list(X.stdDev = rst.list$stdDevX, Y.stdDev = rst.list$stdDevY)
-      loadings = list(X.loadings = rst.list$loadingsX, Y.loadings = rst.list$loadingsY)
       nfactors = list(X.nFactors = rst.list$nfactorsX, Y.nFactors = rst.list$nfactorsY)
       n = list(X.n = nrow(X), Y.n = nrow(Y))
       output = list(means = means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal, 
-                    eigenRatio = eigenRatio, nFactors = nfactors, tStat = rst.list$tStat, 
+                    eigenRatio = eigenRatio, nFactors = nfactors, tStat = tStat, 
                     pValues = rst.list$pValues, significant = rst.list$significant, reject = reject, 
                     type = "known", n = n, p = p, h0 = h0, alpha = alpha, alternative = alternative)
     }
@@ -229,16 +260,23 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       loadings = "not available when KX = 0 and KY = 0"
       eigenVal = "not available when KX = 0 and KY = 0"
       eigenRatio = "not available when KX = 0 and KY = 0"
-      rst.list = rmTestTwo(X, Y, h0, alpha, alternative)
+      stdDev = "not available for bootstrap method"
+      tStat = "not available for bootstrap method"
+      if (p.method == "bootstrap") {
+        rst.list = rmTestTwoBoot(X, Y, h0, alpha, alternative, nBoot)
+      } else {
+        rst.list = rmTestTwo(X, Y, h0, alpha, alternative)
+        stdDev = list(X.stdDev = rst.list$stdDevX, Y.stdDev = rst.list$stdDevY)
+        tStat = rst.list$tStat
+      }
       if (sum(rst.list$significant) > 0) {
         reject = which(rst.list$significant == 1)
       }
       means = list(X.means = rst.list$meansX, Y.means = rst.list$meansY)
-      stdDev = list(X.stdDev = rst.list$stdDevX, Y.stdDev = rst.list$stdDevY)
       nfactors = list(X.nFactors = 0, Y.nFactors = 0)
       n = list(X.n = nrow(X), Y.n = nrow(Y))
       output = list(means = means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal,
-                    eigenRatio = eigenRatio, nFactors = nfactors, tStat = rst.list$tStat, 
+                    eigenRatio = eigenRatio, nFactors = nfactors, tStat = tStat, 
                     pValues = rst.list$pValues, significant = rst.list$significant, reject = reject, 
                     type = "unknown", n = n, p = p, h0 = h0, alpha = alpha, alternative = alternative)
     } else {
