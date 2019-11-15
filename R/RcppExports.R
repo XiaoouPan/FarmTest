@@ -17,6 +17,10 @@ rmTest <- function(X, h0, alpha = 0.05, alternative = "two.sided") {
     .Call('_FarmTest_rmTest', PACKAGE = 'FarmTest', X, h0, alpha, alternative)
 }
 
+rmTestBoot <- function(X, h0, alpha = 0.05, alternative = "two.sided", B = 200L) {
+    .Call('_FarmTest_rmTestBoot', PACKAGE = 'FarmTest', X, h0, alpha, alternative, B)
+}
+
 rmTestTwo <- function(X, Y, h0, alpha = 0.05, alternative = "two.sided") {
     .Call('_FarmTest_rmTestTwo', PACKAGE = 'FarmTest', X, Y, h0, alpha, alternative)
 }
