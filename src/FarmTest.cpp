@@ -291,20 +291,15 @@ Rcpp::List rmTest(const arma::mat& X, const arma::vec& h0, const double alpha = 
 
 // [[Rcpp::export]]
 Rcpp::List rmTestBoot(const arma::mat& X, const arma::vec& h0, const double alpha = 0.05, 
-                      const std::string alternative = "two.sided", const int B = 200) {
+                      const std::string alternative = "two.sided", const int B = 500) {
   int n = X.n_rows, p = X.n_cols;
-  arma::vec mu(p);
-  for (int j = 0; j < p; j++) {
-    mu(j) = huberMean(X.col(j), n);
-  }
+  arma::vec mu = huberMeanVec(X, n, p);
   arma::mat boot(p, B);
   for (int i = 0; i < B; i++) {
     arma::uvec idx = arma::find(arma::randu(n) > 0.5);
     int subn = idx.size();
     arma::mat subX = X.rows(idx);
-    for (int j = 0; j < p; j++) {
-      boot(j, i) = huberMean(subX.col(j), subn);
-    }
+    boot.col(i) = huberMeanVec(subX, subn, p);
   }
   arma::vec Prob = getPboot(mu, boot, h0, alternative, p, B);
   arma::uvec significant = getRej(Prob, alpha, p);
@@ -342,6 +337,30 @@ Rcpp::List rmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& h0
                             Rcpp::Named("stdDevX") = sigmaX, Rcpp::Named("stdDevY") = sigmaY,
                             Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, 
                             Rcpp::Named("significant") = significant);
+}
+
+// [[Rcpp::export]]
+Rcpp::List rmTestTwoBoot(const arma::mat& X, const arma::mat& Y, const arma::vec& h0, 
+                         const double alpha = 0.05, const std::string alternative = "two.sided",
+                         const int B = 500) {
+  int nX = X.n_rows, nY = Y.n_rows, p = X.n_cols;
+  arma::vec muX = huberMeanVec(X, nX, p);
+  arma::vec muY = huberMeanVec(Y, nY, p);
+  arma::mat bootX(p, B), bootY(p, B);
+  for (int i = 0; i < B; i++) {
+    arma::uvec idx = arma::find(arma::randu(nX) > 0.5);
+    int subn = idx.size();
+    arma::mat subX = X.rows(idx);
+    bootX.col(i) = huberMeanVec(subX, subn, p);
+    idx = arma::find(arma::randu(nY) > 0.5);
+    subn = idx.size();
+    arma::mat subY = Y.rows(idx);
+    bootY.col(i) = huberMeanVec(subY, subn, p);
+  }
+  arma::vec Prob = getPboot(muX - muY, bootX - bootY, h0, alternative, p, B);
+  arma::uvec significant = getRej(Prob, alpha, p);
+  return Rcpp::List::create(Rcpp::Named("meansX") = muX, Rcpp::Named("meansY") = muY, 
+                            Rcpp::Named("pValues") = Prob, Rcpp::Named("significant") = significant);
 }
 
 // [[Rcpp::export]]
@@ -483,6 +502,30 @@ Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, const arma::vec
 }
 
 // [[Rcpp::export]]
+Rcpp::List farmTestFacBoot(const arma::mat& X, const arma::mat& fac, const arma::vec& h0, 
+                           const double alpha = 0.05, const std::string alternative = "two.sided",
+                           const int B = 500) {
+  int n = X.n_rows, p = X.n_cols, K = fac.n_cols;
+  arma::vec mu(p);
+  for (int j = 0; j < p; j++) {
+    mu(j) = huberReg(fac, X.col(j), n, K)(0);
+  }
+  arma::mat boot(p, B);
+  for (int i = 0; i < B; i++) {
+    arma::uvec idx = arma::find(arma::randu(n) > 0.5);
+    int subn = idx.size();
+    arma::mat subX = X.rows(idx);
+    for (int j = 0; j < p; j++) {
+      boot(j, i) = huberReg(fac.rows(idx), subX.col(j), subn, K)(0);
+    }
+  }
+  arma::vec Prob = getPboot(mu, boot, h0, alternative, p, B);
+  arma::uvec significant = getRej(Prob, alpha, p);
+  return Rcpp::List::create(Rcpp::Named("means") = mu, Rcpp::Named("nfactors") = K,
+                            Rcpp::Named("pValues") = Prob, Rcpp::Named("significant") = significant);
+}
+
+// [[Rcpp::export]]
 Rcpp::List farmTestTwoFac(const arma::mat& X, const arma::mat& facX, const arma::mat& Y, 
                           const arma::mat& facY, const arma::vec& h0, const double alpha = 0.05, 
                           const std::string alternative = "two.sided") {
@@ -533,4 +576,36 @@ Rcpp::List farmTestTwoFac(const arma::mat& X, const arma::mat& facX, const arma:
                             Rcpp::Named("nfactorsX") = KX, Rcpp::Named("nfactorsY") = KY,
                             Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, 
                             Rcpp::Named("significant") = significant);
+}
+
+// [[Rcpp::export]]
+Rcpp::List farmTestTwoFacBoot(const arma::mat& X, const arma::mat& facX, const arma::mat& Y, 
+                              const arma::mat& facY, const arma::vec& h0, const double alpha = 0.05, 
+                              const std::string alternative = "two.sided", const int B = 500) {
+  int nX = X.n_rows, nY = Y.n_rows, p = X.n_cols, KX = facX.n_cols, KY = facY.n_cols;
+  arma::vec muX(p), muY(p);
+  for (int j = 0; j < p; j++) {
+    muX(j) = huberReg(facX, X.col(j), nX, KX)(0);
+    muY(j) = huberReg(facY, Y.col(j), nY, KY)(0);
+  }
+  arma::mat bootX(p, B), bootY(p, B);
+  for (int i = 0; i < B; i++) {
+    arma::uvec idx = arma::find(arma::randu(nX) > 0.5);
+    int subn = idx.size();
+    arma::mat subX = X.rows(idx);
+    for (int j = 0; j < p; j++) {
+      bootX(j, i) = huberReg(facX.rows(idx), subX.col(j), subn, KX)(0);
+    }
+    idx = arma::find(arma::randu(nY) > 0.5);
+    subn = idx.size();
+    arma::mat subY = Y.rows(idx);
+    for (int j = 0; j < p; j++) {
+      bootY(j, i) = huberReg(facY.rows(idx), subY.col(j), subn, KY)(0);
+    }
+  }
+  arma::vec Prob = getPboot(muX - muY, bootX - bootY, h0, alternative, p, B);
+  arma::uvec significant = getRej(Prob, alpha, p);
+  return Rcpp::List::create(Rcpp::Named("meansX") = muX, Rcpp::Named("meansY") = muY, 
+                            Rcpp::Named("nfactorsX") = KX, Rcpp::Named("nfactorsY") = KY,
+                            Rcpp::Named("pValues") = Prob, Rcpp::Named("significant") = significant);
 }

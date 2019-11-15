@@ -17,12 +17,16 @@ rmTest <- function(X, h0, alpha = 0.05, alternative = "two.sided") {
     .Call('_FarmTest_rmTest', PACKAGE = 'FarmTest', X, h0, alpha, alternative)
 }
 
-rmTestBoot <- function(X, h0, alpha = 0.05, alternative = "two.sided", B = 200L) {
+rmTestBoot <- function(X, h0, alpha = 0.05, alternative = "two.sided", B = 500L) {
     .Call('_FarmTest_rmTestBoot', PACKAGE = 'FarmTest', X, h0, alpha, alternative, B)
 }
 
 rmTestTwo <- function(X, Y, h0, alpha = 0.05, alternative = "two.sided") {
     .Call('_FarmTest_rmTestTwo', PACKAGE = 'FarmTest', X, Y, h0, alpha, alternative)
+}
+
+rmTestTwoBoot <- function(X, Y, h0, alpha = 0.05, alternative = "two.sided", B = 500L) {
+    .Call('_FarmTest_rmTestTwoBoot', PACKAGE = 'FarmTest', X, Y, h0, alpha, alternative, B)
 }
 
 farmTest <- function(X, h0, K = -1L, alpha = 0.05, alternative = "two.sided") {
@@ -37,7 +41,15 @@ farmTestFac <- function(X, fac, h0, alpha = 0.05, alternative = "two.sided") {
     .Call('_FarmTest_farmTestFac', PACKAGE = 'FarmTest', X, fac, h0, alpha, alternative)
 }
 
+farmTestFacBoot <- function(X, fac, h0, alpha = 0.05, alternative = "two.sided", B = 500L) {
+    .Call('_FarmTest_farmTestFacBoot', PACKAGE = 'FarmTest', X, fac, h0, alpha, alternative, B)
+}
+
 farmTestTwoFac <- function(X, facX, Y, facY, h0, alpha = 0.05, alternative = "two.sided") {
     .Call('_FarmTest_farmTestTwoFac', PACKAGE = 'FarmTest', X, facX, Y, facY, h0, alpha, alternative)
+}
+
+farmTestTwoFacBoot <- function(X, facX, Y, facY, h0, alpha = 0.05, alternative = "two.sided", B = 500L) {
+    .Call('_FarmTest_farmTestTwoFacBoot', PACKAGE = 'FarmTest', X, facX, Y, facY, h0, alpha, alternative, B)
 }
 
