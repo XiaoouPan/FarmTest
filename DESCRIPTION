@@ -2,15 +2,15 @@ Package: FarmTest
 Type: Package
 Title: Factor Adjustd Robust Multiple Testing
 Version: 2.0.0
-Date: 2019-09-21
-Author: Xiaoou Pan, Koushiki Bose, Yuan Ke and Wen-Xin Zhou
+Date: 2019-11-15
+Author: Xiaoou Pan, Yuan Ke and Wen-Xin Zhou
 Maintainer: Xiaoou Pan <xip024@ucsd.edu>
 Description: FarmTest package performs robust multiple testing for means in the presence of known and unknown latent factors.
              It implements a series of adaptive Huber methods combined with fast data-drive tuning schemes to estimate model parameters and construct test statistics that are robust against heavy-tailed and/or assymetric error distributions. 
              Extensions to two-sample simultaneous mean comparison problems are also included. 
              As by-products, this package also contains functions that compute adaptive Huber mean and covariance matrix estimators that are of independent interest.
 Depends: R (>= 3.3.0)
-License: GPL-2
+License: GPL-3.0
 Encoding: UTF-8
 URL: https://github.com/XiaoouPan/FarmTest
 SystemRequirements: C++11

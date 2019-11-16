@@ -151,7 +151,7 @@ This library is built upon an earlier version written by Bose, K., Ke, Y. and Zh
 
 ## License
 
-GPL (>= 2)
+GPL-3.0
 
 ## Author(s)
 
