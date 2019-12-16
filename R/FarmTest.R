@@ -326,6 +326,7 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
 #' @title Summary and print function of FarmTest
 #' @description This is the print function of S3 objects with class "\code{farm.test}". It summarizes and prints the outputs of \code{farm.test} function.
 #' @param x A \code{farm.test} object.
+#' @param \dots Further arguments passed to or from other methods.
 #' @return No variable will be returned, but a brief summary of FarmTest will be displayed.
 #' @seealso \code{\link{farm.test}}
 #' @examples 
@@ -342,7 +343,7 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
 #' output = farm.test(X)
 #' output
 #' @export
-print.farm.test = function(x) {
+print.farm.test = function(x, ...) {
   if (x$type == "known" && length(x$n) == 1) {
     cat(paste("One-sample FarmTest with known factors \n"))
     cat(paste("n = ", x$n, ", p = ", x$p, ", nFactors = ", x$nFactors, "\n", sep = ""))

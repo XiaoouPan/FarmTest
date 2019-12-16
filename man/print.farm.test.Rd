@@ -4,10 +4,12 @@
 \alias{print.farm.test}
 \title{Summary and print function of FarmTest}
 \usage{
-\method{print}{farm.test}(x)
+\method{print}{farm.test}(x, ...)
 }
 \arguments{
 \item{x}{A \code{farm.test} object.}
+
+\item{\dots}{Further arguments passed to or from other methods.}
 }
 \value{
 No variable will be returned, but a brief summary of FarmTest will be displayed.
