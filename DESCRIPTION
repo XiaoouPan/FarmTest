@@ -6,7 +6,7 @@ Date: 2020-01-07
 Author: Xiaoou Pan, Yuan Ke and Wen-Xin Zhou
 Maintainer: Xiaoou Pan <xip024@ucsd.edu>
 Description: FarmTest package performs robust multiple testing for means in the presence of known and unknown latent factors.
-             It implements a series of adaptive Huber methods combined with fast data-drive tuning schemes to estimate model parameters and construct test statistics that are robust against heavy-tailed and/or assymetric error distributions. 
+             It implements a series of adaptive Huber methods combined with fast data-drive tuning schemes to estimate model parameters and construct test statistics that are robust against heavy-tailed and/or asymetric error distributions. 
              Extensions to two-sample simultaneous mean comparison problems are also included. 
              As by-products, this package also contains functions that compute adaptive Huber mean and covariance matrix estimators that are of independent interest.
 Depends: R (>= 3.6.0)
