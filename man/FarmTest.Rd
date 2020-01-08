@@ -6,6 +6,17 @@
 \usage{
 farmTest(X, h0, K = -1L, alpha = 0.05, alternative = "two.sided")
 }
+\arguments{
+\item{X}{An \eqn{n} by \eqn{p} data matrix with each row being a sample.}
+
+\item{h0}{A \eqn{p}-vector of true means.}
+
+\item{K}{An \strong{optional} positive number of factors to be estimated for \code{X}. \code{K} cannot exceed the number of columns of \code{X}. If \code{K} is not specified or specified to be negative, it will be estimated internally.}
+
+\item{alpha}{An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.}
+
+\item{alternative}{An \strong{optional} character string specifying the alternate hypothesis, must be one of "two.sided" (default), "less" or "greater".}
+}
 \description{
 Internal function implemented in C++ for FarmTest with unknown factors. This case is incorporated into \code{farm.test}.
 }

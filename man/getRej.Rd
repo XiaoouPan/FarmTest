@@ -6,6 +6,13 @@
 \usage{
 getRej(Prob, alpha, p)
 }
+\arguments{
+\item{Prob}{A sequence of p-values. Each entry of \code{Prob} must be between 0 and 1.}
+
+\item{alpha}{A numerical value for controlling the false discovery rate. The value of \code{alpha} must be strictly between 0 and 1.}
+
+\item{p}{The length of \code{Prob}.}
+}
 \description{
 Internal function implemented in C++ for an adaptive Benjamini-Hochberg procedure. This function is incorporated into \code{farm.fdr}.
 }

@@ -7,6 +7,19 @@
 farmTestFacBoot(X, fac, h0, alpha = 0.05, alternative = "two.sided",
   B = 500L)
 }
+\arguments{
+\item{X}{An \eqn{n} by \eqn{p} data matrix with each row being a sample.}
+
+\item{fac}{A factor matrix with each column being a factor for \code{X}. The number of rows of \code{fac} and \code{X} must be the same.}
+
+\item{h0}{A \eqn{p}-vector of true means.}
+
+\item{alpha}{An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.}
+
+\item{alternative}{An \strong{optional} character string specifying the alternate hypothesis, must be one of "two.sided" (default), "less" or "greater".}
+
+\item{B}{An \strong{optional} positive integer specifying the size of bootstrap sample. The dafault value is 500.}
+}
 \description{
 Internal function implemented in C++ for FarmTest with known factors, where p-values are obtained via multiplier bootstrap. 
 This case is incorporated into \code{farm.test}.

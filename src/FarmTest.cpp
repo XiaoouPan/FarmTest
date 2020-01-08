@@ -68,7 +68,7 @@ double rootf2(const arma::vec& resSq, const int n, const int d, const int N, dou
 //' @title Huber mean estimation
 //' @description Internal function implemented in C++ for tuning-free Huber mean estimation. This function is incorporated into \code{farm.mean}.
 //' @param X An \eqn{n}-dimensional data vector.
-//' @param n Dimension of \code{X}.
+//' @param n The length of \code{X}.
 //' @param epsilon An \strong{optional} numerical value for tolerance level. The default value is 0.0001.
 //' @param iteMax An \strong{optional} integer for maximun number of iteration. The default value is 500.
 //' @seealso \code{\link{farm.mean}}
@@ -265,6 +265,9 @@ arma::vec getPboot(const arma::vec& mu, const arma::mat& boot, const arma::vec& 
 
 //' @title Multiple testing via an adaptive Benjamini-Hochberg procedure
 //' @description Internal function implemented in C++ for an adaptive Benjamini-Hochberg procedure. This function is incorporated into \code{farm.fdr}.
+//' @param Prob A sequence of p-values. Each entry of \code{Prob} must be between 0 and 1.
+//' @param alpha A numerical value for controlling the false discovery rate. The value of \code{alpha} must be strictly between 0 and 1.
+//' @param p The length of \code{Prob}.
 //' @seealso \code{\link{farm.fdr}}
 // [[Rcpp::export]]
 arma::uvec getRej(const arma::vec& Prob, const double alpha, const int p) {
@@ -299,6 +302,10 @@ arma::vec getRatio(const arma::vec& eigenVal, const int n, const int p) {
 
 //' @title Robust multiple testing
 //' @description Internal function implemented in C++ for robust multiple testing without factor-adjustment. This case is incorporated into \code{farm.test}.
+//' @param X An \eqn{n} by \eqn{p} data matrix with each row being a sample.
+//' @param h0 A \eqn{p}-vector of true means.
+//' @param alpha An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.
+//' @param alternative An \strong{optional} character string specifying the alternate hypothesis, must be one of "two.sided" (default), "less" or "greater".
 //' @seealso \code{\link{farm.test}}
 // [[Rcpp::export]]
 Rcpp::List rmTest(const arma::mat& X, const arma::vec& h0, const double alpha = 0.05, 
@@ -326,6 +333,11 @@ Rcpp::List rmTest(const arma::mat& X, const arma::vec& h0, const double alpha = 
 //' @title Robust multiple testing with multiplier bootstrap
 //' @description Internal function implemented in C++ for robust multiple testing without factor-adjustment, where p-values are obtained via multiplier bootstrap. 
 //' This case is incorporated into \code{farm.test}.
+//' @param X An \eqn{n} by \eqn{p} data matrix with each row being a sample.
+//' @param h0 A \eqn{p}-vector of true means.
+//' @param alpha An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.
+//' @param alternative An \strong{optional} character string specifying the alternate hypothesis, must be one of "two.sided" (default), "less" or "greater".
+//' @param B An \strong{optional} positive integer specifying the size of bootstrap sample. The dafault value is 500.
 //' @seealso \code{\link{farm.test}}
 // [[Rcpp::export]]
 Rcpp::List rmTestBoot(const arma::mat& X, const arma::vec& h0, const double alpha = 0.05, 
@@ -347,6 +359,11 @@ Rcpp::List rmTestBoot(const arma::mat& X, const arma::vec& h0, const double alph
 
 //' @title Two sample robust multiple testing
 //' @description Internal function implemented in C++ for two sample robust multiple testing without factor-adjustment. This case is incorporated into \code{farm.test}.
+//' @param X An \eqn{nX} by \eqn{p} data matrix with each row being a sample.
+//' @param Y An \eqn{nY} by \eqn{p} data matrix with each row being a sample. The number of columns of \code{X} and \code{Y} must be the same.
+//' @param h0 A \eqn{p}-vector of true difference in means.
+//' @param alpha An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.
+//' @param alternative An \strong{optional} character string specifying the alternate hypothesis, must be one of "two.sided" (default), "less" or "greater".
 //' @seealso \code{\link{farm.test}}
 // [[Rcpp::export]]
 Rcpp::List rmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& h0, 
@@ -383,6 +400,12 @@ Rcpp::List rmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& h0
 //' @title Two sample robust multiple testing with multiplier bootstrap
 //' @description Internal function implemented in C++ for two sample robust multiple testing without factor-adjustment, where p-values are obtained via multiplier bootstrap. 
 //' This case is incorporated into \code{farm.test}.
+//' @param X An \eqn{nX} by \eqn{p} data matrix with each row being a sample.
+//' @param Y An \eqn{nY} by \eqn{p} data matrix with each row being a sample. The number of columns of \code{X} and \code{Y} must be the same.
+//' @param h0 A \eqn{p}-vector of true difference in means.
+//' @param alpha An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.
+//' @param alternative An \strong{optional} character string specifying the alternate hypothesis, must be one of "two.sided" (default), "less" or "greater".
+//' @param B An \strong{optional} positive integer specifying the size of bootstrap sample. The dafault value is 500.
 //' @seealso \code{\link{farm.test}}
 // [[Rcpp::export]]
 Rcpp::List rmTestTwoBoot(const arma::mat& X, const arma::mat& Y, const arma::vec& h0, 
@@ -410,6 +433,11 @@ Rcpp::List rmTestTwoBoot(const arma::mat& X, const arma::mat& Y, const arma::vec
 
 //' @title FarmTest with unknown factors
 //' @description Internal function implemented in C++ for FarmTest with unknown factors. This case is incorporated into \code{farm.test}.
+//' @param X An \eqn{n} by \eqn{p} data matrix with each row being a sample.
+//' @param h0 A \eqn{p}-vector of true means.
+//' @param K An \strong{optional} positive number of factors to be estimated for \code{X}. \code{K} cannot exceed the number of columns of \code{X}. If \code{K} is not specified or specified to be negative, it will be estimated internally.
+//' @param alpha An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.
+//' @param alternative An \strong{optional} character string specifying the alternate hypothesis, must be one of "two.sided" (default), "less" or "greater".
 //' @seealso \code{\link{farm.test}}
 // [[Rcpp::export]]
 Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const double alpha = 0.05, 
@@ -453,6 +481,13 @@ Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const d
 
 //' @title Two sample FarmTest with unknown factors
 //' @description Internal function implemented in C++ for two sample FarmTest with unknown factors. This case is incorporated into \code{farm.test}.
+//' @param X An \eqn{nX} by \eqn{p} data matrix with each row being a sample.
+//' @param Y An \eqn{nY} by \eqn{p} data matrix with each row being a sample. The number of columns of \code{X} and \code{Y} must be the same.
+//' @param h0 A \eqn{p}-vector of true difference in means.
+//' @param KX An \strong{optional} positive number of factors to be estimated for \code{X}. \code{KX} cannot exceed the number of columns of \code{X}. If \code{KX} is not specified or specified to be negative, it will be estimated internally.
+//' @param KY An \strong{optional} positive number of factors to be estimated for \code{Y}. \code{KY} cannot exceed the number of columns of \code{Y}. If \code{KY} is not specified or specified to be negative, it will be estimated internally.
+//' @param alpha An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.
+//' @param alternative An \strong{optional} character string specifying the alternate hypothesis, must be one of "two.sided" (default), "less" or "greater".
 //' @seealso \code{\link{farm.test}}
 // [[Rcpp::export]]
 Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& h0, int KX = -1, 
@@ -520,6 +555,11 @@ Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& 
 
 //' @title FarmTest with known factors
 //' @description Internal function implemented in C++ for FarmTest with known factors. This case is incorporated into \code{farm.test}.
+//' @param X An \eqn{n} by \eqn{p} data matrix with each row being a sample.
+//' @param fac A factor matrix with each column being a factor for \code{X}. The number of rows of \code{fac} and \code{X} must be the same.
+//' @param h0 A \eqn{p}-vector of true means.
+//' @param alpha An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.
+//' @param alternative An \strong{optional} character string specifying the alternate hypothesis, must be one of "two.sided" (default), "less" or "greater".
 //' @seealso \code{\link{farm.test}}
 // [[Rcpp::export]]
 Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, const arma::vec& h0, 
@@ -558,6 +598,12 @@ Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, const arma::vec
 //' @title FarmTest with known factors and multiplier bootstrap
 //' @description Internal function implemented in C++ for FarmTest with known factors, where p-values are obtained via multiplier bootstrap. 
 //' This case is incorporated into \code{farm.test}.
+//' @param X An \eqn{n} by \eqn{p} data matrix with each row being a sample.
+//' @param fac A factor matrix with each column being a factor for \code{X}. The number of rows of \code{fac} and \code{X} must be the same.
+//' @param h0 A \eqn{p}-vector of true means.
+//' @param alpha An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.
+//' @param alternative An \strong{optional} character string specifying the alternate hypothesis, must be one of "two.sided" (default), "less" or "greater".
+//' @param B An \strong{optional} positive integer specifying the size of bootstrap sample. The dafault value is 500.
 //' @seealso \code{\link{farm.test}}
 // [[Rcpp::export]]
 Rcpp::List farmTestFacBoot(const arma::mat& X, const arma::mat& fac, const arma::vec& h0, 
@@ -585,6 +631,13 @@ Rcpp::List farmTestFacBoot(const arma::mat& X, const arma::mat& fac, const arma:
 
 //' @title Two sample FarmTest with known factors
 //' @description Internal function implemented in C++ for two sample FarmTest with known factors. This case is incorporated into \code{farm.test}.
+//' @param X An \eqn{nX} by \eqn{p} data matrix with each row being a sample.
+//' @param facX A factor matrix with each column being a factor for \code{X}. The number of rows of \code{facX} and \code{X} must be the same.
+//' @param Y An \eqn{nY} by \eqn{p} data matrix with each row being a sample. The number of columns of \code{X} and \code{Y} must be the same.
+//' @param facY A factor matrix with each column being a factor for \code{Y}. The number of rows of \code{facY} and \code{Y} must be the same.
+//' @param h0 A \eqn{p}-vector of true difference in means.
+//' @param alpha An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.
+//' @param alternative An \strong{optional} character string specifying the alternate hypothesis, must be one of "two.sided" (default), "less" or "greater".
 //' @seealso \code{\link{farm.test}}
 // [[Rcpp::export]]
 Rcpp::List farmTestTwoFac(const arma::mat& X, const arma::mat& facX, const arma::mat& Y, 
@@ -642,6 +695,14 @@ Rcpp::List farmTestTwoFac(const arma::mat& X, const arma::mat& facX, const arma:
 //' @title Two sample FarmTest with known factors and multiplier bootstrap
 //' @description Internal function implemented in C++ for two sample FarmTest with known factors, where p-values are obtained via multiplier bootstrap. 
 //' This case is incorporated into \code{farm.test}.
+//' @param X An \eqn{nX} by \eqn{p} data matrix with each row being a sample.
+//' @param facX A factor matrix with each column being a factor for \code{X}. The number of rows of \code{facX} and \code{X} must be the same.
+//' @param Y An \eqn{nY} by \eqn{p} data matrix with each row being a sample. The number of columns of \code{X} and \code{Y} must be the same.
+//' @param facY A factor matrix with each column being a factor for \code{Y}. The number of rows of \code{facY} and \code{Y} must be the same.
+//' @param h0 A \eqn{p}-vector of true difference in means.
+//' @param alpha An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.
+//' @param alternative An \strong{optional} character string specifying the alternate hypothesis, must be one of "two.sided" (default), "less" or "greater".
+//' @param B An \strong{optional} positive integer specifying the size of bootstrap sample. The dafault value is 500.
 //' @seealso \code{\link{farm.test}}
 // [[Rcpp::export]]
 Rcpp::List farmTestTwoFacBoot(const arma::mat& X, const arma::mat& facX, const arma::mat& Y, 

@@ -9,7 +9,7 @@ huberMean(X, n, epsilon = 1e-04, iteMax = 500L)
 \arguments{
 \item{X}{An \eqn{n}-dimensional data vector.}
 
-\item{n}{Dimension of \code{X}.}
+\item{n}{The length of \code{X}.}
 
 \item{epsilon}{An \strong{optional} numerical value for tolerance level. The default value is 0.0001.}
 

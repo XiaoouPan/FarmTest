@@ -7,6 +7,21 @@
 farmTestTwoFac(X, facX, Y, facY, h0, alpha = 0.05,
   alternative = "two.sided")
 }
+\arguments{
+\item{X}{An \eqn{nX} by \eqn{p} data matrix with each row being a sample.}
+
+\item{facX}{A factor matrix with each column being a factor for \code{X}. The number of rows of \code{facX} and \code{X} must be the same.}
+
+\item{Y}{An \eqn{nY} by \eqn{p} data matrix with each row being a sample. The number of columns of \code{X} and \code{Y} must be the same.}
+
+\item{facY}{A factor matrix with each column being a factor for \code{Y}. The number of rows of \code{facY} and \code{Y} must be the same.}
+
+\item{h0}{A \eqn{p}-vector of true difference in means.}
+
+\item{alpha}{An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.}
+
+\item{alternative}{An \strong{optional} character string specifying the alternate hypothesis, must be one of "two.sided" (default), "less" or "greater".}
+}
 \description{
 Internal function implemented in C++ for two sample FarmTest with known factors. This case is incorporated into \code{farm.test}.
 }
