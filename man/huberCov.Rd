@@ -6,6 +6,13 @@
 \usage{
 huberCov(X, n, p)
 }
+\arguments{
+\item{X}{An \eqn{n} by \eqn{p} data matrix.}
+
+\item{n}{Number of rows of \code{X}.}
+
+\item{p}{Number of columns of \code{X}.}
+}
 \description{
 Internal function implemented in C++ for tuning-free Huber-type covariance estimation. This function is incorporated into \code{farm.cov}.
 }

@@ -67,6 +67,10 @@ double rootf2(const arma::vec& resSq, const int n, const int d, const int N, dou
 
 //' @title Huber mean estimation
 //' @description Internal function implemented in C++ for tuning-free Huber mean estimation. This function is incorporated into \code{farm.mean}.
+//' @param X An \eqn{n}-dimensional data vector.
+//' @param n Dimension of \code{X}.
+//' @param epsilon An \strong{optional} numerical value for tolerance level. The default value is 0.0001.
+//' @param iteMax An \strong{optional} integer for maximun number of iteration. The default value is 500.
 //' @seealso \code{\link{farm.mean}}
 // [[Rcpp::export]]
 double huberMean(const arma::vec& X, const int n, const double epsilon = 0.0001, const int iteMax = 500) {
@@ -121,6 +125,9 @@ double hMeanCov(const arma::vec& Z, const int n, const int d, const int N, const
 
 //' @title Huber-type covariance estimation
 //' @description Internal function implemented in C++ for tuning-free Huber-type covariance estimation. This function is incorporated into \code{farm.cov}.
+//' @param X An \eqn{n} by \eqn{p} data matrix.
+//' @param n Number of rows of \code{X}.
+//' @param p Number of columns of \code{X}.
 //' @seealso \code{\link{farm.cov}}
 // [[Rcpp::export]]
 Rcpp::List huberCov(const arma::mat& X, const int n, const int p) {

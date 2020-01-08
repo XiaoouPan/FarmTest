@@ -3,6 +3,10 @@
 
 #' @title Huber mean estimation
 #' @description Internal function implemented in C++ for tuning-free Huber mean estimation. This function is incorporated into \code{farm.mean}.
+#' @param X An \eqn{n}-dimensional data vector.
+#' @param n Dimension of \code{X}.
+#' @param epsilon An \strong{optional} numerical value for tolerance level. The default value is 0.0001.
+#' @param iteMax An \strong{optional} integer for maximun number of iteration. The default value is 500.
 #' @seealso \code{\link{farm.mean}}
 huberMean <- function(X, n, epsilon = 0.0001, iteMax = 500L) {
     .Call('_FarmTest_huberMean', PACKAGE = 'FarmTest', X, n, epsilon, iteMax)
@@ -10,6 +14,9 @@ huberMean <- function(X, n, epsilon = 0.0001, iteMax = 500L) {
 
 #' @title Huber-type covariance estimation
 #' @description Internal function implemented in C++ for tuning-free Huber-type covariance estimation. This function is incorporated into \code{farm.cov}.
+#' @param X An \eqn{n} by \eqn{p} data matrix.
+#' @param n Number of rows of \code{X}.
+#' @param p Number of columns of \code{X}.
 #' @seealso \code{\link{farm.cov}}
 huberCov <- function(X, n, p) {
     .Call('_FarmTest_huberCov', PACKAGE = 'FarmTest', X, n, p)
