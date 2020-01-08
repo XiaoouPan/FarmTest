@@ -120,8 +120,8 @@ farm.cov = function(X) {
 #' @seealso \code{\link{print.farm.test}}
 #' @seealso \code{\link{farm.fdr}}
 #' @examples 
-#' n = 50
-#' p = 100
+#' n = 20
+#' p = 50
 #' K = 3
 #' muX = rep(0, p)
 #' muX[1:5] = 2

@@ -63,8 +63,8 @@ For two-sample FarmTest, \code{means}, \code{stdDev}, \code{loadings}, \code{eig
 Setting \code{p.method = "bootstrap"} for factor-known model will slow down the program, but it will achieve lower empirical FDP than setting \code{p.method = "normal"}.
 }
 \examples{
-n = 50
-p = 100
+n = 20
+p = 50
 K = 3
 muX = rep(0, p)
 muX[1:5] = 2
