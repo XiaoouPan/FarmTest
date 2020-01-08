@@ -8,7 +8,7 @@ farmTestTwoFac(X, facX, Y, facY, h0, alpha = 0.05,
   alternative = "two.sided")
 }
 \description{
-Internal function implemented in C++ for two sample FarmTest with known factors. This is a case of \code{farm.test}.
+Internal function implemented in C++ for two sample FarmTest with known factors. This case is incorporated into \code{farm.test}.
 }
 \seealso{
 \code{\link{farm.test}}

@@ -66,7 +66,7 @@ double rootf2(const arma::vec& resSq, const int n, const int d, const int N, dou
 }
 
 //' @title Huber mean estimation
-//' @description Internal function implemented in C++ for tuning-free Huber mean estimation. See \code{farm.mean} for details.
+//' @description Internal function implemented in C++ for tuning-free Huber mean estimation. This function is incorporated into \code{farm.mean}.
 //' @seealso \code{\link{farm.mean}}
 // [[Rcpp::export]]
 double huberMean(const arma::vec& X, const int n, const double epsilon = 0.0001, const int iteMax = 500) {
@@ -120,7 +120,7 @@ double hMeanCov(const arma::vec& Z, const int n, const int d, const int N, const
 }
 
 //' @title Huber-type covariance estimation
-//' @description Internal function implemented in C++ for tuning-free Huber-type covariance estimation. See \code{farm.cov} for details.
+//' @description Internal function implemented in C++ for tuning-free Huber-type covariance estimation. This function is incorporated into \code{farm.cov}.
 //' @seealso \code{\link{farm.cov}}
 // [[Rcpp::export]]
 Rcpp::List huberCov(const arma::mat& X, const int n, const int p) {
@@ -257,7 +257,7 @@ arma::vec getPboot(const arma::vec& mu, const arma::mat& boot, const arma::vec& 
 }
 
 //' @title Multiple testing via an adaptive Benjamini-Hochberg procedure
-//' @description Internal function implemented in C++ for an adaptive Benjamini-Hochberg procedure. This is a step of \code{farm.fdr}.
+//' @description Internal function implemented in C++ for an adaptive Benjamini-Hochberg procedure. This function is incorporated into \code{farm.fdr}.
 //' @seealso \code{\link{farm.fdr}}
 // [[Rcpp::export]]
 arma::uvec getRej(const arma::vec& Prob, const double alpha, const int p) {
@@ -291,7 +291,7 @@ arma::vec getRatio(const arma::vec& eigenVal, const int n, const int p) {
 }
 
 //' @title Robust multiple testing
-//' @description Internal function implemented in C++ for robust multiple testing without factor-adjustment. This is a case of \code{farm.test}.
+//' @description Internal function implemented in C++ for robust multiple testing without factor-adjustment. This case is incorporated into \code{farm.test}.
 //' @seealso \code{\link{farm.test}}
 // [[Rcpp::export]]
 Rcpp::List rmTest(const arma::mat& X, const arma::vec& h0, const double alpha = 0.05, 
@@ -318,7 +318,7 @@ Rcpp::List rmTest(const arma::mat& X, const arma::vec& h0, const double alpha = 
 
 //' @title Robust multiple testing with multiplier bootstrap
 //' @description Internal function implemented in C++ for robust multiple testing without factor-adjustment, where p-values are obtained via multiplier bootstrap. 
-//' This is a case of \code{farm.test}.
+//' This case is incorporated into \code{farm.test}.
 //' @seealso \code{\link{farm.test}}
 // [[Rcpp::export]]
 Rcpp::List rmTestBoot(const arma::mat& X, const arma::vec& h0, const double alpha = 0.05, 
@@ -339,7 +339,7 @@ Rcpp::List rmTestBoot(const arma::mat& X, const arma::vec& h0, const double alph
 }
 
 //' @title Two sample robust multiple testing
-//' @description Internal function implemented in C++ for two sample robust multiple testing without factor-adjustment. This is a case of \code{farm.test}.
+//' @description Internal function implemented in C++ for two sample robust multiple testing without factor-adjustment. This case is incorporated into \code{farm.test}.
 //' @seealso \code{\link{farm.test}}
 // [[Rcpp::export]]
 Rcpp::List rmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& h0, 
@@ -375,7 +375,7 @@ Rcpp::List rmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& h0
 
 //' @title Two sample robust multiple testing with multiplier bootstrap
 //' @description Internal function implemented in C++ for two sample robust multiple testing without factor-adjustment, where p-values are obtained via multiplier bootstrap. 
-//' This is a case of \code{farm.test}.
+//' This case is incorporated into \code{farm.test}.
 //' @seealso \code{\link{farm.test}}
 // [[Rcpp::export]]
 Rcpp::List rmTestTwoBoot(const arma::mat& X, const arma::mat& Y, const arma::vec& h0, 
@@ -402,7 +402,7 @@ Rcpp::List rmTestTwoBoot(const arma::mat& X, const arma::mat& Y, const arma::vec
 }
 
 //' @title FarmTest with unknown factors
-//' @description Internal function implemented in C++ for FarmTest with unknown factors. This is a case of \code{farm.test}.
+//' @description Internal function implemented in C++ for FarmTest with unknown factors. This case is incorporated into \code{farm.test}.
 //' @seealso \code{\link{farm.test}}
 // [[Rcpp::export]]
 Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const double alpha = 0.05, 
@@ -445,7 +445,7 @@ Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const d
 }
 
 //' @title Two sample FarmTest with unknown factors
-//' @description Internal function implemented in C++ for two sample FarmTest with unknown factors. This is a case of \code{farm.test}.
+//' @description Internal function implemented in C++ for two sample FarmTest with unknown factors. This case is incorporated into \code{farm.test}.
 //' @seealso \code{\link{farm.test}}
 // [[Rcpp::export]]
 Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& h0, int KX = -1, 
@@ -512,7 +512,7 @@ Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& 
 }
 
 //' @title FarmTest with known factors
-//' @description Internal function implemented in C++ for FarmTest with known factors. This is a case of \code{farm.test}.
+//' @description Internal function implemented in C++ for FarmTest with known factors. This case is incorporated into \code{farm.test}.
 //' @seealso \code{\link{farm.test}}
 // [[Rcpp::export]]
 Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, const arma::vec& h0, 
@@ -550,7 +550,7 @@ Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, const arma::vec
 
 //' @title FarmTest with known factors and multiplier bootstrap
 //' @description Internal function implemented in C++ for FarmTest with known factors, where p-values are obtained via multiplier bootstrap. 
-//' This is a case of \code{farm.test}.
+//' This case is incorporated into \code{farm.test}.
 //' @seealso \code{\link{farm.test}}
 // [[Rcpp::export]]
 Rcpp::List farmTestFacBoot(const arma::mat& X, const arma::mat& fac, const arma::vec& h0, 
@@ -577,7 +577,7 @@ Rcpp::List farmTestFacBoot(const arma::mat& X, const arma::mat& fac, const arma:
 }
 
 //' @title Two sample FarmTest with known factors
-//' @description Internal function implemented in C++ for two sample FarmTest with known factors. This is a case of \code{farm.test}.
+//' @description Internal function implemented in C++ for two sample FarmTest with known factors. This case is incorporated into \code{farm.test}.
 //' @seealso \code{\link{farm.test}}
 // [[Rcpp::export]]
 Rcpp::List farmTestTwoFac(const arma::mat& X, const arma::mat& facX, const arma::mat& Y, 
@@ -634,7 +634,7 @@ Rcpp::List farmTestTwoFac(const arma::mat& X, const arma::mat& facX, const arma:
 
 //' @title Two sample FarmTest with known factors and multiplier bootstrap
 //' @description Internal function implemented in C++ for two sample FarmTest with known factors, where p-values are obtained via multiplier bootstrap. 
-//' This is a case of \code{farm.test}.
+//' This case is incorporated into \code{farm.test}.
 //' @seealso \code{\link{farm.test}}
 // [[Rcpp::export]]
 Rcpp::List farmTestTwoFacBoot(const arma::mat& X, const arma::mat& facX, const arma::mat& Y, 

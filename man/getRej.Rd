@@ -7,7 +7,7 @@
 getRej(Prob, alpha, p)
 }
 \description{
-Internal function implemented in C++ for an adaptive Benjamini-Hochberg procedure. This is a step of \code{farm.fdr}.
+Internal function implemented in C++ for an adaptive Benjamini-Hochberg procedure. This function is incorporated into \code{farm.fdr}.
 }
 \seealso{
 \code{\link{farm.fdr}}

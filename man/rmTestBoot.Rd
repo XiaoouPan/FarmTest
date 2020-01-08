@@ -8,7 +8,7 @@ rmTestBoot(X, h0, alpha = 0.05, alternative = "two.sided", B = 500L)
 }
 \description{
 Internal function implemented in C++ for robust multiple testing without factor-adjustment, where p-values are obtained via multiplier bootstrap. 
-This is a case of \code{farm.test}.
+This case is incorporated into \code{farm.test}.
 }
 \seealso{
 \code{\link{farm.test}}

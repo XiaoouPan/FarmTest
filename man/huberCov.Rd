@@ -7,7 +7,7 @@
 huberCov(X, n, p)
 }
 \description{
-Internal function implemented in C++ for tuning-free Huber-type covariance estimation. See \code{farm.cov} for details.
+Internal function implemented in C++ for tuning-free Huber-type covariance estimation. This function is incorporated into \code{farm.cov}.
 }
 \seealso{
 \code{\link{farm.cov}}

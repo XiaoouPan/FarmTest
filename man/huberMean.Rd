@@ -7,7 +7,7 @@
 huberMean(X, n, epsilon = 1e-04, iteMax = 500L)
 }
 \description{
-Internal function implemented in C++ for tuning-free Huber mean estimation. See \code{farm.mean} for details.
+Internal function implemented in C++ for tuning-free Huber mean estimation. This function is incorporated into \code{farm.mean}.
 }
 \seealso{
 \code{\link{farm.mean}}
