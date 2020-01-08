@@ -44,7 +44,7 @@ Besides, since the library `FarmTest` is coded in `Rcpp` and `RcppArmadillo`, wh
 
 ## Functions
 
-There are five functions in this library:
+There are five main functions in this library:
 
 * `farm.test`: Factor-adjusted robust multiple testing.
 * `print.farm.test`: Print function for `farm.test`.
