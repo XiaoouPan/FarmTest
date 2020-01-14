@@ -147,7 +147,7 @@ huberCov = farm.cov(X)
 
 ## Remark 
 
-This library is built upon an earlier version written by Bose, K., Ke, Y. and Zhou, W.-X. ([CRAN](https://CRAN.R-project.org/package=FarmTest), [GitHub](https://github.com/kbose28/FarmTest)). Another library named `tfHuber` that implements data-driven robust mean and covariance matrix estimation as well as standard and *l<sub>1</sub>*-regularized Huber regression can be found [here](https://github.com/XiaoouPan/tfHuber).
+This library is built upon an earlier version written by Bose, K., Ke, Y. and Zhou, W.-X. ( [GitHub](https://github.com/kbose28/FarmTest)). Another library named `tfHuber` that implements data-driven robust mean and covariance matrix estimation as well as standard and *l<sub>1</sub>*-regularized Huber regression can be found [here](https://github.com/XiaoouPan/tfHuber).
 
 ## License
 
