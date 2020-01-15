@@ -147,7 +147,7 @@ huberCov = farm.cov(X)
 
 ## Remark 
 
-This library is built upon an earlier version written by Bose, K., Ke, Y. and Zhou, W.-X. ( [GitHub](https://github.com/kbose28/FarmTest)). Another library named `tfHuber` that implements data-driven robust mean and covariance matrix estimation as well as standard and *l<sub>1</sub>*-regularized Huber regression can be found [here](https://github.com/XiaoouPan/tfHuber).
+This library is built upon an earlier version written by Bose, K., Ke, Y. and Zhou, W.-X. ([GitHub](https://github.com/kbose28/FarmTest)). Another library named `tfHuber` that implements data-driven robust mean and covariance matrix estimation as well as standard and *l<sub>1</sub>*-regularized Huber regression can be found [here](https://github.com/XiaoouPan/tfHuber).
 
 ## License
 
@@ -166,6 +166,8 @@ Xiaoou Pan <xip024@ucsd.edu>
 Ahn, S. C. and Horenstein, A. R. (2013). Eigenvalue ratio test for the number of factors. *Econometrica* **81**(3) 1203–1227. [Paper](https://onlinelibrary.wiley.com/doi/abs/10.3982/ECTA8968)
 
 Benjamini, Y. and Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. *J. R. Stat. Soc. Ser. B. Stat. Methodol.* **57** 289–300. [Paper](https://www.jstor.org/stable/2346101?seq=1#metadata_info_tab_contents)
+
+Bose, K., Fan, J., Ke, Y., Pan, X. and Zhou, W.-X. (2019). FarmTest: An R package for factor-adjusted robust multiple testing. [Preprint](https://www.math.ucsd.edu/~xip024/Papers/FarmTest.pdf)
 
 Eddelbuettel, D. and Francois, R. (2011). Rcpp: Seamless R and C++ integration. *J. Stat. Softw.* **40**(8) 1-18. [Paper](http://dirk.eddelbuettel.com/code/rcpp/Rcpp-introduction.pdf)
 
