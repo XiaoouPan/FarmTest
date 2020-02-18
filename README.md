@@ -17,7 +17,7 @@ The FarmTest method involves multiple tuning parameters for fitting the factor m
 
 `FarmTest` can be installed into `R` environment with the following methods:
 
-1. (Recommend) `FarmTest` is available on [CRAN](https://CRAN.R-project.org/package=FarmTest), so simply use the command:
+1. (Recommended) `FarmTest` is available on [CRAN](https://CRAN.R-project.org/package=FarmTest), so simply use the command:
 
 ```r
 install.packages("FarmTest")
