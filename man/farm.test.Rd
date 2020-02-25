@@ -4,9 +4,19 @@
 \alias{farm.test}
 \title{Factor-adjusted robust multiple testing}
 \usage{
-farm.test(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1,
-  h0 = NULL, alternative = c("two.sided", "less", "greater"),
-  alpha = 0.05, p.method = c("bootstrap", "normal"), nBoot = 500)
+farm.test(
+  X,
+  fX = NULL,
+  KX = -1,
+  Y = NULL,
+  fY = NULL,
+  KY = -1,
+  h0 = NULL,
+  alternative = c("two.sided", "less", "greater"),
+  alpha = 0.05,
+  p.method = c("bootstrap", "normal"),
+  nBoot = 500
+)
 }
 \arguments{
 \item{X}{An \eqn{n} by \eqn{p} data matrix with each row being a sample.}
