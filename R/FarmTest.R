@@ -1,17 +1,3 @@
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-
 #' @title Tuning-free Huber mean estimation
 #' @description The function calculates adaptive Huber mean estimator from a data sample, with robustification parameter \eqn{\tau} determined by a tuning-free principle.
 #' @param X An \eqn{n}-dimensional data vector.
@@ -36,7 +22,7 @@ farm.mean = function(X){
 #' @param X An \eqn{n} by \eqn{p} data matrix.
 #' @return A \eqn{p} by \eqn{p} Huber-type covariance matrix estimator will be returned.
 #' @references Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.
-#' @references Ke, Y., Minsker, S., Ren, Z., Sun, Q. and Zhou, W.-X. (2019). User-friendly covariance estimation for heavy-tailed distributions: A survey and recent results. Statis. Sci. To appear.
+#' @references Ke, Y., Minsker, S., Ren, Z., Sun, Q. and Zhou, W.-X. (2019). User-friendly covariance estimation for heavy-tailed distributions: A survey and recent results. Statis. Sci., to appear.
 #' @seealso \code{\link{farm.mean}} for tuning-free Huber mean estimation.
 #' @examples
 #' set.seed(2019)
@@ -87,12 +73,12 @@ farm.cov = function(X) {
 #' @details \code{alternative = "greater"} is the alternative that \eqn{\mu > \mu_0} for one-sample test or \eqn{\mu_X > \mu_Y} for two-sample test.
 #' @details Setting \code{p.method = "bootstrap"} for factor-known model will slow down the program, but it will achieve lower empirical FDP than setting \code{p.method = "normal"}.
 #' @references Ahn, S. C. and Horenstein, A. R. (2013). Eigenvalue ratio test for the number of factors. Econometrica, 81(3) 1203–1227.
-#' @references Benjamini, Y. and Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. J. R. Stat. Soc. Ser. B. Stat. Methodol. 57 289–300.
+#' @references Benjamini, Y. and Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. J. R. Stat. Soc. Ser. B. Stat. Methodol., 57 289–300.
 #' @references Fan, J., Ke, Y., Sun, Q. and Zhou, W-X. (2019). FarmTest: Factor-adjusted robust multiple testing with approximate false discovery control. J. Amer. Statist. Assoc., to appear.
 #' @references Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.
-#' @references Storey, J. D. (2002). A direct approach to false discovery rates. J. R. Stat. Soc. Ser. B. Stat. Methodol. 64, 479–498.
+#' @references Storey, J. D. (2002). A direct approach to false discovery rates. J. R. Stat. Soc. Ser. B. Stat. Methodol., 64, 479–498.
 #' @references Sun, Q., Zhou, W.-X. and Fan, J. (2019). Adaptive Huber regression. J. Amer. Statist. Assoc., to appear.
-#' @references Zhou, W-X., Bose, K., Fan, J. and Liu, H. (2018). A new perspective on robust M-estimation: Finite sample theory and applications to dependence-adjusted multiple testing. Ann. Statist. 46 1904-1931.
+#' @references Zhou, W-X., Bose, K., Fan, J. and Liu, H. (2018). A new perspective on robust M-estimation: Finite sample theory and applications to dependence-adjusted multiple testing. Ann. Statist., 46 1904-1931.
 #' @seealso \code{\link{print.farm.test}}
 #' @seealso \code{\link{farm.fdr}}
 #' @examples 
@@ -122,9 +108,8 @@ farm.cov = function(X) {
 #' Y = rep(1, n) %*% t(muY) + fY %*% t(BY) + epsilonY
 #' output = farm.test(X, Y = Y)
 #' @export 
-farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = NULL, 
-                     alternative = c("two.sided", "less", "greater"), alpha = 0.05, 
-                     p.method = c("bootstrap", "normal"), nBoot = 500) {
+farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = NULL, alternative = c("two.sided", "less", "greater"), 
+                     alpha = 0.05, p.method = c("bootstrap", "normal"), nBoot = 500) {
   p = ncol(X)
   alternative = match.arg(alternative)
   p.method = match.arg(p.method)
@@ -160,10 +145,9 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       if (sum(rst.list$significant) > 0) {
         reject = which(rst.list$significant == 1)
       }
-      output = list(means = rst.list$means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal, 
-                    eigenRatio = eigenRatio, nFactors = rst.list$nfactors, tStat = tStat, 
-                    pValues = rst.list$pValues, significant = rst.list$significant, reject = reject, 
-                    type = "known", n = nrow(X), p = p, h0 = h0, alpha = alpha, alternative = alternative)
+      output = list(means = rst.list$means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal, eigenRatio = eigenRatio, 
+                    nFactors = rst.list$nfactors, tStat = tStat, pValues = rst.list$pValues, significant = rst.list$significant, 
+                    reject = reject, type = "known", n = nrow(X), p = p, h0 = h0, alpha = alpha, alternative = alternative)
     }
   } else if (is.null(Y) && is.null(fX)) {
     if (KX > p) {
@@ -184,9 +168,8 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       if (sum(rst.list$significant) > 0) {
         reject = which(rst.list$significant == 1)
       }
-      output = list(means = rst.list$means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal, 
-                    eigenRatio = eigenRatio, nFactors = 0, tStat = tStat, pValues = rst.list$pValues, 
-                    significant = rst.list$significant, reject = reject, type = "unknown", 
+      output = list(means = rst.list$means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal, eigenRatio = eigenRatio, nFactors = 0, 
+                    tStat = tStat, pValues = rst.list$pValues, significant = rst.list$significant, reject = reject, type = "unknown", 
                     n = nrow(X), p = p, h0 = h0, alpha = alpha, alternative = alternative)
     } else {
       eigenRatio = "not available when KX is specified"
@@ -197,10 +180,9 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       if (KX < 0) {
         eigenRatio = rst.list$ratio
       }
-      output = list(means = rst.list$means, stdDev = rst.list$stdDev, loadings = rst.list$loadings,
-                    eigenVal = rst.list$eigens, eigenRatio = eigenRatio, nFactors = rst.list$nfactors, 
-                    tStat = rst.list$tStat, pValues = rst.list$pValues, significant = rst.list$significant, 
-                    reject = reject, type = "unknown", n = nrow(X), p = p, h0 = h0, alpha = alpha, 
+      output = list(means = rst.list$means, stdDev = rst.list$stdDev, loadings = rst.list$loadings, eigenVal = rst.list$eigens, 
+                    eigenRatio = eigenRatio, nFactors = rst.list$nfactors, tStat = rst.list$tStat, pValues = rst.list$pValues, 
+                    significant = rst.list$significant, reject = reject, type = "unknown", n = nrow(X), p = p, h0 = h0, alpha = alpha, 
                     alternative = alternative)
     }
   } else if (!is.null(Y) && !is.null(fX)) {
@@ -232,10 +214,9 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       means = list(X.means = rst.list$meansX, Y.means = rst.list$meansY)
       nfactors = list(X.nFactors = rst.list$nfactorsX, Y.nFactors = rst.list$nfactorsY)
       n = list(X.n = nrow(X), Y.n = nrow(Y))
-      output = list(means = means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal, 
-                    eigenRatio = eigenRatio, nFactors = nfactors, tStat = tStat, 
-                    pValues = rst.list$pValues, significant = rst.list$significant, reject = reject, 
-                    type = "known", n = n, p = p, h0 = h0, alpha = alpha, alternative = alternative)
+      output = list(means = means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal, eigenRatio = eigenRatio, nFactors = nfactors, 
+                    tStat = tStat, pValues = rst.list$pValues, significant = rst.list$significant, reject = reject, type = "known", n = n, 
+                    p = p, h0 = h0, alpha = alpha, alternative = alternative)
     }
   } else {
     if (ncol(X) != ncol(Y)) {
@@ -265,10 +246,9 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       means = list(X.means = rst.list$meansX, Y.means = rst.list$meansY)
       nfactors = list(X.nFactors = 0, Y.nFactors = 0)
       n = list(X.n = nrow(X), Y.n = nrow(Y))
-      output = list(means = means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal,
-                    eigenRatio = eigenRatio, nFactors = nfactors, tStat = tStat, 
-                    pValues = rst.list$pValues, significant = rst.list$significant, reject = reject, 
-                    type = "unknown", n = n, p = p, h0 = h0, alpha = alpha, alternative = alternative)
+      output = list(means = means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal, eigenRatio = eigenRatio, nFactors = nfactors, 
+                    tStat = tStat, pValues = rst.list$pValues, significant = rst.list$significant, reject = reject, type = "unknown", n = n, 
+                    p = p, h0 = h0, alpha = alpha, alternative = alternative)
     } else {
       rst.list = farmTestTwo(X, Y, h0, KX, KY, alpha, alternative)
       if (sum(rst.list$significant) > 0) {
@@ -289,10 +269,9 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
         ratioY = rst.list$ratioY
       }
       eigenRatio = list(X.eigenRatio = ratioX, Y.eigenRatio = ratioY)
-      output = list(means = means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal,
-                    eigenRatio = eigenRatio, nFactors = nfactors, tStat = rst.list$tStat, 
-                    pValues = rst.list$pValues, significant = rst.list$significant, reject = reject, 
-                    type = "unknown", n = n, p = p, h0 = h0, alpha = alpha, alternative = alternative)
+      output = list(means = means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal, eigenRatio = eigenRatio, nFactors = nfactors, 
+                    tStat = rst.list$tStat, pValues = rst.list$pValues, significant = rst.list$significant, reject = reject, type = "unknown", 
+                    n = n, p = p, h0 = h0, alpha = alpha, alternative = alternative)
     } 
   }
   attr(output, "class") = "farm.test"
@@ -353,8 +332,8 @@ print.farm.test = function(x, ...) {
 #' @param pValues A sequence of p-values, each entry of \code{pValues} must be between 0 and 1.
 #' @param alpha An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be strictly between 0 and 1. The default value is 0.05.
 #' @return Indices of tests that are rejected will be returned. It will show "no hypotheses rejected" if none of the tests are rejected.
-#' @references Benjamini, Y. and Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. J. R. Stat. Soc. Ser. B. Stat. Methodol. 57 289–300.
-#' @references Storey, J. D. (2002). A direct approach to false discovery rates. J. R. Stat. Soc. Ser. B. Stat. Methodol. 64, 479–498.
+#' @references Benjamini, Y. and Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. J. R. Stat. Soc. Ser. B. Stat. Methodol., 57 289–300.
+#' @references Storey, J. D. (2002). A direct approach to false discovery rates. J. R. Stat. Soc. Ser. B. Stat. Methodol., 64, 479–498.
 #' @examples 
 #' set.seed(100)
 #' n = 50
