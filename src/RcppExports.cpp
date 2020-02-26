@@ -33,6 +33,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// huberReg
+arma::vec huberReg(const arma::mat& X, const arma::vec& Y, const int n, const int p, const double tol, const double constTau, const int iteMax);
+RcppExport SEXP _FarmTest_huberReg(SEXP XSEXP, SEXP YSEXP, SEXP nSEXP, SEXP pSEXP, SEXP tolSEXP, SEXP constTauSEXP, SEXP iteMaxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< const double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< const double >::type constTau(constTauSEXP);
+    Rcpp::traits::input_parameter< const int >::type iteMax(iteMaxSEXP);
+    rcpp_result_gen = Rcpp::wrap(huberReg(X, Y, n, p, tol, constTau, iteMax));
+    return rcpp_result_gen;
+END_RCPP
+}
 // getRej
 arma::uvec getRej(const arma::vec& Prob, const double alpha, const int p);
 RcppExport SEXP _FarmTest_getRej(SEXP ProbSEXP, SEXP alphaSEXP, SEXP pSEXP) {
@@ -208,6 +225,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_FarmTest_huberMean", (DL_FUNC) &_FarmTest_huberMean, 4},
     {"_FarmTest_huberCov", (DL_FUNC) &_FarmTest_huberCov, 3},
+    {"_FarmTest_huberReg", (DL_FUNC) &_FarmTest_huberReg, 7},
     {"_FarmTest_getRej", (DL_FUNC) &_FarmTest_getRej, 3},
     {"_FarmTest_rmTest", (DL_FUNC) &_FarmTest_rmTest, 4},
     {"_FarmTest_rmTestBoot", (DL_FUNC) &_FarmTest_rmTestBoot, 5},

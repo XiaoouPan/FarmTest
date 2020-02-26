@@ -162,43 +162,44 @@ arma::mat standardize(arma::mat X) {
   return X;
 }
 
-arma::vec huberReg(const arma::mat& X, const arma::vec& Y, const int n, const int p, const double tol = 0.00001, const double constTau = 1.345, 
-                   const int iteMax = 500) {
+// [[Rcpp::export]]
+arma::vec huberReg(const arma::mat& X, const arma::vec& Y, const int n, const int p, const double tol = 0.0000001, 
+                   const double constTau = 1.345, const int iteMax = 5000) {
   arma::mat Z(n, p + 1);
   Z.cols(1, p) = standardize(X);
   Z.col(0) = arma::ones(n);
-  arma::vec betaOld = arma::zeros(p + 1);
+  arma::vec beta = arma::zeros(p + 1);
   double tau = constTau * mad(Y);
   arma::vec gradOld = Z.t() * huberDer(Y, n, tau) / n;
-  double lossOld = huberLoss(Y - Z * betaOld, n, tau);
-  arma::vec betaNew = betaOld - gradOld;
-  arma::vec res = Y - Z * betaNew;
+  double lossOld = huberLoss(Y, n, tau);
+  beta -= gradOld;
+  arma::vec betaDiff = -gradOld;
+  arma::vec res = Y - Z * beta;
+  tau = constTau * mad(res);
   double lossNew = huberLoss(res, n, tau);
-  arma::vec gradNew, gradDiff, betaDiff;
+  arma::vec gradNew = Z.t() * huberDer(res, n, tau) / n;
+  arma::vec gradDiff = gradNew - gradOld;
   int ite = 1;
-  while (std::abs(lossNew - lossOld) > tol && arma::norm(betaNew - betaOld, "inf") > tol && ite <= iteMax) {
-    tau = constTau * mad(res);
-    gradNew = Z.t() * huberDer(res, n, tau) / n;
-    gradDiff = gradNew - gradOld;
-    betaDiff = betaNew - betaOld;
-    double alpha = 1.0;
+  while (std::abs(lossNew - lossOld) > tol && arma::norm(betaDiff, "inf") > tol && ite <= iteMax) {
+    double alpha = 100.0;
     double cross = arma::as_scalar(betaDiff.t() * gradDiff);
     if (cross > 0) {
       double a1 = cross / arma::as_scalar(gradDiff.t() * gradDiff);
       double a2 = arma::as_scalar(betaDiff.t() * betaDiff) / cross;
-      alpha = std::min(std::min(a1, a2), 1.0);
+      alpha = std::min(std::min(a1, a2), 100.0);
     }
-    betaOld = betaNew;
     gradOld = gradNew;
     lossOld = lossNew;
-    betaNew -= alpha * gradNew;
-    res += alpha * Z * gradNew; 
+    beta -= alpha * gradNew;
+    betaDiff = -alpha * gradNew;
+    res += alpha * Z * gradNew;
+    tau = constTau * mad(res);
+    gradNew = Z.t() * huberDer(res, n, tau) / n;
     lossNew = huberLoss(res, n, tau);
+    gradDiff = gradNew - gradOld;
     ite++;
   }
-  betaNew.rows(1, p) /= arma::stddev(X, 0, 0).t();
-  betaNew(0) = huberMean(Y - X * betaNew.rows(1, p), n);
-  return betaNew;
+  return beta;
 }
 
 arma::vec getP(const arma::vec& T, const std::string alternative) {
