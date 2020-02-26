@@ -12,30 +12,6 @@
 ## along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-#' @useDynLib FarmTest
-#' @importFrom Rcpp evalCpp
-#' @exportPattern "^[[:alpha:]]+"
-NULL
-
-#' @title FarmTest: Factor-Adjusted Robust Multiple Testing
-#' @description FarmTest package performs robust multiple testing for means in the presence of known and unknown latent factors.
-#' It implements a series of adaptive Huber methods combined with fast data-drive tuning schemes to estimate model parameters and construct test statistics that are robust against heavy-tailed and/or assymetric error distributions. 
-#' Extensions to two-sample simultaneous mean comparison problems are also included. 
-#' As by-products, this package also contains functions that compute adaptive Huber mean and covariance matrix estimators that are of independent interest.
-#' @details For detailed information on how to use and install see its GitHub page \url{https://github.com/XiaoouPan/FarmTest}.
-#' @references Ahn, S. C. and Horenstein, A. R. (2013). Eigenvalue ratio rest for the number of factors. Econometrica, 81(3) 1203–1227.
-#' @references Benjamini, Y. and Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. J. R. Stat. Soc. Ser. B. Stat. Methodol. 57 289–300.
-#' @references Fan, J., Ke, Y., Sun, Q. and Zhou, W-X. (2019). FarmTest: Factor-adjusted robust multiple testing with approximate false discovery control. J. Amer. Statist. Assoc., to appear.
-#' @references Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.
-#' @references Ke, Y., Minsker, S., Ren, Z., Sun, Q. and Zhou, W.-X. (2019). User-friendly covariance estimation for heavy-tailed distributions: A survey and recent results. Statis. Sci. To appear.
-#' @references Storey, J. D. (2002). A direct approach to false discovery rates. J. R. Stat. Soc. Ser. B. Stat. Methodol. 64, 479–498.
-#' @references Sun, Q., Zhou, W.-X. and Fan, J. (2019). Adaptive Huber regression. J. Amer. Statist. Assoc., to appear.
-#' @references Wang, L., Zheng, C., Zhou, W. and Zhou, W.-X. (2018). A New Principle for Tuning-Free Huber Regression. Preprint.
-#' @references Zhou, W-X., Bose, K., Fan, J. and Liu, H. (2018). A new perspective on robust M-estimation: Finite sample theory and applications to dependence-adjusted multiple testing. Ann. Statist. 46 1904-1931.
-#' @docType package
-#' @name FarmTest
-NULL
-
 #' @title Tuning-free Huber mean estimation
 #' @description The function calculates adaptive Huber mean estimator from a data sample, with robustification parameter \eqn{\tau} determined by a tuning-free principle.
 #' @param X An \eqn{n}-dimensional data vector.
