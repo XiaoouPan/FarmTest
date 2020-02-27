@@ -6,8 +6,8 @@ Date: 2020-02-27
 Authors@R: c(person("Xiaoou", "Pan", email = "xip024@ucsd.edu", role = c("aut", "cre")), 
              person("Yuan", "Ke", email = "yuan.ke@uga.edu", role = "aut"),
              person("Wen-Xin", "Zhou", email = "wez243@ucsd.edu", role = "aut"))
-Description: Performs robust multiple testing for means in the presence of known and unknown latent factors (Fan et al, 2019).
-             It implements a series of adaptive Huber methods combined with fast data-drive tuning schemes (Ke et al, 2019) to estimate model parameters and construct test statistics that are robust against heavy-tailed and/or asymmetric error distributions. 
+Description: Performs robust multiple testing for means in the presence of known and unknown latent factors (Fan et al., 2019).
+             It implements a series of adaptive Huber methods combined with fast data-drive tuning schemes (Ke et al., 2019) to estimate model parameters and construct test statistics that are robust against heavy-tailed and/or asymmetric error distributions. 
              Extensions to two-sample simultaneous mean comparison problems are also included. 
              As by-products, this package also contains functions that compute adaptive Huber mean and covariance matrix estimators that are of independent interest.
 Depends: R (>= 3.6.0)

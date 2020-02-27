@@ -15,44 +15,15 @@ The FarmTest method involves multiple tuning parameters for fitting the factor m
 
 ## Installation
 
-`FarmTest` can be installed into `R` environment with the following methods:
-
-1. (Recommended) `FarmTest` is available on [CRAN](https://CRAN.R-project.org/package=FarmTest), so simply use the command:
+`FarmTest` is available on [CRAN](https://CRAN.R-project.org/package=FarmTest), and it can be installed into `R` environment using the command:
 
 ```r
 install.packages("FarmTest")
 ```
 
-2. `FarmTest` can also be installed from the GitHub repository:
-
-```r
-install.packages("devtools")
-library(devtools)
-devtools::install_github("XiaoouPan/FarmTest")
-library(FarmTest)
-```
-
-## Common error messages
-
-First of all, to avoid most unexpected error messages, it is **strongly** recommended to update `R` to version >= 3.6.1.
-
-Besides, since the library `FarmTest` is coded in `Rcpp` and `RcppArmadillo`, when you first install it, the following two build tools are required:
-
-1. Rtools for Windows OS or XCode Command Line Tools for Mac OS. See [this link](https://support.rstudio.com/hc/en-us/articles/200486498-Package-Development-Prerequisites) for details.
-
-2. gfortran binaries: see [here](https://gcc.gnu.org/wiki/GFortranBinaries#MacOS) for instructions.
-
-`FarmTest` should be working well after these steps. Some common error messages along with their solutions are collected below, and we'll keep updating them based on users' feedback:
-
-* Error: "...could not find build tools necessary to build FarmTest": Please see step 1 above.
-
-* Error: "library not found for -lgfortran/..": Please see step 2 above.
-    
-* Error: "cannot remove prior installation of package 'Rcpp'": This issue happens occasionally when you have installed an old version of the package `Rcpp` before. Updating `Rcpp` with command `install.packages("Rcpp")` will solve the problem.
-
 ## Functions
 
-There are five main functions in this library:
+There are five functions in this library:
 
 * `farm.test`: Factor-adjusted robust multiple testing.
 * `print.farm.test`: Print function for `farm.test`.
