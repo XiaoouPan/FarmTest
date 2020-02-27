@@ -9,7 +9,7 @@ To explicitly caputre the strong dependency among features, we assume that the d
 
 FarmTest implements a series of adaptive Huber methods combined with fast data-driven tuning schemes to estimate model parameters and construct test statistics that are robust against heavy-tailed and/or asymetric error distributions. Extensions to two-sample simultaneous mean comparison are also included. As by-products, this library also contains functions that compute adaptive Huber mean and covariance matrix estimators that are of independent interest.
 
-## Main updates 
+## Main updates of version 2.0.0
 
 The FarmTest method involves multiple tuning parameters for fitting the factor models. In the case of latent factors, the algorithm first computes a robust covariance matrix estimator, and then use the eigenvalue ratio method ([Ahn and Horenstein, 2013](https://onlinelibrary.wiley.com/doi/abs/10.3982/ECTA8968)) along with SVD to estimate the number of factors and loading vectors. It is therefore computationally expenstive to select all the tuning parameters via cross-validation. Instead, the current version makes use of the fast data-driven tuning scheme proposed by [Ke et al., 2019](https://arxiv.org/abs/1811.01520), which significantly reduces the computational cost.
 
