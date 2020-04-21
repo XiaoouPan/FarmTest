@@ -163,8 +163,8 @@ arma::mat standardize(arma::mat X) {
 }
 
 // [[Rcpp::export]]
-arma::vec huberReg(const arma::mat& X, const arma::vec& Y, const int n, const int p, const double tol = 0.0000001, 
-                   const double constTau = 1.345, const int iteMax = 5000) {
+arma::vec huberReg(const arma::mat& X, const arma::vec& Y, const int n, const int p, const double tol = 0.0000001, const double constTau = 1.345, 
+                   const int iteMax = 5000) {
   arma::mat Z(n, p + 1);
   Z.cols(1, p) = standardize(X);
   Z.col(0) = arma::ones(n);
@@ -352,12 +352,11 @@ Rcpp::List rmTestTwoBoot(const arma::mat& X, const arma::mat& Y, const arma::vec
   arma::vec Prob = getPboot(muX - muY, bootX - bootY, h0, alternative, p, B);
   arma::uvec significant = getRej(Prob, alpha, p);
   return Rcpp::List::create(Rcpp::Named("meansX") = muX, Rcpp::Named("meansY") = muY, Rcpp::Named("pValues") = Prob, 
-                            Rcpp::Named("significant") = significant);
+                                        Rcpp::Named("significant") = significant);
 }
 
 // [[Rcpp::export]]
-Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const double alpha = 0.05, 
-                    const std::string alternative = "two.sided") {
+Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const double alpha = 0.05, const std::string alternative = "two.sided") {
   int n = X.n_rows, p = X.n_cols;
   Rcpp::List listCov = huberCov(X, n, p);
   arma::vec mu = listCov["means"];
