@@ -4,15 +4,17 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::plugins(cpp11)]]
 
+// [[Rcpp::export]]
 double f1(const double x, const arma::vec& resSq, const int n) {
   return arma::accu(arma::min(resSq, x * arma::ones(n))) / (n * x) - std::log(n) / n;
 }
 
+// [[Rcpp::export]]
 double rootf1(const arma::vec& resSq, const int n, double low, double up, const double tol = 0.0001, const int maxIte = 500) {
   int ite = 0;
   double mid, val;
   while (ite <= maxIte && up - low > tol) {
-    mid = (up + low) / 2;
+    mid = 0.5 * (up + low);
     val = f1(mid, resSq, n);
     if (val == 0) {
       return mid;
@@ -23,19 +25,21 @@ double rootf1(const arma::vec& resSq, const int n, double low, double up, const 
     }
     ite++;
   }
-  return (low + up) / 2;
+  return 0.5 * (low + up);
 }
 
+// [[Rcpp::export]]
 double f2(const double x, const arma::vec& resSq, const int n, const int d, const int N) {
   return arma::accu(arma::min(resSq, x * arma::ones(N))) / (N * x) - (2 * std::log(d) + std::log(n)) / n;
 }
 
+// [[Rcpp::export]]
 double rootf2(const arma::vec& resSq, const int n, const int d, const int N, double low, double up, const double tol = 0.0001, 
               const int maxIte = 500) {
   int ite = 0;
   double mid, val;
   while (ite <= maxIte && up - low > tol) {
-    mid = (up + low) / 2;
+    mid = 0.5 * (up + low);
     val = f2(mid, resSq, n, d, N);
     if (val == 0) {
       return mid;
@@ -46,7 +50,7 @@ double rootf2(const arma::vec& resSq, const int n, const int d, const int N, dou
     }
     ite++;
   }
-  return (low + up) / 2;
+  return 0.5 * (low + up);
 }
 
 // [[Rcpp::export]]
@@ -70,6 +74,7 @@ double huberMean(const arma::vec& X, const int n, const double epsilon = 0.0001,
   return muNew;
 }
 
+// [[Rcpp::export]]
 arma::vec huberMeanVec(const arma::mat& X, const int n, const int p, const double epsilon = 0.0001, const int iteMax = 500) {
   arma::vec rst(p);
   for (int i = 0; i < p; i++) {
@@ -78,6 +83,7 @@ arma::vec huberMeanVec(const arma::mat& X, const int n, const int p, const doubl
   return rst;
 }
 
+// [[Rcpp::export]]
 double hMeanCov(const arma::vec& Z, const int n, const int d, const int N, const double epsilon = 0.0001, const int iteMax = 500) {
   double muOld = 0;
   double muNew = arma::mean(Z);
@@ -126,14 +132,17 @@ Rcpp::List huberCov(const arma::mat& X, const int n, const int p) {
   return Rcpp::List::create(Rcpp::Named("means") = mu, Rcpp::Named("cov") = sigmaHat);
 }
 
+// [[Rcpp::export]]
 double mad(const arma::vec& x) {
   return arma::median(arma::abs(x - arma::median(x))) / 0.6744898;
 }
 
+// [[Rcpp::export]]
 int sgn(const double x) {
   return (x > 0) - (x < 0);
 }
 
+// [[Rcpp::export]]
 arma::vec huberDer(const arma::vec& x, const int n, const double tau) {
   arma::vec w(n);
   for (int i = 0; i < n; i++) {
@@ -146,6 +155,7 @@ arma::vec huberDer(const arma::vec& x, const int n, const double tau) {
   return w;
 }
 
+// [[Rcpp::export]]
 double huberLoss(const arma::vec& x, const int n, const double tau) {
   double loss = 0;
   for (int i = 0; i < n; i++) {
@@ -155,6 +165,7 @@ double huberLoss(const arma::vec& x, const int n, const double tau) {
   return loss / n;
 }
 
+// [[Rcpp::export]]
 arma::mat standardize(arma::mat X) {
   for (int i = 0; i < X.n_cols; i++) {
     X.col(i) = (X.col(i) - arma::mean(X.col(i))) / arma::stddev(X.col(i));
@@ -202,6 +213,7 @@ arma::vec huberReg(const arma::mat& X, const arma::vec& Y, const int n, const in
   return beta;
 }
 
+// [[Rcpp::export]]
 arma::vec getP(const arma::vec& T, const std::string alternative) {
   arma::vec rst;
   if (alternative == "two.sided") {
@@ -214,6 +226,7 @@ arma::vec getP(const arma::vec& T, const std::string alternative) {
   return rst;
 }
 
+// [[Rcpp::export]]
 arma::vec getPboot(const arma::vec& mu, const arma::mat& boot, const arma::vec& h0, const std::string alternative, const int p, const int B) {
   arma::vec rst(p);
   if (alternative == "two.sided") {
@@ -246,6 +259,7 @@ arma::uvec getRej(const arma::vec& Prob, const double alpha, const int p) {
   return Prob <= pAlpha;
 }
 
+// [[Rcpp::export]]
 arma::vec getRatio(const arma::vec& eigenVal, const int n, const int p) {
   int temp = std::min(n, p);
   int len = temp < 4 ? temp - 1 : temp >> 1;
