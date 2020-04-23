@@ -148,20 +148,20 @@ Benjamini, Y. and Hochberg, Y. (1995). Controlling the false discovery rate: A p
 
 Bose, K., Fan, J., Ke, Y., Pan, X. and Zhou, W.-X. (2019). FarmTest: An R package for factor-adjusted robust multiple testing. [Preprint](https://www.math.ucsd.edu/~xip024/Papers/FarmTest.pdf)
 
-Eddelbuettel, D. and Francois, R. (2011). Rcpp: Seamless R and C++ integration. *J. Stat. Softw.* **40**(8) 1-18. [Paper](http://dirk.eddelbuettel.com/code/rcpp/Rcpp-introduction.pdf)
+Eddelbuettel, D. and Francois, R. (2011). Rcpp: Seamless R and C++ integration. *J. Stat. Softw.* **40** 1-18. [Paper](http://dirk.eddelbuettel.com/code/rcpp/Rcpp-introduction.pdf)
 
 Eddelbuettel, D. and Sanderson, C. (2014). RcppArmadillo: Accelerating R with high-performance C++ linear algebra. *Comput. Statist. Data Anal.* **71** 1054-1063. [Paper](http://dirk.eddelbuettel.com/papers/RcppArmadillo.pdf)
 
-Fan, J., Ke, Y., Sun, Q. and Zhou, W.-X. (2019). FarmTest: Factor-adjusted robust multiple testing with approximate false discovery control. *J. Amer. Statist. Assoc.*, to appear. [Paper](https://www.tandfonline.com/doi/full/10.1080/01621459.2018.1527700) 
+Fan, J., Ke, Y., Sun, Q. and Zhou, W.-X. (2019). FarmTest: Factor-adjusted robust multiple testing with approximate false discovery control. *J. Amer. Statist. Assoc.* **114** 1880-1893. [Paper](https://www.tandfonline.com/doi/full/10.1080/01621459.2018.1527700) 
 
 Huber, P. J. (1964). Robust estimation of a location parameter. *Ann. Math. Statist.* **35** 73-101. [Paper](https://projecteuclid.org/euclid.aoms/1177703732)
 
-Ke, Y., Minsker, S., Ren, Z., Sun, Q. and Zhou, W.-X. (2019). User-friendly covariance estimation for heavy-tailed distributions. *Statis. Sci.*, to appear. [Paper](https://arxiv.org/abs/1811.01520)
+Ke, Y., Minsker, S., Ren, Z., Sun, Q. and Zhou, W.-X. (2019). User-friendly covariance estimation for heavy-tailed distributions. *Statis. Sci.* **34** 454-471. [Paper](https://projecteuclid.org/euclid.ss/1570780979)
 
 Sanderson, C. and Curtin, R. (2016). Armadillo: A template-based C++ library for linear algebra. *J. Open Source Softw.* **1** 26. [Paper](http://conradsanderson.id.au/pdfs/sanderson_armadillo_joss_2016.pdf)
 
 Storey, J. D. (2002). A direct approach to false discovery rates. *J. R. Stat. Soc. Ser. B. Stat. Methodol.* **64** 479–498. [Paper](https://www.jstor.org/stable/3088784?seq=1#metadata_info_tab_contents)
 
-Sun, Q., Zhou, W.-X. and Fan, J. (2019). Adaptive Huber regression. *J. Amer. Statist. Assoc.*, to appear. [Paper](https://www.tandfonline.com/doi/abs/10.1080/01621459.2018.1543124)
+Sun, Q., Zhou, W.-X. and Fan, J. (2020). Adaptive Huber regression. *J. Amer. Statist. Assoc.* **115** 254-265. [Paper](https://www.tandfonline.com/doi/abs/10.1080/01621459.2018.1543124)
 
 Zhou, W.-X., Bose, K., Fan, J. and Liu, H. (2018). A new perspective on robust M-estimation: Finite sample theory and applications to dependence-adjusted multiple testing. *Ann. Statist.* **46** 1904-1931. [Paper](https://projecteuclid.org/euclid.aos/1534492823)
