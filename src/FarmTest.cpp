@@ -164,12 +164,14 @@ void updateHuber(const arma::mat& Z, const arma::vec& res, arma::vec& der, arma:
 }
 
 // [[Rcpp::export]]
-arma::vec huberReg(const arma::mat& X, const arma::vec& Y, const int n, const int p, const double tol = 0.0001, const double constTau = 1.345, 
+arma::vec huberReg(const arma::mat& X, arma::vec Y, const int n, const int p, const double tol = 0.0001, const double constTau = 1.345, 
                    const int iteMax = 5000) {
   const double n1 = 1.0 / n;
   arma::rowvec mx = arma::mean(X, 0);
   arma::vec sx = arma::stddev(X, 0, 0).t();
+  double my = arma::mean(Y);
   arma::mat Z = arma::join_rows(arma::ones(n), standardize(X, mx, sx, p));
+  Y -= my;
   double tau = constTau * mad(Y);
   arma::vec der(n);
   arma::vec gradOld(p + 1), gradNew(p + 1);
@@ -198,7 +200,7 @@ arma::vec huberReg(const arma::mat& X, const arma::vec& Y, const int n, const in
     ite++;
   }
   beta.rows(1, p) /= sx;
-  beta(0) -= arma::as_scalar(mx * beta.rows(1, p));
+  beta(0) += my - arma::as_scalar(mx * beta.rows(1, p));
   return beta;
 }
 

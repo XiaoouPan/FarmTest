@@ -179,13 +179,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // huberReg
-arma::vec huberReg(const arma::mat& X, const arma::vec& Y, const int n, const int p, const double tol, const double constTau, const int iteMax);
+arma::vec huberReg(const arma::mat& X, arma::vec Y, const int n, const int p, const double tol, const double constTau, const int iteMax);
 RcppExport SEXP _FarmTest_huberReg(SEXP XSEXP, SEXP YSEXP, SEXP nSEXP, SEXP pSEXP, SEXP tolSEXP, SEXP constTauSEXP, SEXP iteMaxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const int >::type n(nSEXP);
     Rcpp::traits::input_parameter< const int >::type p(pSEXP);
     Rcpp::traits::input_parameter< const double >::type tol(tolSEXP);
