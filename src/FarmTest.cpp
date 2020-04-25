@@ -316,17 +316,10 @@ arma::vec getPboot(const arma::vec& mu, const arma::mat& boot, const arma::vec& 
 }
 
 // [[Rcpp::export]]
-arma::uvec getRej(const arma::vec& Prob, const double alpha, const int p) {
-  double piHat = (double)arma::accu(Prob > alpha) / ((1 - alpha) * p);
-  arma::vec z = arma::sort(Prob);
-  double pAlpha = -1.0;
-  for (int i = p - 1; i >= 0; i--) {
-    if (z(i) * piHat * p <= alpha * (i + 1)) {
-      pAlpha = z(i);
-      break;
-    }
-  }
-  return Prob <= pAlpha;
+arma::vec adjust(const arma::vec& Prob, const double alpha, const int p) {
+  double piHat = std::min((double)arma::accu(Prob > alpha) / (p * (1 - alpha)), 1.0);
+  arma::uvec rk = arma::sort_index(arma::sort_index(Prob)) + 1;
+  return arma::min(Prob * piHat * p / rk, arma::ones(p));
 }
 
 // [[Rcpp::export]]
@@ -363,9 +356,10 @@ Rcpp::List rmTest(const arma::mat& X, const arma::vec& h0, const double alpha = 
   sigma = arma::sqrt(sigma / n);
   arma::vec T = (mu - h0) / sigma;
   arma::vec Prob = getP(T, alternative);
-  arma::uvec significant = getRej(Prob, alpha, p);
+  arma::vec pAdjust = adjust(Prob, alpha, p);
+  arma::uvec significant = pAdjust <= alpha;
   return Rcpp::List::create(Rcpp::Named("means") = mu, Rcpp::Named("stdDev") = sigma, Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, 
-                            Rcpp::Named("significant") = significant);
+                            Rcpp::Named("pAdjust") = pAdjust, Rcpp::Named("significant") = significant);
 }
 
 // [[Rcpp::export]]
@@ -381,8 +375,10 @@ Rcpp::List rmTestBoot(const arma::mat& X, const arma::vec& h0, const double alph
     boot.col(i) = huberMeanVec(subX, subn, p);
   }
   arma::vec Prob = getPboot(mu, boot, h0, alternative, p, B);
-  arma::uvec significant = getRej(Prob, alpha, p);
-  return Rcpp::List::create(Rcpp::Named("means") = mu, Rcpp::Named("pValues") = Prob, Rcpp::Named("significant") = significant);
+  arma::vec pAdjust = adjust(Prob, alpha, p);
+  arma::uvec significant = pAdjust <= alpha;
+  return Rcpp::List::create(Rcpp::Named("means") = mu, Rcpp::Named("pValues") = Prob, Rcpp::Named("pAdjust") = pAdjust, 
+                            Rcpp::Named("significant") = significant);
 }
 
 // [[Rcpp::export]]
@@ -410,10 +406,11 @@ Rcpp::List rmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& h0
   sigmaX = arma::sqrt(sigmaX / nX);
   sigmaY = arma::sqrt(sigmaY / nY);
   arma::vec Prob = getP(T, alternative);
-  arma::uvec significant = getRej(Prob, alpha, p);
+  arma::vec pAdjust = adjust(Prob, alpha, p);
+  arma::uvec significant = pAdjust <= alpha;
   return Rcpp::List::create(Rcpp::Named("meansX") = muX, Rcpp::Named("meansY") = muY, Rcpp::Named("stdDevX") = sigmaX, 
                             Rcpp::Named("stdDevY") = sigmaY, Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, 
-                            Rcpp::Named("significant") = significant);
+                            Rcpp::Named("pAdjust") = pAdjust, Rcpp::Named("significant") = significant);
 }
 
 // [[Rcpp::export]]
@@ -434,9 +431,10 @@ Rcpp::List rmTestTwoBoot(const arma::mat& X, const arma::mat& Y, const arma::vec
     bootY.col(i) = huberMeanVec(subY, subn, p);
   }
   arma::vec Prob = getPboot(muX - muY, bootX - bootY, h0, alternative, p, B);
-  arma::uvec significant = getRej(Prob, alpha, p);
+  arma::vec pAdjust = adjust(Prob, alpha, p);
+  arma::uvec significant = pAdjust <= alpha;
   return Rcpp::List::create(Rcpp::Named("meansX") = muX, Rcpp::Named("meansY") = muY, Rcpp::Named("pValues") = Prob, 
-                            Rcpp::Named("significant") = significant);
+                            Rcpp::Named("pAdjust") = pAdjust, Rcpp::Named("significant") = significant);
 }
 
 // [[Rcpp::export]]
@@ -470,10 +468,11 @@ Rcpp::List farmTest(const arma::mat& X, const arma::vec& h0, int K = -1, const d
   sigma = arma::sqrt(sigma / n);
   arma::vec T = (mu - h0) / sigma;
   arma::vec Prob = getP(T, alternative);
-  arma::uvec significant = getRej(Prob, alpha, p);
+  arma::vec pAdjust = adjust(Prob, alpha, p);
+  arma::uvec significant = pAdjust <= alpha;
   return Rcpp::List::create(Rcpp::Named("means") = mu, Rcpp::Named("stdDev") = sigma, Rcpp::Named("loadings") = B, Rcpp::Named("nfactors") = K, 
-                            Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, Rcpp::Named("significant") = significant, 
-                            Rcpp::Named("eigens") = eigenVal, Rcpp::Named("ratio") = ratio);
+                            Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, Rcpp::Named("pAdjust") = pAdjust, 
+                            Rcpp::Named("significant") = significant, Rcpp::Named("eigens") = eigenVal, Rcpp::Named("ratio") = ratio);
 }
 
 // [[Rcpp::export]]
@@ -529,12 +528,14 @@ Rcpp::List farmTestTwo(const arma::mat& X, const arma::mat& Y, const arma::vec& 
   sigmaX = arma::sqrt(sigmaX / nX);
   sigmaY = arma::sqrt(sigmaY / nY);
   arma::vec Prob = getP(T, alternative);
-  arma::uvec significant = getRej(Prob, alpha, p);
+  arma::vec pAdjust = adjust(Prob, alpha, p);
+  arma::uvec significant = pAdjust <= alpha;
   return Rcpp::List::create(Rcpp::Named("meansX") = muX, Rcpp::Named("meansY") = muY, Rcpp::Named("stdDevX") = sigmaX, 
                             Rcpp::Named("stdDevY") = sigmaY, Rcpp::Named("loadingsX") = BX, Rcpp::Named("loadingsY") = BY,
                             Rcpp::Named("nfactorsX") = KX, Rcpp::Named("nfactorsY") = KY, Rcpp::Named("tStat") = T, 
-                            Rcpp::Named("pValues") = Prob, Rcpp::Named("significant") = significant, Rcpp::Named("eigensX") = eigenValX,
-                            Rcpp::Named("eigensY") = eigenValY, Rcpp::Named("ratioX") = ratioX, Rcpp::Named("ratioY") = ratioY);
+                            Rcpp::Named("pValues") = Prob, Rcpp::Named("pAdjust") = pAdjust, Rcpp::Named("significant") = significant, 
+                            Rcpp::Named("eigensX") = eigenValX, Rcpp::Named("eigensY") = eigenValY, Rcpp::Named("ratioX") = ratioX, 
+                            Rcpp::Named("ratioY") = ratioY);
 }
 
 // [[Rcpp::export]]
@@ -564,9 +565,11 @@ Rcpp::List farmTestFac(const arma::mat& X, const arma::mat& fac, const arma::vec
   sigma = arma::sqrt(sigma / n);
   arma::vec T = (mu - h0) / sigma;
   arma::vec Prob = getP(T, alternative);
-  arma::uvec significant = getRej(Prob, alpha, p);
+  arma::vec pAdjust = adjust(Prob, alpha, p);
+  arma::uvec significant = pAdjust <= alpha;
   return Rcpp::List::create(Rcpp::Named("means") = mu, Rcpp::Named("stdDev") = sigma, Rcpp::Named("loadings") = B, Rcpp::Named("nfactors") = K,
-                            Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, Rcpp::Named("significant") = significant);
+                            Rcpp::Named("tStat") = T, Rcpp::Named("pValues") = Prob, Rcpp::Named("pAdjust") = pAdjust, 
+                            Rcpp::Named("significant") = significant);
 }
 
 // [[Rcpp::export]]
@@ -587,9 +590,10 @@ Rcpp::List farmTestFacBoot(const arma::mat& X, const arma::mat& fac, const arma:
     }
   }
   arma::vec Prob = getPboot(mu, boot, h0, alternative, p, B);
-  arma::uvec significant = getRej(Prob, alpha, p);
+  arma::vec pAdjust = adjust(Prob, alpha, p);
+  arma::uvec significant = pAdjust <= alpha;
   return Rcpp::List::create(Rcpp::Named("means") = mu, Rcpp::Named("nfactors") = K, Rcpp::Named("pValues") = Prob, 
-                            Rcpp::Named("significant") = significant);
+                            Rcpp::Named("pAdjust") = pAdjust, Rcpp::Named("significant") = significant);
 }
 
 // [[Rcpp::export]]
@@ -635,11 +639,12 @@ Rcpp::List farmTestTwoFac(const arma::mat& X, const arma::mat& facX, const arma:
   sigmaX = arma::sqrt(sigmaX / nX);
   sigmaY = arma::sqrt(sigmaY / nY);
   arma::vec Prob = getP(T, alternative);
-  arma::uvec significant = getRej(Prob, alpha, p);
+  arma::vec pAdjust = adjust(Prob, alpha, p);
+  arma::uvec significant = pAdjust <= alpha;
   return Rcpp::List::create(Rcpp::Named("meansX") = muX, Rcpp::Named("meansY") = muY, Rcpp::Named("stdDevX") = sigmaX, 
                             Rcpp::Named("stdDevY") = sigmaY, Rcpp::Named("loadingsX") = BX, Rcpp::Named("loadingsY") = BY,
                             Rcpp::Named("nfactorsX") = KX, Rcpp::Named("nfactorsY") = KY, Rcpp::Named("tStat") = T, 
-                            Rcpp::Named("pValues") = Prob, Rcpp::Named("significant") = significant);
+                            Rcpp::Named("pValues") = Prob, Rcpp::Named("pAdjust") = pAdjust, Rcpp::Named("significant") = significant);
 }
 
 // [[Rcpp::export]]
@@ -667,7 +672,9 @@ Rcpp::List farmTestTwoFacBoot(const arma::mat& X, const arma::mat& facX, const a
     }
   }
   arma::vec Prob = getPboot(muX - muY, bootX - bootY, h0, alternative, p, B);
-  arma::uvec significant = getRej(Prob, alpha, p);
+  arma::vec pAdjust = adjust(Prob, alpha, p);
+  arma::uvec significant = pAdjust <= alpha;
   return Rcpp::List::create(Rcpp::Named("meansX") = muX, Rcpp::Named("meansY") = muY, Rcpp::Named("nfactorsX") = KX, 
-                            Rcpp::Named("nfactorsY") = KY, Rcpp::Named("pValues") = Prob, Rcpp::Named("significant") = significant);
+                            Rcpp::Named("nfactorsY") = KY, Rcpp::Named("pValues") = Prob, Rcpp::Named("pAdjust") = pAdjust, 
+                            Rcpp::Named("significant") = significant);
 }

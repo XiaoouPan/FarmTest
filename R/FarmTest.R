@@ -303,11 +303,11 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
 }
 
 #' @title Print function of FarmTest
-#' @description This is the print function of S3 objects with class "\code{farm.test}". It summarizes and prints the outputs of \code{farm.test} function.
+#' @description This is the print function of S3 objects with class "\code{farm.test}".
 #' @param x A \code{farm.test} object.
 #' @param \dots Further arguments passed to or from other methods.
 #' @return No variable will be returned, but a brief summary of FarmTest will be displayed.
-#' @seealso \code{\link{farm.test}}
+#' @seealso \code{\link{farm.test}} and \code{\link{summary.farm.test}}
 #' @examples 
 #' n = 50
 #' p = 100
@@ -320,7 +320,7 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
 #' fX = matrix(rnorm(K * n, 0, 1), nrow = n)
 #' X = rep(1, n) %*% t(muX) + fX %*% t(BX) + epsilonX
 #' output = farm.test(X)
-#' output
+#' print(output)
 #' @export
 print.farm.test = function(x, ...) {
   if (x$type == "known" && length(x$n) == 1) {
@@ -349,4 +349,31 @@ print.farm.test = function(x, ...) {
   cat(paste("FDR to be controlled at: ", x$alpha, "\n", sep = ""))
   cat(paste("Alternative hypothesis: ",  x$alternative, "\n", sep = ""))
   cat(paste("Number of hypotheses rejected: ", sum(x$significant), "\n", sep = ""))
+}
+
+#' @title Summary function of FarmTest
+#' @description This is the summary function of S3 objects with class "\code{farm.test}".
+#' @param x A \code{farm.test} object.
+#' @param \dots Further arguments passed to or from other methods.
+#' @return A data frame including the estimated means, p-values and significance for all the features.
+#' @seealso \code{\link{farm.test}} and \code{\link{print.farm.test}}
+#' @examples 
+#' n = 50
+#' p = 100
+#' K = 3
+#' muX = rep(0, p)
+#' muX[1:5] = 2
+#' set.seed(2019)
+#' epsilonX = matrix(rnorm(p * n, 0, 1), nrow = n)
+#' BX = matrix(runif(p * K, -2, 2), nrow = p)
+#' fX = matrix(rnorm(K * n, 0, 1), nrow = n)
+#' X = rep(1, n) %*% t(muX) + fX %*% t(BX) + epsilonX
+#' output = farm.test(X)
+#' summary(output)
+#' @export
+summary.farm.test = function(x, ...) {
+  p = x$p
+  rst = as.data.frame(cbind(x$means, x$pValues, x$significant))
+  names(rst) = c("means", "p-values", "significance")
+  return (rst)
 }
