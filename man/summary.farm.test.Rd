@@ -17,6 +17,9 @@ A data frame including the estimated means, p-values, adjusted p-values and sign
 \description{
 This is the summary function of S3 objects with class "\code{farm.test}".
 }
+\details{
+For two-sample FarmTest, the first column is: estimated means of sample \code{X} - estimated means of sample \code{Y}.
+}
 \examples{
 n = 50
 p = 100

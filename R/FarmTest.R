@@ -358,6 +358,7 @@ print.farm.test = function(x, ...) {
 #' @param x A \code{farm.test} object.
 #' @param \dots Further arguments passed to or from other methods.
 #' @return A data frame including the estimated means, p-values, adjusted p-values and significance for all the features.
+#' @details For two-sample FarmTest, the first column is: estimated means of sample \code{X} - estimated means of sample \code{Y}.
 #' @seealso \code{\link{farm.test}}, \code{\link{print.farm.test}} and \code{\link{plot.farm.test}}.
 #' @examples 
 #' n = 50
@@ -374,8 +375,12 @@ print.farm.test = function(x, ...) {
 #' summary(output)
 #' @export
 summary.farm.test = function(x, ...) {
-  p = x$p
-  rst = as.data.frame(cbind(x$means, x$pValues, x$pAdjust, x$significant))
+  rst = NULL
+  if (length(x$n) == 1) {
+    rst = as.data.frame(cbind(x$means, x$pValues, x$pAdjust, x$significant))
+  } else {
+    rst = as.data.frame(cbind(x$meansX.means - x$meansY.means, x$pValues, x$pAdjust, x$significant))
+  }
   names(rst) = c("means", "p-values", "p-adjusted", "significance")
   return (rst)
 }
@@ -385,6 +390,7 @@ summary.farm.test = function(x, ...) {
 #' @param x A \code{farm.test} object.
 #' @param \dots Further arguments passed to or from other methods.
 #' @return No variable will be returned, but a histogram of estimated means will be presented.
+#' @details For two-sample FarmTest, the histogram is based on estimated means of sample \code{X} - estimated means of sample \code{Y}.
 #' @seealso \code{\link{farm.test}}, \code{\link{print.farm.test}} and \code{\link{summary.farm.test}}.
 #' @examples 
 #' n = 50
@@ -401,6 +407,11 @@ summary.farm.test = function(x, ...) {
 #' plot(output)
 #' @export
 plot.farm.test = function(x, ...) {
-  means = as.vector(x$means)
+  means = NULL
+  if (length(x$n) == 1) {
+    means = as.vector(x$means)
+  } else {
+    means = as.vector(x$meansX.means - x$meansY.means)
+  }
   graphics::hist(means, freq = TRUE, main = "Histogram of Estimated Means", xlab = "Estimated Means", col = "blue")
 }

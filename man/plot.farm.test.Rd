@@ -17,6 +17,9 @@ No variable will be returned, but a histogram of estimated means will be present
 \description{
 This is the plot function of S3 objects with class "\code{farm.test}". It produces the histogram of estimated means.
 }
+\details{
+For two-sample FarmTest, the histogram is based on estimated means of sample \code{X} - estimated means of sample \code{Y}.
+}
 \examples{
 n = 50
 p = 100
