@@ -132,6 +132,10 @@ This library is built upon an earlier version written by Bose, K., Ke, Y. and Zh
 
 GPL-3.0
 
+##  System requirements 
+
+C++11
+
 ## Author(s)
 
 Xiaoou Pan <xip024@ucsd.edu>, Yuan Ke <yuan.ke@uga.edu>, Wen-Xin Zhou <wez243@ucsd.edu> 
