@@ -27,9 +27,9 @@ There are five functions in this library:
 
 * `farm.test`: Factor-adjusted robust multiple testing.
 * `print.farm.test`: Print function for `farm.test`.
-* `farm.mean`: Tuning-free Huber mean estimation.
-* `farm.cov`: Tuning-free Huber-type covariance estimation.
-* `farm.fdr`: FDR control given a sequence of p-values.
+* `huber.mean`: Tuning-free Huber mean estimation.
+* `huber.cov`: Tuning-free Huber-type covariance estimation.
+* `huber.reg`: Tuning-free Huber regression.
 
 ## Getting help
 
@@ -109,19 +109,19 @@ Y = rep(1, n) %*% t(muY) + fY %*% t(BY) + epsilonY
 output = farm.test(X, Y = Y)
 ```
  
-Robust mean and covariance matrix estimation is not only an important step in the FarmTest, but also of independent interest in many other problems. We write separate functions `farm.mean` and `farm.cov` for this purpose.
+As by-products, robust mean and covariance matrix estimation is not only an important step in the FarmTest, but also of independent interest in many other problems. We write separate functions `huber.mean` and `huber.cov` for this purpose.
 
 ```r
 library(FarmTest)
 set.seed(1)
 n = 1000
 X = rlnorm(n, 0, 1.5)
-huberMean = farm.mean(X)
+huberMean = huber.mean(X)
 
 n = 100
 d = 50
 X = matrix(rt(n * d, df = 3), n, d)
-huberCov = farm.cov(X)
+huberCov = huber.cov(X)
 ```
 
 ## Remark 
