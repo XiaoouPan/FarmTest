@@ -195,6 +195,40 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// huberRegCoef
+arma::vec huberRegCoef(const arma::mat& X, arma::vec Y, const int n, const int p, const double tol, const double constTau, const int iteMax);
+RcppExport SEXP _FarmTest_huberRegCoef(SEXP XSEXP, SEXP YSEXP, SEXP nSEXP, SEXP pSEXP, SEXP tolSEXP, SEXP constTauSEXP, SEXP iteMaxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< const double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< const double >::type constTau(constTauSEXP);
+    Rcpp::traits::input_parameter< const int >::type iteMax(iteMaxSEXP);
+    rcpp_result_gen = Rcpp::wrap(huberRegCoef(X, Y, n, p, tol, constTau, iteMax));
+    return rcpp_result_gen;
+END_RCPP
+}
+// huberRegItcp
+double huberRegItcp(const arma::mat& X, arma::vec Y, const int n, const int p, const double tol, const double constTau, const int iteMax);
+RcppExport SEXP _FarmTest_huberRegItcp(SEXP XSEXP, SEXP YSEXP, SEXP nSEXP, SEXP pSEXP, SEXP tolSEXP, SEXP constTauSEXP, SEXP iteMaxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< const double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< const double >::type constTau(constTauSEXP);
+    Rcpp::traits::input_parameter< const int >::type iteMax(iteMaxSEXP);
+    rcpp_result_gen = Rcpp::wrap(huberRegItcp(X, Y, n, p, tol, constTau, iteMax));
+    return rcpp_result_gen;
+END_RCPP
+}
 // getP
 arma::vec getP(const arma::vec& T, const std::string alternative);
 RcppExport SEXP _FarmTest_getP(SEXP TSEXP, SEXP alternativeSEXP) {
@@ -422,6 +456,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FarmTest_standardize", (DL_FUNC) &_FarmTest_standardize, 4},
     {"_FarmTest_updateHuber", (DL_FUNC) &_FarmTest_updateHuber, 7},
     {"_FarmTest_huberReg", (DL_FUNC) &_FarmTest_huberReg, 7},
+    {"_FarmTest_huberRegCoef", (DL_FUNC) &_FarmTest_huberRegCoef, 7},
+    {"_FarmTest_huberRegItcp", (DL_FUNC) &_FarmTest_huberRegItcp, 7},
     {"_FarmTest_getP", (DL_FUNC) &_FarmTest_getP, 2},
     {"_FarmTest_getPboot", (DL_FUNC) &_FarmTest_getPboot, 6},
     {"_FarmTest_getRej", (DL_FUNC) &_FarmTest_getRej, 3},

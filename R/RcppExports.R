@@ -53,6 +53,14 @@ huberReg <- function(X, Y, n, p, tol = 0.0001, constTau = 1.345, iteMax = 5000L)
     .Call('_FarmTest_huberReg', PACKAGE = 'FarmTest', X, Y, n, p, tol, constTau, iteMax)
 }
 
+huberRegCoef <- function(X, Y, n, p, tol = 0.0001, constTau = 1.345, iteMax = 5000L) {
+    .Call('_FarmTest_huberRegCoef', PACKAGE = 'FarmTest', X, Y, n, p, tol, constTau, iteMax)
+}
+
+huberRegItcp <- function(X, Y, n, p, tol = 0.0001, constTau = 1.345, iteMax = 5000L) {
+    .Call('_FarmTest_huberRegItcp', PACKAGE = 'FarmTest', X, Y, n, p, tol, constTau, iteMax)
+}
+
 getP <- function(T, alternative) {
     .Call('_FarmTest_getP', PACKAGE = 'FarmTest', T, alternative)
 }
