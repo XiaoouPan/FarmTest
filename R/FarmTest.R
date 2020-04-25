@@ -376,6 +376,6 @@ print.farm.test = function(x, ...) {
 summary.farm.test = function(x, ...) {
   p = x$p
   rst = as.data.frame(cbind(x$means, x$pValues, x$pAdjust, x$significant))
-  names(rst) = c("means", "p-values", "significance")
+  names(rst) = c("means", "p-values", "p-adjusted", "significance")
   return (rst)
 }
