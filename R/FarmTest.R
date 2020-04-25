@@ -402,5 +402,5 @@ summary.farm.test = function(x, ...) {
 #' @export
 plot.farm.test = function(x, ...) {
   means = as.vector(x$means)
-  graphics::hist(means, freq = TRUE, main = "Histogram of estimated means$", xlab = "Estimated means", col = "blue")
+  graphics::hist(means, freq = TRUE, main = "Histogram of Estimated Means", xlab = "Estimated Means", col = "blue")
 }
