@@ -23,7 +23,7 @@ install.packages("FarmTest")
 
 ## Functions
 
-There are five functions in this library:
+There are 7 functions in this library:
 
 * `farm.test`: Factor-adjusted robust multiple testing.
 * `print.farm.test`: Print function for `farm.test`.
