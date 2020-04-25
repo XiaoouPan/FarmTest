@@ -2,7 +2,7 @@
 % Please edit documentation in R/FarmTest.R
 \name{print.farm.test}
 \alias{print.farm.test}
-\title{Summary and print function of FarmTest}
+\title{Print function of FarmTest}
 \usage{
 \method{print}{farm.test}(x, ...)
 }

@@ -4,14 +4,14 @@
 #' @return A Huber mean estimator will be returned.
 #' @references Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.
 #' @references Wang, L., Zheng, C., Zhou, W. and Zhou, W.-X. (2018). A New Principle for Tuning-Free Huber Regression. Preprint.
-#' @seealso \code{\link{farm.cov}} for tuning-free Huber-type covariance estimation.
+#' @seealso \code{\link{huber.cov}} for tuning-free Huber-type covariance estimation and \code{\link{huber.reg}} for tuning-free Huber regression.
 #' @examples
 #' set.seed(2019)
 #' n = 1000
 #' X = rlnorm(n, 0, 1.5) - exp(1.5^2 / 2)
 #' mu = farm.mean(X)
 #' @export
-farm.mean = function(X){
+huber.mean = function(X){
   n = length(X)
   return (huberMean(X, n))
 }
@@ -23,7 +23,7 @@ farm.mean = function(X){
 #' @return A \eqn{p} by \eqn{p} Huber-type covariance matrix estimator will be returned.
 #' @references Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.
 #' @references Ke, Y., Minsker, S., Ren, Z., Sun, Q. and Zhou, W.-X. (2019). User-friendly covariance estimation for heavy-tailed distributions. Statis. Sci., 34, 454-471.
-#' @seealso \code{\link{farm.mean}} for tuning-free Huber mean estimation.
+#' @seealso \code{\link{huber.mean}} for tuning-free Huber mean estimation and \code{\link{huber.reg}} for tuning-free Huber regression.
 #' @examples
 #' set.seed(2019)
 #' n = 100
@@ -31,10 +31,35 @@ farm.mean = function(X){
 #' X = matrix(rt(n * d, df = 3), n, d) / sqrt(3)
 #' Sigma = farm.cov(X)
 #' @export
-farm.cov = function(X) {
+huber.cov = function(X) {
   n = nrow(X)
   p = ncol(X)
   return (huberCov(X, n, p)$cov)
+}
+
+#' @title Tuning-free Huber regression
+#' @description The function calculates adaptive Huber regression estimator from a data sample, with robustification parameter \eqn{\tau} determined by a tuning-free principle.
+#' @param X An \eqn{n} by \eqn{p} design matrix.
+#' @param Y A continuous response with length \eqn{n}.
+#' @return A coefficients estimator with length \eqn{p + 1} will be returned.
+#' @references Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.
+#' @references Sun, Q., Zhou, W.-X. and Fan, J. (2020). Adaptive Huber regression. J. Amer. Statist. Assoc., 115, 254-265.
+#' @references Wang, L., Zheng, C., Zhou, W. and Zhou, W.-X. (2018). A new principle for tuning-free Huber regression. Preprint.
+#' @seealso \code{\link{huber.mean}} for tuning-free Huber mean estimation and \code{\link{huber.cov}} for tuning-free Huber-type covariance estimation.
+#' @examples
+#' set.seed(2019)
+#' n = 100
+#' d = 50
+#' beta = rep(1, d)
+#' X = matrix(rnorm(n * d), n, d)
+#' err = rnorm(n)
+#' Y = 1 + X %*% beta + err
+#' beta.hat = huber.reg(X, Y)
+#' @export
+huber.reg = function(X, Y) {
+  n = nrow(X)
+  p = ncol(X)
+  return (huberReg(X, Y, n, p))
 }
 
 #' @title Factor-adjusted robust multiple testing
@@ -80,7 +105,6 @@ farm.cov = function(X) {
 #' @references Sun, Q., Zhou, W.-X. and Fan, J. (2020). Adaptive Huber regression. J. Amer. Statist. Assoc., 115, 254-265.
 #' @references Zhou, W-X., Bose, K., Fan, J. and Liu, H. (2018). A new perspective on robust M-estimation: Finite sample theory and applications to dependence-adjusted multiple testing. Ann. Statist., 46 1904-1931.
 #' @seealso \code{\link{print.farm.test}}
-#' @seealso \code{\link{farm.fdr}}
 #' @examples 
 #' n = 20
 #' p = 50
@@ -278,7 +302,7 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
   return (output)
 }
 
-#' @title Summary and print function of FarmTest
+#' @title Print function of FarmTest
 #' @description This is the print function of S3 objects with class "\code{farm.test}". It summarizes and prints the outputs of \code{farm.test} function.
 #' @param x A \code{farm.test} object.
 #' @param \dots Further arguments passed to or from other methods.
@@ -325,36 +349,4 @@ print.farm.test = function(x, ...) {
   cat(paste("FDR to be controlled at: ", x$alpha, "\n", sep = ""))
   cat(paste("Alternative hypothesis: ",  x$alternative, "\n", sep = ""))
   cat(paste("Number of hypotheses rejected: ", sum(x$significant), "\n", sep = ""))
-}
-
-#' @title FDR control given a sequence of p-values
-#' @description Given a sequence of p-values, this function conducts multiple testing and outputs the indices of rejected hypotheses using an adaptive Benjamini-Hochberg procedure proposed by Storey (2002).
-#' @param pValues A sequence of p-values, each entry of \code{pValues} must be between 0 and 1.
-#' @param alpha An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be strictly between 0 and 1. The default value is 0.05.
-#' @return Indices of tests that are rejected will be returned. It will show "no hypotheses rejected" if none of the tests are rejected.
-#' @references Benjamini, Y. and Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. J. R. Stat. Soc. Ser. B. Stat. Methodol., 57 289–300.
-#' @references Storey, J. D. (2002). A direct approach to false discovery rates. J. R. Stat. Soc. Ser. B. Stat. Methodol., 64, 479–498.
-#' @examples 
-#' set.seed(100)
-#' n = 50
-#' p = 100
-#' X = cbind(matrix(rnorm(n * 10, 1, 1), n, 10), matrix(rnorm(n * (p - 10)), n, p - 10))
-#' pValues = apply(X, 2, function(x) t.test(x)$p.value)
-#' farm.fdr(pValues)
-#' @seealso \code{\link{farm.test}}
-#' @export
-farm.fdr = function(pValues, alpha = 0.05) {
-  if((sum(pValues < 0) != 0) || (sum(pValues > 1) != 0)) {
-    stop("Each p-value must be between 0 and 1")
-  } else if (alpha >= 1 || alpha <= 0) {
-    stop("Alpha should be strictly between 0 and 1")
-  } else {
-    p = length(pValues)
-    significant = getRej(pValues, alpha, p)
-    reject = "no hypotheses rejected"
-    if (sum(significant) > 0) {
-      reject = which(significant == 1)
-    }
-    return (reject)
-  }
 }

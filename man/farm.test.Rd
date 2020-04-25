@@ -116,6 +116,4 @@ Zhou, W-X., Bose, K., Fan, J. and Liu, H. (2018). A new perspective on robust M-
 }
 \seealso{
 \code{\link{print.farm.test}}
-
-\code{\link{farm.fdr}}
 }
