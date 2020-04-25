@@ -71,7 +71,7 @@ Based on 100 simulations, we report below the average values of the true positiv
 
 | TPR | FPR | FDR |
 | :---: | :---: | :---: | 
-| 1.000 | 0.002 | 0.031 |
+| 1.000 | 0.002 | 0.026 |
 
 In addition, we illustrate the use of FarmTest under different circumstances. For one-sided alternatives, modify the `alternative` argument to be `less` or `greater`:
 
