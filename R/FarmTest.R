@@ -105,7 +105,7 @@ huber.reg = function(X, Y) {
 #' @references Storey, J. D. (2002). A direct approach to false discovery rates. J. R. Stat. Soc. Ser. B. Stat. Methodol., 64, 479–498.
 #' @references Sun, Q., Zhou, W.-X. and Fan, J. (2020). Adaptive Huber regression. J. Amer. Statist. Assoc., 115, 254-265.
 #' @references Zhou, W-X., Bose, K., Fan, J. and Liu, H. (2018). A new perspective on robust M-estimation: Finite sample theory and applications to dependence-adjusted multiple testing. Ann. Statist., 46 1904-1931.
-#' @seealso \code{\link{print.farm.test}} and \code{\link{summary.farm.test}}
+#' @seealso \code{\link{print.farm.test}}, \code{\link{summary.farm.test}} and \code{\link{plot.farm.test}}.
 #' @examples 
 #' n = 20
 #' p = 50
@@ -309,7 +309,7 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
 #' @param x A \code{farm.test} object.
 #' @param \dots Further arguments passed to or from other methods.
 #' @return No variable will be returned, but a brief summary of FarmTest will be displayed.
-#' @seealso \code{\link{farm.test}} and \code{\link{summary.farm.test}}
+#' @seealso \code{\link{farm.test}}, \code{\link{summary.farm.test}} and \code{\link{plot.farm.test}}.
 #' @examples 
 #' n = 50
 #' p = 100
@@ -358,7 +358,7 @@ print.farm.test = function(x, ...) {
 #' @param x A \code{farm.test} object.
 #' @param \dots Further arguments passed to or from other methods.
 #' @return A data frame including the estimated means, p-values, adjusted p-values and significance for all the features.
-#' @seealso \code{\link{farm.test}} and \code{\link{print.farm.test}}
+#' @seealso \code{\link{farm.test}}, \code{\link{print.farm.test}} and \code{\link{plot.farm.test}}.
 #' @examples 
 #' n = 50
 #' p = 100
@@ -378,4 +378,29 @@ summary.farm.test = function(x, ...) {
   rst = as.data.frame(cbind(x$means, x$pValues, x$pAdjust, x$significant))
   names(rst) = c("means", "p-values", "p-adjusted", "significance")
   return (rst)
+}
+
+#' @title Plot function of FarmTest
+#' @description This is the plot function of S3 objects with class "\code{farm.test}". It produces the histogram of estimated means.
+#' @param x A \code{farm.test} object.
+#' @param \dots Further arguments passed to or from other methods.
+#' @return No variable will be returned, but a histogram of estimated means will be presented.
+#' @seealso \code{\link{farm.test}}, \code{\link{print.farm.test}} and \code{\link{summary.farm.test}}.
+#' @examples 
+#' n = 50
+#' p = 100
+#' K = 3
+#' muX = rep(0, p)
+#' muX[1:5] = 2
+#' set.seed(2019)
+#' epsilonX = matrix(rnorm(p * n, 0, 1), nrow = n)
+#' BX = matrix(runif(p * K, -2, 2), nrow = p)
+#' fX = matrix(rnorm(K * n, 0, 1), nrow = n)
+#' X = rep(1, n) %*% t(muX) + fX %*% t(BX) + epsilonX
+#' output = farm.test(X)
+#' plot(output)
+#' @export
+plot.farm.test = function(x, ...) {
+  means = as.vector(x$means)
+  graphics::hist(means, freq = TRUE, main = "Histogram of estimated means$", xlab = "Estimated means", col = "blue")
 }

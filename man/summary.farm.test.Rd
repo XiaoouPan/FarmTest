@@ -32,5 +32,5 @@ output = farm.test(X)
 summary(output)
 }
 \seealso{
-\code{\link{farm.test}} and \code{\link{print.farm.test}}
+\code{\link{farm.test}}, \code{\link{print.farm.test}} and \code{\link{plot.farm.test}}.
 }

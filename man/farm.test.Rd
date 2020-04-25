@@ -116,5 +116,5 @@ Sun, Q., Zhou, W.-X. and Fan, J. (2020). Adaptive Huber regression. J. Amer. Sta
 Zhou, W-X., Bose, K., Fan, J. and Liu, H. (2018). A new perspective on robust M-estimation: Finite sample theory and applications to dependence-adjusted multiple testing. Ann. Statist., 46 1904-1931.
 }
 \seealso{
-\code{\link{print.farm.test}} and \code{\link{summary.farm.test}}
+\code{\link{print.farm.test}}, \code{\link{summary.farm.test}} and \code{\link{plot.farm.test}}.
 }
