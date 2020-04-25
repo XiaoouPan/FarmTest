@@ -69,8 +69,8 @@ getPboot <- function(mu, boot, h0, alternative, p, B) {
     .Call('_FarmTest_getPboot', PACKAGE = 'FarmTest', mu, boot, h0, alternative, p, B)
 }
 
-getRej <- function(Prob, alpha, p) {
-    .Call('_FarmTest_getRej', PACKAGE = 'FarmTest', Prob, alpha, p)
+adjust <- function(Prob, alpha, p) {
+    .Call('_FarmTest_adjust', PACKAGE = 'FarmTest', Prob, alpha, p)
 }
 
 getRatio <- function(eigenVal, n, p) {

@@ -12,7 +12,7 @@
 \item{\dots}{Further arguments passed to or from other methods.}
 }
 \value{
-A data frame including the estimated means, p-values and significance for all the features.
+A data frame including the estimated means, p-values, adjusted p-values and significance for all the features.
 }
 \description{
 This is the summary function of S3 objects with class "\code{farm.test}".

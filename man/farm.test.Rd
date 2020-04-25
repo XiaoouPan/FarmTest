@@ -14,7 +14,7 @@ farm.test(
   h0 = NULL,
   alternative = c("two.sided", "less", "greater"),
   alpha = 0.05,
-  p.method = c("bootstrap", "normal"),
+  p.method = c("normal", "bootstrap"),
   nBoot = 500
 )
 }
@@ -37,29 +37,30 @@ farm.test(
 
 \item{alpha}{An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.}
 
-\item{p.method}{An \strong{optional} character string specifying the method to calculate p-values when \code{fX} is known or when \code{KX = 0}, possible options are multiplier bootstrap or normal approximation. It must be one of "bootstrap" (default) or "normal".}
+\item{p.method}{An \strong{optional} character string specifying the method to calculate p-values when \code{fX} is known or when \code{KX = 0}, possible options are multiplier bootstrap or normal approximation. It must be one of "normal"(default) or "bootstrap".}
 
 \item{nBoot}{An \strong{optional} positive integer specifying the size of bootstrap sample, only available when \code{p.method = "bootstrap"}. The dafault value is 500.}
 }
 \value{
 An object with S3 class \code{farm.test} containing the following items will be returned:
-\itemize{
-\item \code{means} Estimated means, a vector with length \eqn{p}.
-\item \code{stdDev} Estimated standard deviations, a vector with length \eqn{p}. It's not available for bootstrap method.
-\item \code{loadings} Estimated factor loadings, a matrix with dimension \eqn{p} by \eqn{K}, where \eqn{K} is the number of factors.
-\item \code{eigenVal} Eigenvalues of estimated covariance matrix, a vector with length \eqn{p}. It's only available when factors \code{fX} and \code{fY} are not given.
-\item \code{eigenRatio} Ratios of \code{eigenVal} to estimate \code{nFactors}, a vector with length \eqn{min(n, p) / 2}. It's only available when number of factors \code{KX} and \code{KY} are not given.
-\item \code{nFactors} Estimated or input number of factors, a positive integer.
-\item \code{tStat} Values of test statistics, a vector with length \eqn{p}. It's not available for bootstrap method.
-\item \code{pValues} P-values of tests, a vector with length \eqn{p}.
-\item \code{significant} Boolean values indicating whether each test is significant, with 1 for significant and 0 for non-significant, a vector with length \eqn{p}.
-\item \code{reject} Indices of tests that are rejected. It will show "no hypotheses rejected" if none of the tests are rejected.
-\item \code{type} Indicator of whether factor is known or unknown.
-\item \code{n} Sample size.
-\item \code{p} Data dimension.
-\item \code{h0} Null hypothesis, a vector with length \eqn{p}.
-\item \code{alpha} \eqn{\alpha} value.
-\item \code{alternative} Althernative hypothesis.
+\describe{
+\item{\code{means}}{Estimated means, a vector with length \eqn{p}.}
+\item{\code{stdDev}}{Estimated standard deviations, a vector with length \eqn{p}. It's not available for bootstrap method.}
+\item{\code{loadings}}{Estimated factor loadings, a matrix with dimension \eqn{p} by \eqn{K}, where \eqn{K} is the number of factors.}
+\item{\code{eigenVal}}{Eigenvalues of estimated covariance matrix, a vector with length \eqn{p}. It's only available when factors \code{fX} and \code{fY} are not given.}
+\item{\code{eigenRatio}}{Ratios of \code{eigenVal} to estimate \code{nFactors}, a vector with length \eqn{min(n, p) / 2}. It's only available when number of factors \code{KX} and \code{KY} are not given.}
+\item{\code{nFactors}}{Estimated or input number of factors, a positive integer.}
+\item{\code{tStat}}{Values of test statistics, a vector with length \eqn{p}. It's not available for bootstrap method.}
+\item{\code{pValues}}{P-values of tests, a vector with length \eqn{p}.}
+\item{\code{pAdjust}}{Adjusted p-values of tests, a vector with length \eqn{p}.}
+\item{\code{significant}}{Boolean values indicating whether each test is significant, with 1 for significant and 0 for non-significant, a vector with length \eqn{p}.}
+\item{\code{reject}}{Indices of tests that are rejected. It will show "no hypotheses rejected" if none of the tests are rejected.}
+\item{\code{type}}{Indicator of whether factor is known or unknown.}
+\item{\code{n}}{Sample size.}
+\item{\code{p}}{Data dimension.}
+\item{\code{h0}}{Null hypothesis, a vector with length \eqn{p}.}
+\item{\code{alpha}}{\eqn{\alpha} value.}
+\item{\code{alternative}}{Althernative hypothesis.}
 }
 }
 \description{
@@ -115,5 +116,5 @@ Sun, Q., Zhou, W.-X. and Fan, J. (2020). Adaptive Huber regression. J. Amer. Sta
 Zhou, W-X., Bose, K., Fan, J. and Liu, H. (2018). A new perspective on robust M-estimation: Finite sample theory and applications to dependence-adjusted multiple testing. Ann. Statist., 46 1904-1931.
 }
 \seealso{
-\code{\link{print.farm.test}}
+\code{\link{print.farm.test}} and \code{\link{summary.farm.test}}
 }

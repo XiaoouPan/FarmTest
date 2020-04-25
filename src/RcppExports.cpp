@@ -257,16 +257,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// getRej
-arma::uvec getRej(const arma::vec& Prob, const double alpha, const int p);
-RcppExport SEXP _FarmTest_getRej(SEXP ProbSEXP, SEXP alphaSEXP, SEXP pSEXP) {
+// adjust
+arma::vec adjust(const arma::vec& Prob, const double alpha, const int p);
+RcppExport SEXP _FarmTest_adjust(SEXP ProbSEXP, SEXP alphaSEXP, SEXP pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::vec& >::type Prob(ProbSEXP);
     Rcpp::traits::input_parameter< const double >::type alpha(alphaSEXP);
     Rcpp::traits::input_parameter< const int >::type p(pSEXP);
-    rcpp_result_gen = Rcpp::wrap(getRej(Prob, alpha, p));
+    rcpp_result_gen = Rcpp::wrap(adjust(Prob, alpha, p));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -460,7 +460,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FarmTest_huberRegItcp", (DL_FUNC) &_FarmTest_huberRegItcp, 7},
     {"_FarmTest_getP", (DL_FUNC) &_FarmTest_getP, 2},
     {"_FarmTest_getPboot", (DL_FUNC) &_FarmTest_getPboot, 6},
-    {"_FarmTest_getRej", (DL_FUNC) &_FarmTest_getRej, 3},
+    {"_FarmTest_adjust", (DL_FUNC) &_FarmTest_adjust, 3},
     {"_FarmTest_getRatio", (DL_FUNC) &_FarmTest_getRatio, 3},
     {"_FarmTest_rmTest", (DL_FUNC) &_FarmTest_rmTest, 4},
     {"_FarmTest_rmTestBoot", (DL_FUNC) &_FarmTest_rmTestBoot, 5},

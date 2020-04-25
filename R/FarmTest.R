@@ -73,26 +73,27 @@ huber.reg = function(X, Y) {
 #' @param h0 An \strong{optional} \eqn{p}-vector of true means, or difference in means for two-sample FarmTest. The default is a zero vector.
 #' @param alternative An \strong{optional} character string specifying the alternate hypothesis, must be one of "two.sided" (default), "less" or "greater".
 #' @param alpha An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.
-#' @param p.method An \strong{optional} character string specifying the method to calculate p-values when \code{fX} is known or when \code{KX = 0}, possible options are multiplier bootstrap or normal approximation. It must be one of "bootstrap" (default) or "normal".
+#' @param p.method An \strong{optional} character string specifying the method to calculate p-values when \code{fX} is known or when \code{KX = 0}, possible options are multiplier bootstrap or normal approximation. It must be one of "normal"(default) or "bootstrap".
 #' @param nBoot An \strong{optional} positive integer specifying the size of bootstrap sample, only available when \code{p.method = "bootstrap"}. The dafault value is 500.
 #' @return An object with S3 class \code{farm.test} containing the following items will be returned:
-#' \itemize{
-#' \item \code{means} Estimated means, a vector with length \eqn{p}.
-#' \item \code{stdDev} Estimated standard deviations, a vector with length \eqn{p}. It's not available for bootstrap method.
-#' \item \code{loadings} Estimated factor loadings, a matrix with dimension \eqn{p} by \eqn{K}, where \eqn{K} is the number of factors.
-#' \item \code{eigenVal} Eigenvalues of estimated covariance matrix, a vector with length \eqn{p}. It's only available when factors \code{fX} and \code{fY} are not given.
-#' \item \code{eigenRatio} Ratios of \code{eigenVal} to estimate \code{nFactors}, a vector with length \eqn{min(n, p) / 2}. It's only available when number of factors \code{KX} and \code{KY} are not given.
-#' \item \code{nFactors} Estimated or input number of factors, a positive integer.
-#' \item \code{tStat} Values of test statistics, a vector with length \eqn{p}. It's not available for bootstrap method.
-#' \item \code{pValues} P-values of tests, a vector with length \eqn{p}.
-#' \item \code{significant} Boolean values indicating whether each test is significant, with 1 for significant and 0 for non-significant, a vector with length \eqn{p}.
-#' \item \code{reject} Indices of tests that are rejected. It will show "no hypotheses rejected" if none of the tests are rejected.
-#' \item \code{type} Indicator of whether factor is known or unknown.
-#' \item \code{n} Sample size.
-#' \item \code{p} Data dimension.
-#' \item \code{h0} Null hypothesis, a vector with length \eqn{p}.
-#' \item \code{alpha} \eqn{\alpha} value.
-#' \item \code{alternative} Althernative hypothesis.
+#' \describe{
+#' \item{\code{means}}{Estimated means, a vector with length \eqn{p}.}
+#' \item{\code{stdDev}}{Estimated standard deviations, a vector with length \eqn{p}. It's not available for bootstrap method.}
+#' \item{\code{loadings}}{Estimated factor loadings, a matrix with dimension \eqn{p} by \eqn{K}, where \eqn{K} is the number of factors.}
+#' \item{\code{eigenVal}}{Eigenvalues of estimated covariance matrix, a vector with length \eqn{p}. It's only available when factors \code{fX} and \code{fY} are not given.}
+#' \item{\code{eigenRatio}}{Ratios of \code{eigenVal} to estimate \code{nFactors}, a vector with length \eqn{min(n, p) / 2}. It's only available when number of factors \code{KX} and \code{KY} are not given.}
+#' \item{\code{nFactors}}{Estimated or input number of factors, a positive integer.}
+#' \item{\code{tStat}}{Values of test statistics, a vector with length \eqn{p}. It's not available for bootstrap method.}
+#' \item{\code{pValues}}{P-values of tests, a vector with length \eqn{p}.}
+#' \item{\code{pAdjust}}{Adjusted p-values of tests, a vector with length \eqn{p}.}
+#' \item{\code{significant}}{Boolean values indicating whether each test is significant, with 1 for significant and 0 for non-significant, a vector with length \eqn{p}.}
+#' \item{\code{reject}}{Indices of tests that are rejected. It will show "no hypotheses rejected" if none of the tests are rejected.}
+#' \item{\code{type}}{Indicator of whether factor is known or unknown.}
+#' \item{\code{n}}{Sample size.}
+#' \item{\code{p}}{Data dimension.}
+#' \item{\code{h0}}{Null hypothesis, a vector with length \eqn{p}.}
+#' \item{\code{alpha}}{\eqn{\alpha} value.}
+#' \item{\code{alternative}}{Althernative hypothesis.}
 #' }
 #' @details For two-sample FarmTest, \code{means}, \code{stdDev}, \code{loadings}, \code{eigenVal}, \code{eigenRatio}, \code{nfactors} and \code{n} will be lists of items for sample X and Y separately.
 #' @details \code{alternative = "greater"} is the alternative that \eqn{\mu > \mu_0} for one-sample test or \eqn{\mu_X > \mu_Y} for two-sample test.
@@ -104,7 +105,7 @@ huber.reg = function(X, Y) {
 #' @references Storey, J. D. (2002). A direct approach to false discovery rates. J. R. Stat. Soc. Ser. B. Stat. Methodol., 64, 479–498.
 #' @references Sun, Q., Zhou, W.-X. and Fan, J. (2020). Adaptive Huber regression. J. Amer. Statist. Assoc., 115, 254-265.
 #' @references Zhou, W-X., Bose, K., Fan, J. and Liu, H. (2018). A new perspective on robust M-estimation: Finite sample theory and applications to dependence-adjusted multiple testing. Ann. Statist., 46 1904-1931.
-#' @seealso \code{\link{print.farm.test}}
+#' @seealso \code{\link{print.farm.test}} and \code{\link{summary.farm.test}}
 #' @examples 
 #' n = 20
 #' p = 50
@@ -133,7 +134,7 @@ huber.reg = function(X, Y) {
 #' output = farm.test(X, Y = Y)
 #' @export 
 farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = NULL, alternative = c("two.sided", "less", "greater"), 
-                     alpha = 0.05, p.method = c("bootstrap", "normal"), nBoot = 500) {
+                     alpha = 0.05, p.method = c("normal", "bootstrap"), nBoot = 500) {
   p = ncol(X)
   alternative = match.arg(alternative)
   p.method = match.arg(p.method)
@@ -170,8 +171,9 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
         reject = which(rst.list$significant == 1)
       }
       output = list(means = rst.list$means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal, eigenRatio = eigenRatio, 
-                    nFactors = rst.list$nfactors, tStat = tStat, pValues = rst.list$pValues, significant = rst.list$significant, 
-                    reject = reject, type = "known", n = nrow(X), p = p, h0 = h0, alpha = alpha, alternative = alternative)
+                    nFactors = rst.list$nfactors, tStat = tStat, pValues = rst.list$pValues, pAdjust = rst.list$pAdjust, 
+                    significant = rst.list$significant, reject = reject, type = "known", n = nrow(X), p = p, h0 = h0, alpha = alpha, 
+                    alternative = alternative)
     }
   } else if (is.null(Y) && is.null(fX)) {
     if (KX > p) {
@@ -193,8 +195,8 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
         reject = which(rst.list$significant == 1)
       }
       output = list(means = rst.list$means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal, eigenRatio = eigenRatio, nFactors = 0, 
-                    tStat = tStat, pValues = rst.list$pValues, significant = rst.list$significant, reject = reject, type = "unknown", 
-                    n = nrow(X), p = p, h0 = h0, alpha = alpha, alternative = alternative)
+                    tStat = tStat, pValues = rst.list$pValues, pAdjust = rst.list$pAdjust, significant = rst.list$significant, reject = reject, 
+                    type = "unknown", n = nrow(X), p = p, h0 = h0, alpha = alpha, alternative = alternative)
     } else {
       eigenRatio = "not available when KX is specified"
       rst.list = farmTest(X, h0, KX, alpha, alternative)
@@ -206,8 +208,8 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       }
       output = list(means = rst.list$means, stdDev = rst.list$stdDev, loadings = rst.list$loadings, eigenVal = rst.list$eigens, 
                     eigenRatio = eigenRatio, nFactors = rst.list$nfactors, tStat = rst.list$tStat, pValues = rst.list$pValues, 
-                    significant = rst.list$significant, reject = reject, type = "unknown", n = nrow(X), p = p, h0 = h0, alpha = alpha, 
-                    alternative = alternative)
+                    pAdjust = rst.list$pAdjust, significant = rst.list$significant, reject = reject, type = "unknown", n = nrow(X), p = p, h0 = h0, 
+                    alpha = alpha, alternative = alternative)
     }
   } else if (!is.null(Y) && !is.null(fX)) {
     if (ncol(X) != ncol(Y)) {
@@ -239,8 +241,8 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       nfactors = list(X.nFactors = rst.list$nfactorsX, Y.nFactors = rst.list$nfactorsY)
       n = list(X.n = nrow(X), Y.n = nrow(Y))
       output = list(means = means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal, eigenRatio = eigenRatio, nFactors = nfactors, 
-                    tStat = tStat, pValues = rst.list$pValues, significant = rst.list$significant, reject = reject, type = "known", n = n, 
-                    p = p, h0 = h0, alpha = alpha, alternative = alternative)
+                    tStat = tStat, pValues = rst.list$pValues, pAdjust = rst.list$pAdjust, significant = rst.list$significant, reject = reject, 
+                    type = "known", n = n, p = p, h0 = h0, alpha = alpha, alternative = alternative)
     }
   } else {
     if (ncol(X) != ncol(Y)) {
@@ -271,8 +273,8 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       nfactors = list(X.nFactors = 0, Y.nFactors = 0)
       n = list(X.n = nrow(X), Y.n = nrow(Y))
       output = list(means = means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal, eigenRatio = eigenRatio, nFactors = nfactors, 
-                    tStat = tStat, pValues = rst.list$pValues, significant = rst.list$significant, reject = reject, type = "unknown", n = n, 
-                    p = p, h0 = h0, alpha = alpha, alternative = alternative)
+                    tStat = tStat, pValues = rst.list$pValues, pAdjust = rst.list$pAdjust, significant = rst.list$significant, reject = reject, 
+                    type = "unknown", n = n, p = p, h0 = h0, alpha = alpha, alternative = alternative)
     } else {
       rst.list = farmTestTwo(X, Y, h0, KX, KY, alpha, alternative)
       if (sum(rst.list$significant) > 0) {
@@ -294,8 +296,8 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
       }
       eigenRatio = list(X.eigenRatio = ratioX, Y.eigenRatio = ratioY)
       output = list(means = means, stdDev = stdDev, loadings = loadings, eigenVal = eigenVal, eigenRatio = eigenRatio, nFactors = nfactors, 
-                    tStat = rst.list$tStat, pValues = rst.list$pValues, significant = rst.list$significant, reject = reject, type = "unknown", 
-                    n = n, p = p, h0 = h0, alpha = alpha, alternative = alternative)
+                    tStat = rst.list$tStat, pValues = rst.list$pValues, pAdjust = rst.list$pAdjust, significant = rst.list$significant, 
+                    reject = reject, type = "unknown", n = n, p = p, h0 = h0, alpha = alpha, alternative = alternative)
     } 
   }
   attr(output, "class") = "farm.test"
@@ -355,7 +357,7 @@ print.farm.test = function(x, ...) {
 #' @description This is the summary function of S3 objects with class "\code{farm.test}".
 #' @param x A \code{farm.test} object.
 #' @param \dots Further arguments passed to or from other methods.
-#' @return A data frame including the estimated means, p-values and significance for all the features.
+#' @return A data frame including the estimated means, p-values, adjusted p-values and significance for all the features.
 #' @seealso \code{\link{farm.test}} and \code{\link{print.farm.test}}
 #' @examples 
 #' n = 50
@@ -373,7 +375,7 @@ print.farm.test = function(x, ...) {
 #' @export
 summary.farm.test = function(x, ...) {
   p = x$p
-  rst = as.data.frame(cbind(x$means, x$pValues, x$significant))
+  rst = as.data.frame(cbind(x$means, x$pValues, x$pAdjust, x$significant))
   names(rst) = c("means", "p-values", "significance")
   return (rst)
 }
