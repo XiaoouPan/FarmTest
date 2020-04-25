@@ -27,6 +27,8 @@ There are five functions in this library:
 
 * `farm.test`: Factor-adjusted robust multiple testing.
 * `print.farm.test`: Print function for `farm.test`.
+* `summary.farm.test`: Summary function for `farm.test`.
+* `plot.farm.test`: Plot function for `farm.test`.
 * `huber.mean`: Tuning-free Huber mean estimation.
 * `huber.cov`: Tuning-free Huber-type covariance estimation.
 * `huber.reg`: Tuning-free Huber regression.
@@ -61,10 +63,12 @@ In this case, the factors are unobservable and thus need to be recovered from da
 output = farm.test(X)
 ```
 
-The library includes a `print.farm.test` function, which summarizes the results of `farm.test`: 
+The library includes `summary.farm.test`, `print.farm.test` and `plot.farm.test` functions, which summarize, print and visualize the results of `farm.test`: 
 
 ```r
-output
+summary(output)
+print(output)
+plot(output)
 ```
 
 Based on 100 simulations, we report below the average values of the true positive rate (TPR), false positive rate (FPR) and false discover rate (FDR).

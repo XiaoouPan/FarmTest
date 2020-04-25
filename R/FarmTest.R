@@ -379,7 +379,7 @@ summary.farm.test = function(x, ...) {
   if (length(x$n) == 1) {
     rst = as.data.frame(cbind(x$means, x$pValues, x$pAdjust, x$significant))
   } else {
-    rst = as.data.frame(cbind(x$meansX.means - x$meansY.means, x$pValues, x$pAdjust, x$significant))
+    rst = as.data.frame(cbind(x$means$X.means - x$means$Y.means, x$pValues, x$pAdjust, x$significant))
   }
   names(rst) = c("means", "p-values", "p-adjusted", "significance")
   return (rst)
@@ -411,7 +411,7 @@ plot.farm.test = function(x, ...) {
   if (length(x$n) == 1) {
     means = as.vector(x$means)
   } else {
-    means = as.vector(x$meansX.means - x$meansY.means)
+    means = as.vector(x$means$X.means - x$means$Y.means)
   }
   graphics::hist(means, freq = TRUE, main = "Histogram of Estimated Means", xlab = "Estimated Means", col = "blue")
 }
