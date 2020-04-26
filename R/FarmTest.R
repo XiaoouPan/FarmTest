@@ -9,7 +9,7 @@
 #' set.seed(2019)
 #' n = 1000
 #' X = rlnorm(n, 0, 1.5) - exp(1.5^2 / 2)
-#' mu = farm.mean(X)
+#' mu = huber.mean(X)
 #' @export
 huber.mean = function(X){
   n = length(X)
@@ -29,7 +29,7 @@ huber.mean = function(X){
 #' n = 100
 #' d = 50
 #' X = matrix(rt(n * d, df = 3), n, d) / sqrt(3)
-#' Sigma = farm.cov(X)
+#' Sigma = huber.cov(X)
 #' @export
 huber.cov = function(X) {
   n = nrow(X)

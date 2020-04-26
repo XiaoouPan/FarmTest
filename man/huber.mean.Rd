@@ -19,7 +19,7 @@ The function calculates adaptive Huber mean estimator from a data sample, with r
 set.seed(2019)
 n = 1000
 X = rlnorm(n, 0, 1.5) - exp(1.5^2 / 2)
-mu = farm.mean(X)
+mu = huber.mean(X)
 }
 \references{
 Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.

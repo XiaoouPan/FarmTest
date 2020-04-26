@@ -21,7 +21,7 @@ set.seed(2019)
 n = 100
 d = 50
 X = matrix(rt(n * d, df = 3), n, d) / sqrt(3)
-Sigma = farm.cov(X)
+Sigma = huber.cov(X)
 }
 \references{
 Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.
