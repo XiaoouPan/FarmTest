@@ -6,38 +6,51 @@
 
 using namespace Rcpp;
 
+// sgn
+int sgn(const double x);
+RcppExport SEXP _FarmTest_sgn(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(sgn(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // f1
-double f1(const double x, const arma::vec& resSq, const int n);
-RcppExport SEXP _FarmTest_f1(SEXP xSEXP, SEXP resSqSEXP, SEXP nSEXP) {
+double f1(const double x, const arma::vec& resSq, const int n, const double rhs);
+RcppExport SEXP _FarmTest_f1(SEXP xSEXP, SEXP resSqSEXP, SEXP nSEXP, SEXP rhsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const double >::type x(xSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type resSq(resSqSEXP);
     Rcpp::traits::input_parameter< const int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(f1(x, resSq, n));
+    Rcpp::traits::input_parameter< const double >::type rhs(rhsSEXP);
+    rcpp_result_gen = Rcpp::wrap(f1(x, resSq, n, rhs));
     return rcpp_result_gen;
 END_RCPP
 }
 // rootf1
-double rootf1(const arma::vec& resSq, const int n, double low, double up, const double tol, const int maxIte);
-RcppExport SEXP _FarmTest_rootf1(SEXP resSqSEXP, SEXP nSEXP, SEXP lowSEXP, SEXP upSEXP, SEXP tolSEXP, SEXP maxIteSEXP) {
+double rootf1(const arma::vec& resSq, const int n, const double rhs, double low, double up, const double tol, const int maxIte);
+RcppExport SEXP _FarmTest_rootf1(SEXP resSqSEXP, SEXP nSEXP, SEXP rhsSEXP, SEXP lowSEXP, SEXP upSEXP, SEXP tolSEXP, SEXP maxIteSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::vec& >::type resSq(resSqSEXP);
     Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const double >::type rhs(rhsSEXP);
     Rcpp::traits::input_parameter< double >::type low(lowSEXP);
     Rcpp::traits::input_parameter< double >::type up(upSEXP);
     Rcpp::traits::input_parameter< const double >::type tol(tolSEXP);
     Rcpp::traits::input_parameter< const int >::type maxIte(maxIteSEXP);
-    rcpp_result_gen = Rcpp::wrap(rootf1(resSq, n, low, up, tol, maxIte));
+    rcpp_result_gen = Rcpp::wrap(rootf1(resSq, n, rhs, low, up, tol, maxIte));
     return rcpp_result_gen;
 END_RCPP
 }
 // f2
-double f2(const double x, const arma::vec& resSq, const int n, const int d, const int N);
-RcppExport SEXP _FarmTest_f2(SEXP xSEXP, SEXP resSqSEXP, SEXP nSEXP, SEXP dSEXP, SEXP NSEXP) {
+double f2(const double x, const arma::vec& resSq, const int n, const int d, const int N, const double rhs);
+RcppExport SEXP _FarmTest_f2(SEXP xSEXP, SEXP resSqSEXP, SEXP nSEXP, SEXP dSEXP, SEXP NSEXP, SEXP rhsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -46,13 +59,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type n(nSEXP);
     Rcpp::traits::input_parameter< const int >::type d(dSEXP);
     Rcpp::traits::input_parameter< const int >::type N(NSEXP);
-    rcpp_result_gen = Rcpp::wrap(f2(x, resSq, n, d, N));
+    Rcpp::traits::input_parameter< const double >::type rhs(rhsSEXP);
+    rcpp_result_gen = Rcpp::wrap(f2(x, resSq, n, d, N, rhs));
     return rcpp_result_gen;
 END_RCPP
 }
 // rootf2
-double rootf2(const arma::vec& resSq, const int n, const int d, const int N, double low, double up, const double tol, const int maxIte);
-RcppExport SEXP _FarmTest_rootf2(SEXP resSqSEXP, SEXP nSEXP, SEXP dSEXP, SEXP NSEXP, SEXP lowSEXP, SEXP upSEXP, SEXP tolSEXP, SEXP maxIteSEXP) {
+double rootf2(const arma::vec& resSq, const int n, const int d, const int N, const double rhs, double low, double up, const double tol, const int maxIte);
+RcppExport SEXP _FarmTest_rootf2(SEXP resSqSEXP, SEXP nSEXP, SEXP dSEXP, SEXP NSEXP, SEXP rhsSEXP, SEXP lowSEXP, SEXP upSEXP, SEXP tolSEXP, SEXP maxIteSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -60,25 +74,39 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type n(nSEXP);
     Rcpp::traits::input_parameter< const int >::type d(dSEXP);
     Rcpp::traits::input_parameter< const int >::type N(NSEXP);
+    Rcpp::traits::input_parameter< const double >::type rhs(rhsSEXP);
     Rcpp::traits::input_parameter< double >::type low(lowSEXP);
     Rcpp::traits::input_parameter< double >::type up(upSEXP);
     Rcpp::traits::input_parameter< const double >::type tol(tolSEXP);
     Rcpp::traits::input_parameter< const int >::type maxIte(maxIteSEXP);
-    rcpp_result_gen = Rcpp::wrap(rootf2(resSq, n, d, N, low, up, tol, maxIte));
+    rcpp_result_gen = Rcpp::wrap(rootf2(resSq, n, d, N, rhs, low, up, tol, maxIte));
+    return rcpp_result_gen;
+END_RCPP
+}
+// huberDer
+double huberDer(const arma::vec& res, const double tau, const int n);
+RcppExport SEXP _FarmTest_huberDer(SEXP resSEXP, SEXP tauSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type res(resSEXP);
+    Rcpp::traits::input_parameter< const double >::type tau(tauSEXP);
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(huberDer(res, tau, n));
     return rcpp_result_gen;
 END_RCPP
 }
 // huberMean
-double huberMean(const arma::vec& X, const int n, const double epsilon, const int iteMax);
-RcppExport SEXP _FarmTest_huberMean(SEXP XSEXP, SEXP nSEXP, SEXP epsilonSEXP, SEXP iteMaxSEXP) {
+double huberMean(arma::vec X, const int n, const double tol, const int iteMax);
+RcppExport SEXP _FarmTest_huberMean(SEXP XSEXP, SEXP nSEXP, SEXP tolSEXP, SEXP iteMaxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::vec& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type X(XSEXP);
     Rcpp::traits::input_parameter< const int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< const double >::type epsilon(epsilonSEXP);
+    Rcpp::traits::input_parameter< const double >::type tol(tolSEXP);
     Rcpp::traits::input_parameter< const int >::type iteMax(iteMaxSEXP);
-    rcpp_result_gen = Rcpp::wrap(huberMean(X, n, epsilon, iteMax));
+    rcpp_result_gen = Rcpp::wrap(huberMean(X, n, tol, iteMax));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -98,8 +126,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // hMeanCov
-double hMeanCov(const arma::vec& Z, const int n, const int d, const int N, const double epsilon, const int iteMax);
-RcppExport SEXP _FarmTest_hMeanCov(SEXP ZSEXP, SEXP nSEXP, SEXP dSEXP, SEXP NSEXP, SEXP epsilonSEXP, SEXP iteMaxSEXP) {
+double hMeanCov(const arma::vec& Z, const int n, const int d, const int N, double rhs, const double epsilon, const int iteMax);
+RcppExport SEXP _FarmTest_hMeanCov(SEXP ZSEXP, SEXP nSEXP, SEXP dSEXP, SEXP NSEXP, SEXP rhsSEXP, SEXP epsilonSEXP, SEXP iteMaxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -107,9 +135,10 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type n(nSEXP);
     Rcpp::traits::input_parameter< const int >::type d(dSEXP);
     Rcpp::traits::input_parameter< const int >::type N(NSEXP);
+    Rcpp::traits::input_parameter< double >::type rhs(rhsSEXP);
     Rcpp::traits::input_parameter< const double >::type epsilon(epsilonSEXP);
     Rcpp::traits::input_parameter< const int >::type iteMax(iteMaxSEXP);
-    rcpp_result_gen = Rcpp::wrap(hMeanCov(Z, n, d, N, epsilon, iteMax));
+    rcpp_result_gen = Rcpp::wrap(hMeanCov(Z, n, d, N, rhs, epsilon, iteMax));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -134,17 +163,6 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP);
     rcpp_result_gen = Rcpp::wrap(mad(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// sgn
-int sgn(const double x);
-RcppExport SEXP _FarmTest_sgn(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const double >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(sgn(x));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -443,16 +461,17 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_FarmTest_f1", (DL_FUNC) &_FarmTest_f1, 3},
-    {"_FarmTest_rootf1", (DL_FUNC) &_FarmTest_rootf1, 6},
-    {"_FarmTest_f2", (DL_FUNC) &_FarmTest_f2, 5},
-    {"_FarmTest_rootf2", (DL_FUNC) &_FarmTest_rootf2, 8},
+    {"_FarmTest_sgn", (DL_FUNC) &_FarmTest_sgn, 1},
+    {"_FarmTest_f1", (DL_FUNC) &_FarmTest_f1, 4},
+    {"_FarmTest_rootf1", (DL_FUNC) &_FarmTest_rootf1, 7},
+    {"_FarmTest_f2", (DL_FUNC) &_FarmTest_f2, 6},
+    {"_FarmTest_rootf2", (DL_FUNC) &_FarmTest_rootf2, 9},
+    {"_FarmTest_huberDer", (DL_FUNC) &_FarmTest_huberDer, 3},
     {"_FarmTest_huberMean", (DL_FUNC) &_FarmTest_huberMean, 4},
     {"_FarmTest_huberMeanVec", (DL_FUNC) &_FarmTest_huberMeanVec, 5},
-    {"_FarmTest_hMeanCov", (DL_FUNC) &_FarmTest_hMeanCov, 6},
+    {"_FarmTest_hMeanCov", (DL_FUNC) &_FarmTest_hMeanCov, 7},
     {"_FarmTest_huberCov", (DL_FUNC) &_FarmTest_huberCov, 3},
     {"_FarmTest_mad", (DL_FUNC) &_FarmTest_mad, 1},
-    {"_FarmTest_sgn", (DL_FUNC) &_FarmTest_sgn, 1},
     {"_FarmTest_standardize", (DL_FUNC) &_FarmTest_standardize, 4},
     {"_FarmTest_updateHuber", (DL_FUNC) &_FarmTest_updateHuber, 7},
     {"_FarmTest_huberReg", (DL_FUNC) &_FarmTest_huberReg, 7},
