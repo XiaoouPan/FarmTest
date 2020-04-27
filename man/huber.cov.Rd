@@ -17,7 +17,7 @@ The function calculates adaptive Huber-type covariance estimator from a data sam
 For the input matrix \code{X}, both low-dimension (\eqn{p < n}) and high-dimension (\eqn{p > n}) are allowed.
 }
 \examples{
-set.seed(2019)
+set.seed(2020)
 n = 100
 d = 50
 X = matrix(rt(n * d, df = 3), n, d) / sqrt(3)

@@ -18,9 +18,9 @@ A coefficients estimator with length \eqn{p + 1} will be returned.
 The function calculates adaptive Huber regression estimator from a data sample, with robustification parameter \eqn{\tau} determined by a tuning-free principle.
 }
 \examples{
-set.seed(2019)
-n = 100
-d = 50
+set.seed(2020)
+n = 200
+d = 10
 beta = rep(1, d)
 X = matrix(rnorm(n * d), n, d)
 err = rnorm(n)

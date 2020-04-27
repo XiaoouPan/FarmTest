@@ -6,9 +6,9 @@
 #' @references Wang, L., Zheng, C., Zhou, W. and Zhou, W.-X. (2018). A New Principle for Tuning-Free Huber Regression. Preprint.
 #' @seealso \code{\link{huber.cov}} for tuning-free Huber-type covariance estimation and \code{\link{huber.reg}} for tuning-free Huber regression.
 #' @examples
-#' set.seed(2019)
-#' n = 1000
-#' X = rlnorm(n, 0, 1.5) - exp(1.5^2 / 2)
+#' set.seed(2020)
+#' n = 10000
+#' X = rt(n, 2) + 2
 #' mu = huber.mean(X)
 #' @export
 huber.mean = function(X){
@@ -25,7 +25,7 @@ huber.mean = function(X){
 #' @references Ke, Y., Minsker, S., Ren, Z., Sun, Q. and Zhou, W.-X. (2019). User-friendly covariance estimation for heavy-tailed distributions. Statis. Sci., 34, 454-471.
 #' @seealso \code{\link{huber.mean}} for tuning-free Huber mean estimation and \code{\link{huber.reg}} for tuning-free Huber regression.
 #' @examples
-#' set.seed(2019)
+#' set.seed(2020)
 #' n = 100
 #' d = 50
 #' X = matrix(rt(n * d, df = 3), n, d) / sqrt(3)
@@ -47,9 +47,9 @@ huber.cov = function(X) {
 #' @references Wang, L., Zheng, C., Zhou, W. and Zhou, W.-X. (2018). A new principle for tuning-free Huber regression. Preprint.
 #' @seealso \code{\link{huber.mean}} for tuning-free Huber mean estimation and \code{\link{huber.cov}} for tuning-free Huber-type covariance estimation.
 #' @examples
-#' set.seed(2019)
-#' n = 100
-#' d = 50
+#' set.seed(2020)
+#' n = 200
+#' d = 10
 #' beta = rep(1, d)
 #' X = matrix(rnorm(n * d), n, d)
 #' err = rnorm(n)
@@ -73,7 +73,7 @@ huber.reg = function(X, Y) {
 #' @param h0 An \strong{optional} \eqn{p}-vector of true means, or difference in means for two-sample FarmTest. The default is a zero vector.
 #' @param alternative An \strong{optional} character string specifying the alternate hypothesis, must be one of "two.sided" (default), "less" or "greater".
 #' @param alpha An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.
-#' @param p.method An \strong{optional} character string specifying the method to calculate p-values when \code{fX} is known or when \code{KX = 0}, possible options are multiplier bootstrap or normal approximation. It must be one of "normal"(default) or "bootstrap".
+#' @param p.method An \strong{optional} character string specifying the method to calculate p-values when \code{fX} is known or when \code{KX = 0}, possible options are multiplier bootstrap or normal approximation. It must be one of "bootstrap"(default) or "normal".
 #' @param nBoot An \strong{optional} positive integer specifying the size of bootstrap sample, only available when \code{p.method = "bootstrap"}. The dafault value is 500.
 #' @return An object with S3 class \code{farm.test} containing the following items will be returned:
 #' \describe{
@@ -112,7 +112,7 @@ huber.reg = function(X, Y) {
 #' K = 3
 #' muX = rep(0, p)
 #' muX[1:5] = 2
-#' set.seed(2019)
+#' set.seed(2020)
 #' epsilonX = matrix(rnorm(p * n, 0, 1), nrow = n)
 #' BX = matrix(runif(p * K, -2, 2), nrow = p)
 #' fX = matrix(rnorm(K * n, 0, 1), nrow = n)
@@ -134,7 +134,7 @@ huber.reg = function(X, Y) {
 #' output = farm.test(X, Y = Y)
 #' @export 
 farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = NULL, alternative = c("two.sided", "less", "greater"), 
-                     alpha = 0.05, p.method = c("normal", "bootstrap"), nBoot = 500) {
+                     alpha = 0.05, p.method = c("bootstrap", "normal"), nBoot = 500) {
   p = ncol(X)
   alternative = match.arg(alternative)
   p.method = match.arg(p.method)
@@ -316,7 +316,7 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
 #' K = 3
 #' muX = rep(0, p)
 #' muX[1:5] = 2
-#' set.seed(2019)
+#' set.seed(2020)
 #' epsilonX = matrix(rnorm(p * n, 0, 1), nrow = n)
 #' BX = matrix(runif(p * K, -2, 2), nrow = p)
 #' fX = matrix(rnorm(K * n, 0, 1), nrow = n)
@@ -366,7 +366,7 @@ print.farm.test = function(x, ...) {
 #' K = 3
 #' muX = rep(0, p)
 #' muX[1:5] = 2
-#' set.seed(2019)
+#' set.seed(2020)
 #' epsilonX = matrix(rnorm(p * n, 0, 1), nrow = n)
 #' BX = matrix(runif(p * K, -2, 2), nrow = p)
 #' fX = matrix(rnorm(K * n, 0, 1), nrow = n)
@@ -398,7 +398,7 @@ summary.farm.test = function(x, ...) {
 #' K = 3
 #' muX = rep(0, p)
 #' muX[1:5] = 2
-#' set.seed(2019)
+#' set.seed(2020)
 #' epsilonX = matrix(rnorm(p * n, 0, 1), nrow = n)
 #' BX = matrix(runif(p * K, -2, 2), nrow = p)
 #' fX = matrix(rnorm(K * n, 0, 1), nrow = n)

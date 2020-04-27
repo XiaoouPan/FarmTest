@@ -23,7 +23,7 @@ p = 100
 K = 3
 muX = rep(0, p)
 muX[1:5] = 2
-set.seed(2019)
+set.seed(2020)
 epsilonX = matrix(rnorm(p * n, 0, 1), nrow = n)
 BX = matrix(runif(p * K, -2, 2), nrow = p)
 fX = matrix(rnorm(K * n, 0, 1), nrow = n)

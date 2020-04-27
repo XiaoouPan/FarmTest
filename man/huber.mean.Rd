@@ -16,9 +16,9 @@ A Huber mean estimator will be returned.
 The function calculates adaptive Huber mean estimator from a data sample, with robustification parameter \eqn{\tau} determined by a tuning-free principle.
 }
 \examples{
-set.seed(2019)
-n = 1000
-X = rlnorm(n, 0, 1.5) - exp(1.5^2 / 2)
+set.seed(2020)
+n = 10000
+X = rt(n, 2) + 2
 mu = huber.mean(X)
 }
 \references{

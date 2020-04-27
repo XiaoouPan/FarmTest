@@ -14,7 +14,7 @@ farm.test(
   h0 = NULL,
   alternative = c("two.sided", "less", "greater"),
   alpha = 0.05,
-  p.method = c("normal", "bootstrap"),
+  p.method = c("bootstrap", "normal"),
   nBoot = 500
 )
 }
@@ -37,7 +37,7 @@ farm.test(
 
 \item{alpha}{An \strong{optional} level for controlling the false discovery rate. The value of \code{alpha} must be between 0 and 1. The default value is 0.05.}
 
-\item{p.method}{An \strong{optional} character string specifying the method to calculate p-values when \code{fX} is known or when \code{KX = 0}, possible options are multiplier bootstrap or normal approximation. It must be one of "normal"(default) or "bootstrap".}
+\item{p.method}{An \strong{optional} character string specifying the method to calculate p-values when \code{fX} is known or when \code{KX = 0}, possible options are multiplier bootstrap or normal approximation. It must be one of "bootstrap"(default) or "normal".}
 
 \item{nBoot}{An \strong{optional} positive integer specifying the size of bootstrap sample, only available when \code{p.method = "bootstrap"}. The dafault value is 500.}
 }
@@ -79,7 +79,7 @@ p = 50
 K = 3
 muX = rep(0, p)
 muX[1:5] = 2
-set.seed(2019)
+set.seed(2020)
 epsilonX = matrix(rnorm(p * n, 0, 1), nrow = n)
 BX = matrix(runif(p * K, -2, 2), nrow = p)
 fX = matrix(rnorm(K * n, 0, 1), nrow = n)
