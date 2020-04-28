@@ -4,15 +4,15 @@
 \alias{summary.farm.test}
 \title{Summary function of FarmTest}
 \usage{
-\method{summary}{farm.test}(x, ...)
+\method{summary}{farm.test}(object, ...)
 }
 \arguments{
-\item{x}{A \code{farm.test} object.}
+\item{object}{A \code{farm.test} object.}
 
 \item{\dots}{Further arguments passed to or from other methods.}
 }
 \value{
-A data frame including the estimated means, p-values, adjusted p-values and significance for all the features.
+A data frame including the estimated means, p-values, adjusted p-values and significance for all the features will be presented.
 }
 \description{
 This is the summary function of S3 objects with class "\code{farm.test}".

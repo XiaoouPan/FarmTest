@@ -350,9 +350,9 @@ print.farm.test = function(x, ...) {
 
 #' @title Summary function of FarmTest
 #' @description This is the summary function of S3 objects with class "\code{farm.test}".
-#' @param x A \code{farm.test} object.
+#' @param object A \code{farm.test} object.
 #' @param \dots Further arguments passed to or from other methods.
-#' @return A data frame including the estimated means, p-values, adjusted p-values and significance for all the features.
+#' @return A data frame including the estimated means, p-values, adjusted p-values and significance for all the features will be presented.
 #' @details For two-sample FarmTest, the first column is the difference: estimated means of sample \code{X} - estimated means of sample \code{Y}.
 #' @seealso \code{\link{farm.test}}, \code{\link{print.farm.test}} and \code{\link{plot.farm.test}}.
 #' @examples 
@@ -368,12 +368,12 @@ print.farm.test = function(x, ...) {
 #' output = farm.test(X)
 #' summary(output)
 #' @export
-summary.farm.test = function(x, ...) {
+summary.farm.test = function(object, ...) {
   rst = NULL
-  if (length(x$n) == 1) {
-    rst = as.data.frame(cbind(x$means, x$pValues, x$pAdjust, x$significant))
+  if (length(object$n) == 1) {
+    rst = as.data.frame(cbind(object$means, object$pValues, object$pAdjust, object$significant))
   } else {
-    rst = as.data.frame(cbind(x$means$X.means - x$means$Y.means, x$pValues, x$pAdjust, x$significant))
+    rst = as.data.frame(cbind(object$means$X.means - object$means$Y.means, object$pValues, object$pAdjust, object$significant))
   }
   names(rst) = c("means", "p-values", "p-adjusted", "significance")
   return (rst)
