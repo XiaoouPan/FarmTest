@@ -1,7 +1,7 @@
 Package: FarmTest
 Type: Package
 Title: Factor-Adjusted Robust Multiple Testing
-Version: 2.0.1
+Version: 2.1.0
 Date: 2020-04-27
 Authors@R: c(person("Xiaoou", "Pan", email = "xip024@ucsd.edu", role = c("aut", "cre")), 
              person("Yuan", "Ke", email = "yuan.ke@uga.edu", role = "aut"),
