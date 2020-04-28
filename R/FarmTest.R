@@ -6,7 +6,6 @@
 #' @references Wang, L., Zheng, C., Zhou, W. and Zhou, W.-X. (2018). A New Principle for Tuning-Free Huber Regression. Preprint.
 #' @seealso \code{\link{huber.cov}} for tuning-free Huber-type covariance estimation and \code{\link{huber.reg}} for tuning-free Huber regression.
 #' @examples
-#' set.seed(2020)
 #' n = 10000
 #' X = rt(n, 2) + 2
 #' mu = huber.mean(X)
@@ -25,7 +24,6 @@ huber.mean = function(X){
 #' @references Ke, Y., Minsker, S., Ren, Z., Sun, Q. and Zhou, W.-X. (2019). User-friendly covariance estimation for heavy-tailed distributions. Statis. Sci., 34, 454-471.
 #' @seealso \code{\link{huber.mean}} for tuning-free Huber mean estimation and \code{\link{huber.reg}} for tuning-free Huber regression.
 #' @examples
-#' set.seed(2020)
 #' n = 100
 #' d = 50
 #' X = matrix(rt(n * d, df = 3), n, d) / sqrt(3)
@@ -39,7 +37,7 @@ huber.cov = function(X) {
 
 #' @title Tuning-free Huber regression
 #' @description The function calculates adaptive Huber regression estimator from a data sample, with robustification parameter \eqn{\tau} determined by a tuning-free principle.
-#' @param X An \eqn{n} by \eqn{p} design matrix.
+#' @param X An \eqn{n} by \eqn{p} design matrix, where \eqn{p < n}.
 #' @param Y A continuous response with length \eqn{n}.
 #' @return A coefficients estimator with length \eqn{p + 1} will be returned.
 #' @references Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.
@@ -47,7 +45,6 @@ huber.cov = function(X) {
 #' @references Wang, L., Zheng, C., Zhou, W. and Zhou, W.-X. (2018). A new principle for tuning-free Huber regression. Preprint.
 #' @seealso \code{\link{huber.mean}} for tuning-free Huber mean estimation and \code{\link{huber.cov}} for tuning-free Huber-type covariance estimation.
 #' @examples
-#' set.seed(2020)
 #' n = 200
 #' d = 10
 #' beta = rep(1, d)
@@ -112,7 +109,6 @@ huber.reg = function(X, Y) {
 #' K = 3
 #' muX = rep(0, p)
 #' muX[1:5] = 2
-#' set.seed(2020)
 #' epsilonX = matrix(rnorm(p * n, 0, 1), nrow = n)
 #' BX = matrix(runif(p * K, -2, 2), nrow = p)
 #' fX = matrix(rnorm(K * n, 0, 1), nrow = n)
@@ -316,7 +312,6 @@ farm.test = function(X, fX = NULL, KX = -1, Y = NULL, fY = NULL, KY = -1, h0 = N
 #' K = 3
 #' muX = rep(0, p)
 #' muX[1:5] = 2
-#' set.seed(2020)
 #' epsilonX = matrix(rnorm(p * n, 0, 1), nrow = n)
 #' BX = matrix(runif(p * K, -2, 2), nrow = p)
 #' fX = matrix(rnorm(K * n, 0, 1), nrow = n)
@@ -358,7 +353,7 @@ print.farm.test = function(x, ...) {
 #' @param x A \code{farm.test} object.
 #' @param \dots Further arguments passed to or from other methods.
 #' @return A data frame including the estimated means, p-values, adjusted p-values and significance for all the features.
-#' @details For two-sample FarmTest, the first column is: estimated means of sample \code{X} - estimated means of sample \code{Y}.
+#' @details For two-sample FarmTest, the first column is the difference: estimated means of sample \code{X} - estimated means of sample \code{Y}.
 #' @seealso \code{\link{farm.test}}, \code{\link{print.farm.test}} and \code{\link{plot.farm.test}}.
 #' @examples 
 #' n = 50
@@ -366,7 +361,6 @@ print.farm.test = function(x, ...) {
 #' K = 3
 #' muX = rep(0, p)
 #' muX[1:5] = 2
-#' set.seed(2020)
 #' epsilonX = matrix(rnorm(p * n, 0, 1), nrow = n)
 #' BX = matrix(runif(p * K, -2, 2), nrow = p)
 #' fX = matrix(rnorm(K * n, 0, 1), nrow = n)
@@ -390,7 +384,7 @@ summary.farm.test = function(x, ...) {
 #' @param x A \code{farm.test} object.
 #' @param \dots Further arguments passed to or from other methods.
 #' @return No variable will be returned, but a histogram of estimated means will be presented.
-#' @details For two-sample FarmTest, the histogram is based on estimated means of sample \code{X} - estimated means of sample \code{Y}.
+#' @details For two-sample FarmTest, the histogram is based on the difference: estimated means of sample \code{X} - estimated means of sample \code{Y}.
 #' @seealso \code{\link{farm.test}}, \code{\link{print.farm.test}} and \code{\link{summary.farm.test}}.
 #' @examples 
 #' n = 50
@@ -398,7 +392,6 @@ summary.farm.test = function(x, ...) {
 #' K = 3
 #' muX = rep(0, p)
 #' muX[1:5] = 2
-#' set.seed(2020)
 #' epsilonX = matrix(rnorm(p * n, 0, 1), nrow = n)
 #' BX = matrix(runif(p * K, -2, 2), nrow = p)
 #' fX = matrix(rnorm(K * n, 0, 1), nrow = n)

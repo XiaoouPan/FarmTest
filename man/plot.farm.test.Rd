@@ -18,7 +18,7 @@ No variable will be returned, but a histogram of estimated means will be present
 This is the plot function of S3 objects with class "\code{farm.test}". It produces the histogram of estimated means.
 }
 \details{
-For two-sample FarmTest, the histogram is based on estimated means of sample \code{X} - estimated means of sample \code{Y}.
+For two-sample FarmTest, the histogram is based on the difference: estimated means of sample \code{X} - estimated means of sample \code{Y}.
 }
 \examples{
 n = 50
@@ -26,7 +26,6 @@ p = 100
 K = 3
 muX = rep(0, p)
 muX[1:5] = 2
-set.seed(2020)
 epsilonX = matrix(rnorm(p * n, 0, 1), nrow = n)
 BX = matrix(runif(p * K, -2, 2), nrow = p)
 fX = matrix(rnorm(K * n, 0, 1), nrow = n)

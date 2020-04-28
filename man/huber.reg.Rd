@@ -7,7 +7,7 @@
 huber.reg(X, Y)
 }
 \arguments{
-\item{X}{An \eqn{n} by \eqn{p} design matrix.}
+\item{X}{An \eqn{n} by \eqn{p} design matrix, where \eqn{p < n}.}
 
 \item{Y}{A continuous response with length \eqn{n}.}
 }
@@ -18,7 +18,6 @@ A coefficients estimator with length \eqn{p + 1} will be returned.
 The function calculates adaptive Huber regression estimator from a data sample, with robustification parameter \eqn{\tau} determined by a tuning-free principle.
 }
 \examples{
-set.seed(2020)
 n = 200
 d = 10
 beta = rep(1, d)

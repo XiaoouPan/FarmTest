@@ -18,7 +18,7 @@ A data frame including the estimated means, p-values, adjusted p-values and sign
 This is the summary function of S3 objects with class "\code{farm.test}".
 }
 \details{
-For two-sample FarmTest, the first column is: estimated means of sample \code{X} - estimated means of sample \code{Y}.
+For two-sample FarmTest, the first column is the difference: estimated means of sample \code{X} - estimated means of sample \code{Y}.
 }
 \examples{
 n = 50
@@ -26,7 +26,6 @@ p = 100
 K = 3
 muX = rep(0, p)
 muX[1:5] = 2
-set.seed(2020)
 epsilonX = matrix(rnorm(p * n, 0, 1), nrow = n)
 BX = matrix(runif(p * K, -2, 2), nrow = p)
 fX = matrix(rnorm(K * n, 0, 1), nrow = n)

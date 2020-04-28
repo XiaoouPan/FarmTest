@@ -11,7 +11,7 @@ Extensions to two-sample simultaneous mean comparison problems are also included
 As by-products, this package also contains functions that compute adaptive Huber mean, covariance and regression estimators that are of independent interest.
 }
 \details{
-For detailed information on how to use and install see its GitHub page \url{https://github.com/XiaoouPan/FarmTest}.
+See its GitHub page \url{https://github.com/XiaoouPan/FarmTest} for details.
 }
 \references{
 Ahn, S. C. and Horenstein, A. R. (2013). Eigenvalue ratio rest for the number of factors. Econometrica, 81(3) 1203–1227.
