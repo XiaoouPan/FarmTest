@@ -15,6 +15,6 @@ License: GPL-3
 Encoding: UTF-8
 URL: https://github.com/XiaoouPan/FarmTest
 SystemRequirements: C++11
-Imports: Rcpp
+Imports: Rcpp, graphics
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.1.0
