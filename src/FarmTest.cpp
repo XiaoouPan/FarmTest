@@ -31,7 +31,7 @@ double rootf1(const arma::vec& resSq, const int n, const double rhs, double low,
 }
 
 // [[Rcpp::export]]
-double f2(const double x, const arma::vec& resSq, const int n, const int d, const int N, const double rhs) {
+double f2(const double x, const arma::vec& resSq, const int N, const double rhs) {
   return arma::mean(arma::min(resSq / x, arma::ones(N))) - rhs;
 }
 
@@ -39,10 +39,30 @@ double f2(const double x, const arma::vec& resSq, const int n, const int d, cons
 double rootf2(const arma::vec& resSq, const int n, const int d, const int N, const double rhs, double low, double up, const double tol = 0.001, 
               const int maxIte = 500) {
   int ite = 0;
-  double mid, val;
   while (ite <= maxIte && up - low > tol) {
-    mid = 0.5 * (up + low);
-    val = f2(mid, resSq, n, d, N, rhs);
+    double mid = 0.5 * (up + low);
+    double val = f2(mid, resSq, N, rhs);
+    if (val < 0) {
+      up = mid;
+    } else {
+      low = mid;
+    }
+    ite++;
+  }
+  return 0.5 * (low + up);
+}
+
+// [[Rcpp::export]]
+double g1(const double x, const arma::vec& resSq, const int n, const double rhs) {
+  return arma::mean(arma::min(resSq / x, arma::ones(n))) - rhs;
+}
+
+// [[Rcpp::export]]
+double rootg1(const arma::vec& resSq, const int n, const double rhs, double low, double up, const double tol = 0.001, const int maxIte = 500) {
+  int ite = 0;
+  while (ite <= maxIte && up - low > tol) {
+    double mid = 0.5 * (up + low);
+    double val = g1(mid, resSq, n, rhs);
     if (val < 0) {
       up = mid;
     } else {
@@ -179,6 +199,49 @@ void updateHuber(const arma::mat& Z, const arma::vec& res, arma::vec& der, arma:
     }
   }
   grad = n1 * Z.t() * der;
+}
+
+// [[Rcpp::export]]
+arma::vec adaHuberReg(const arma::mat& X, arma::vec Y, const int n, const int p, const double tol = 0.0001, const int iteMax = 5000) {
+  const double n1 = 1.0 / n;
+  double rhs = n1 * (p + std::log(n * p));
+  arma::rowvec mx = arma::mean(X, 0);
+  arma::vec sx = arma::stddev(X, 0, 0).t();
+  double my = arma::mean(Y);
+  arma::mat Z = arma::join_rows(arma::ones(n), standardize(X, mx, sx, p));
+  Y -= my;
+  double tau = 1.345 * mad(Y);
+  arma::vec der(n);
+  arma::vec gradOld(p + 1), gradNew(p + 1);
+  updateHuber(Z, Y, der, gradOld, n, tau, n1);
+  arma::vec beta = -gradOld, betaDiff = -gradOld;
+  arma::vec res = Y - Z * beta;
+  arma::vec resSq = arma::square(res);
+  tau = std::sqrt((long double)rootg1(resSq, n, rhs, arma::min(resSq), arma::accu(resSq)));
+  updateHuber(Z, res, der, gradNew, n, tau, n1);
+  arma::vec gradDiff = gradNew - gradOld;
+  int ite = 1;
+  while (arma::norm(gradNew, "inf") > tol && ite <= iteMax) {
+    double alpha = 1.0;
+    double cross = arma::as_scalar(betaDiff.t() * gradDiff);
+    if (cross > 0) {
+      double a1 = cross / arma::as_scalar(gradDiff.t() * gradDiff);
+      double a2 = arma::as_scalar(betaDiff.t() * betaDiff) / cross;
+      alpha = std::min(std::min(a1, a2), 100.0);
+    }
+    gradOld = gradNew;
+    betaDiff = -alpha * gradNew;
+    beta += betaDiff;
+    res -= Z * betaDiff;
+    resSq = arma::square(res);
+    tau = std::sqrt((long double)rootg1(resSq, n, rhs, arma::min(resSq), arma::accu(resSq)));
+    updateHuber(Z, res, der, gradNew, n, tau, n1);
+    gradDiff = gradNew - gradOld;
+    ite++;
+  }
+  beta.rows(1, p) /= sx;
+  beta(0) += my - arma::as_scalar(mx * beta.rows(1, p));
+  return beta;
 }
 
 // [[Rcpp::export]]
