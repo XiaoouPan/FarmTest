@@ -218,7 +218,7 @@ arma::vec huberReg(const arma::mat& X, arma::vec Y, const int n, const int p, co
     ite++;
   }
   beta.rows(1, p) /= sx;
-  beta(0) += my - arma::as_scalar(mx * beta.rows(1, p));
+  beta(0) = huberMean(Y + my - X * beta.rows(1, p), n);
   return beta;
 }
 
@@ -298,7 +298,7 @@ double huberRegItcp(const arma::mat& X, arma::vec Y, const int n, const int p, c
     ite++;
   }
   beta.rows(1, p) /= sx;
-  return beta(0) + my - arma::as_scalar(mx * beta.rows(1, p));
+  return huberMean(Y + my - X * beta.rows(1, p), n);
 }
 
 // [[Rcpp::export]]
