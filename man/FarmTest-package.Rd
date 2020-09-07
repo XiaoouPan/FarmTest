@@ -6,7 +6,7 @@
 \title{FarmTest: Factor-Adjusted Robust Multiple Testing}
 \description{
 FarmTest package performs robust multiple testing for means in the presence of known and unknown latent factors (Fan et al, 2019).
-It implements a series of adaptive Huber methods combined with fast data-drive tuning schemes (Wang et al, 2018; Ke et al, 2019) to estimate model parameters and construct test statistics that are robust against heavy-tailed and/or assymetric error distributions. 
+It implements a series of adaptive Huber methods combined with fast data-drive tuning schemes (Wang et al, 2020; Ke et al, 2019) to estimate model parameters and construct test statistics that are robust against heavy-tailed and/or assymetric error distributions. 
 Extensions to two-sample simultaneous mean comparison problems are also included. 
 As by-products, this package also contains functions that compute adaptive Huber mean, covariance and regression estimators that are of independent interest.
 }
@@ -30,7 +30,7 @@ Storey, J. D. (2002). A direct approach to false discovery rates. J. R. Stat. So
 
 Sun, Q., Zhou, W.-X. and Fan, J. (2020). Adaptive Huber regression. J. Amer. Statist. Assoc., 115, 254-265.
 
-Wang, L., Zheng, C., Zhou, W. and Zhou, W.-X. (2018). A new principle for tuning-free Huber regression. Preprint.
+Wang, L., Zheng, C., Zhou, W. and Zhou, W.-X. (2020). A new principle for tuning-free Huber regression. Stat. Sin., to appear.
 
 Zhou, W-X., Bose, K., Fan, J. and Liu, H. (2018). A new perspective on robust M-estimation: Finite sample theory and applications to dependence-adjusted multiple testing. Ann. Statist., 46 1904-1931.
 }

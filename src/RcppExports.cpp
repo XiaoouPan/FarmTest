@@ -49,18 +49,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // f2
-double f2(const double x, const arma::vec& resSq, const int n, const int d, const int N, const double rhs);
-RcppExport SEXP _FarmTest_f2(SEXP xSEXP, SEXP resSqSEXP, SEXP nSEXP, SEXP dSEXP, SEXP NSEXP, SEXP rhsSEXP) {
+double f2(const double x, const arma::vec& resSq, const int N, const double rhs);
+RcppExport SEXP _FarmTest_f2(SEXP xSEXP, SEXP resSqSEXP, SEXP NSEXP, SEXP rhsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const double >::type x(xSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type resSq(resSqSEXP);
-    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< const int >::type d(dSEXP);
     Rcpp::traits::input_parameter< const int >::type N(NSEXP);
     Rcpp::traits::input_parameter< const double >::type rhs(rhsSEXP);
-    rcpp_result_gen = Rcpp::wrap(f2(x, resSq, n, d, N, rhs));
+    rcpp_result_gen = Rcpp::wrap(f2(x, resSq, N, rhs));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -80,6 +78,37 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type tol(tolSEXP);
     Rcpp::traits::input_parameter< const int >::type maxIte(maxIteSEXP);
     rcpp_result_gen = Rcpp::wrap(rootf2(resSq, n, d, N, rhs, low, up, tol, maxIte));
+    return rcpp_result_gen;
+END_RCPP
+}
+// g1
+double g1(const double x, const arma::vec& resSq, const int n, const double rhs);
+RcppExport SEXP _FarmTest_g1(SEXP xSEXP, SEXP resSqSEXP, SEXP nSEXP, SEXP rhsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type resSq(resSqSEXP);
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const double >::type rhs(rhsSEXP);
+    rcpp_result_gen = Rcpp::wrap(g1(x, resSq, n, rhs));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rootg1
+double rootg1(const arma::vec& resSq, const int n, const double rhs, double low, double up, const double tol, const int maxIte);
+RcppExport SEXP _FarmTest_rootg1(SEXP resSqSEXP, SEXP nSEXP, SEXP rhsSEXP, SEXP lowSEXP, SEXP upSEXP, SEXP tolSEXP, SEXP maxIteSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type resSq(resSqSEXP);
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const double >::type rhs(rhsSEXP);
+    Rcpp::traits::input_parameter< double >::type low(lowSEXP);
+    Rcpp::traits::input_parameter< double >::type up(upSEXP);
+    Rcpp::traits::input_parameter< const double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< const int >::type maxIte(maxIteSEXP);
+    rcpp_result_gen = Rcpp::wrap(rootg1(resSq, n, rhs, low, up, tol, maxIte));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -194,6 +223,22 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type n1(n1SEXP);
     updateHuber(Z, res, der, grad, n, tau, n1);
     return R_NilValue;
+END_RCPP
+}
+// adaHuberReg
+arma::vec adaHuberReg(const arma::mat& X, arma::vec Y, const int n, const int p, const double tol, const int iteMax);
+RcppExport SEXP _FarmTest_adaHuberReg(SEXP XSEXP, SEXP YSEXP, SEXP nSEXP, SEXP pSEXP, SEXP tolSEXP, SEXP iteMaxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< const double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< const int >::type iteMax(iteMaxSEXP);
+    rcpp_result_gen = Rcpp::wrap(adaHuberReg(X, Y, n, p, tol, iteMax));
+    return rcpp_result_gen;
 END_RCPP
 }
 // huberReg
@@ -464,8 +509,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FarmTest_sgn", (DL_FUNC) &_FarmTest_sgn, 1},
     {"_FarmTest_f1", (DL_FUNC) &_FarmTest_f1, 4},
     {"_FarmTest_rootf1", (DL_FUNC) &_FarmTest_rootf1, 7},
-    {"_FarmTest_f2", (DL_FUNC) &_FarmTest_f2, 6},
+    {"_FarmTest_f2", (DL_FUNC) &_FarmTest_f2, 4},
     {"_FarmTest_rootf2", (DL_FUNC) &_FarmTest_rootf2, 9},
+    {"_FarmTest_g1", (DL_FUNC) &_FarmTest_g1, 4},
+    {"_FarmTest_rootg1", (DL_FUNC) &_FarmTest_rootg1, 7},
     {"_FarmTest_huberDer", (DL_FUNC) &_FarmTest_huberDer, 3},
     {"_FarmTest_huberMean", (DL_FUNC) &_FarmTest_huberMean, 4},
     {"_FarmTest_huberMeanVec", (DL_FUNC) &_FarmTest_huberMeanVec, 5},
@@ -474,6 +521,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FarmTest_mad", (DL_FUNC) &_FarmTest_mad, 1},
     {"_FarmTest_standardize", (DL_FUNC) &_FarmTest_standardize, 4},
     {"_FarmTest_updateHuber", (DL_FUNC) &_FarmTest_updateHuber, 7},
+    {"_FarmTest_adaHuberReg", (DL_FUNC) &_FarmTest_adaHuberReg, 6},
     {"_FarmTest_huberReg", (DL_FUNC) &_FarmTest_huberReg, 7},
     {"_FarmTest_huberRegCoef", (DL_FUNC) &_FarmTest_huberRegCoef, 7},
     {"_FarmTest_huberRegItcp", (DL_FUNC) &_FarmTest_huberRegItcp, 7},

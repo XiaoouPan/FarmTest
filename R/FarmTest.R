@@ -39,7 +39,7 @@ huber.cov = function(X) {
 #' @description The function conducts Huber regression from a data sample, with robustification parameter \eqn{\tau} determined by a tuning-free principle.
 #' @param X An \eqn{n} by \eqn{p} design matrix, where \eqn{p < n}.
 #' @param Y A continuous response with length \eqn{n}.
-#' @param method An \strong{optional} character string specifying the method to calibrate the robustification parameter \eqn{\tau}. Two choices are "standard"(default) and "adaptive". See Wang et al. for details.
+#' @param method An \strong{optional} character string specifying the method to calibrate the robustification parameter \eqn{\tau}. Two choices are "standard"(default) and "adaptive". See Wang et al.(2020) for details.
 #' @return A coefficients estimator with length \eqn{p + 1} will be returned.
 #' @references Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.
 #' @references Sun, Q., Zhou, W.-X. and Fan, J. (2020). Adaptive Huber regression. J. Amer. Statist. Assoc., 115, 254-265.
@@ -57,7 +57,7 @@ huber.cov = function(X) {
 huber.reg = function(X, Y, method = c("standard", "adaptive")) {
   n = nrow(X)
   p = ncol(X)
-  method = match.arg(p.method)
+  method = match.arg(method)
   beta = NULL
   if (method == "standard") {
     beta = huberReg(X, Y, n, p)

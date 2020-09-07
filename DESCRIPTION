@@ -17,4 +17,4 @@ URL: https://github.com/XiaoouPan/FarmTest
 SystemRequirements: C++11
 Imports: Rcpp, graphics
 LinkingTo: Rcpp, RcppArmadillo
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1

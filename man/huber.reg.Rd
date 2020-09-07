@@ -4,18 +4,20 @@
 \alias{huber.reg}
 \title{Tuning-free Huber regression}
 \usage{
-huber.reg(X, Y)
+huber.reg(X, Y, method = c("standard", "adaptive"))
 }
 \arguments{
 \item{X}{An \eqn{n} by \eqn{p} design matrix, where \eqn{p < n}.}
 
 \item{Y}{A continuous response with length \eqn{n}.}
+
+\item{method}{An \strong{optional} character string specifying the method to calibrate the robustification parameter \eqn{\tau}. Two choices are "standard"(default) and "adaptive". See Wang et al.(2020) for details.}
 }
 \value{
 A coefficients estimator with length \eqn{p + 1} will be returned.
 }
 \description{
-The function calculates adaptive Huber regression estimator from a data sample, with robustification parameter \eqn{\tau} determined by a tuning-free principle.
+The function conducts Huber regression from a data sample, with robustification parameter \eqn{\tau} determined by a tuning-free principle.
 }
 \examples{
 n = 200
@@ -31,7 +33,7 @@ Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Stati
 
 Sun, Q., Zhou, W.-X. and Fan, J. (2020). Adaptive Huber regression. J. Amer. Statist. Assoc., 115, 254-265.
 
-Wang, L., Zheng, C., Zhou, W. and Zhou, W.-X. (2018). A new principle for tuning-free Huber regression. Preprint.
+Wang, L., Zheng, C., Zhou, W. and Zhou, W.-X. (2020). A new principle for tuning-free Huber regression. Stat. Sin., to appear.
 }
 \seealso{
 \code{\link{huber.mean}} for tuning-free Huber mean estimation and \code{\link{huber.cov}} for tuning-free Huber-type covariance estimation.

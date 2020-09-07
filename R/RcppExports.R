@@ -13,12 +13,20 @@ rootf1 <- function(resSq, n, rhs, low, up, tol = 0.001, maxIte = 500L) {
     .Call('_FarmTest_rootf1', PACKAGE = 'FarmTest', resSq, n, rhs, low, up, tol, maxIte)
 }
 
-f2 <- function(x, resSq, n, d, N, rhs) {
-    .Call('_FarmTest_f2', PACKAGE = 'FarmTest', x, resSq, n, d, N, rhs)
+f2 <- function(x, resSq, N, rhs) {
+    .Call('_FarmTest_f2', PACKAGE = 'FarmTest', x, resSq, N, rhs)
 }
 
 rootf2 <- function(resSq, n, d, N, rhs, low, up, tol = 0.001, maxIte = 500L) {
     .Call('_FarmTest_rootf2', PACKAGE = 'FarmTest', resSq, n, d, N, rhs, low, up, tol, maxIte)
+}
+
+g1 <- function(x, resSq, n, rhs) {
+    .Call('_FarmTest_g1', PACKAGE = 'FarmTest', x, resSq, n, rhs)
+}
+
+rootg1 <- function(resSq, n, rhs, low, up, tol = 0.001, maxIte = 500L) {
+    .Call('_FarmTest_rootg1', PACKAGE = 'FarmTest', resSq, n, rhs, low, up, tol, maxIte)
 }
 
 huberDer <- function(res, tau, n) {
@@ -51,6 +59,10 @@ standardize <- function(X, mx, sx, p) {
 
 updateHuber <- function(Z, res, der, grad, n, tau, n1) {
     invisible(.Call('_FarmTest_updateHuber', PACKAGE = 'FarmTest', Z, res, der, grad, n, tau, n1))
+}
+
+adaHuberReg <- function(X, Y, n, p, tol = 0.0001, iteMax = 5000L) {
+    .Call('_FarmTest_adaHuberReg', PACKAGE = 'FarmTest', X, Y, n, p, tol, iteMax)
 }
 
 huberReg <- function(X, Y, n, p, tol = 0.0001, constTau = 1.345, iteMax = 5000L) {

@@ -23,7 +23,7 @@ mu = huber.mean(X)
 \references{
 Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.
 
-Wang, L., Zheng, C., Zhou, W. and Zhou, W.-X. (2018). A New Principle for Tuning-Free Huber Regression. Preprint.
+Wang, L., Zheng, C., Zhou, W. and Zhou, W.-X. (2020). A New Principle for Tuning-Free Huber Regression. Stat. Sin., to appear.
 }
 \seealso{
 \code{\link{huber.cov}} for tuning-free Huber-type covariance estimation and \code{\link{huber.reg}} for tuning-free Huber regression.
