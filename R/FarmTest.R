@@ -62,7 +62,7 @@ huber.reg = function(X, Y, method = c("standard", "adaptive")) {
   if (method == "standard") {
     beta = huberReg(X, Y, n, p)
   } else {
-    beta = aadaHuberReg(X, Y, n, p)
+    beta = adaHuberReg(X, Y, n, p)
   }
   return (beta)
 }
