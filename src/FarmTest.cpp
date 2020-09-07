@@ -240,7 +240,7 @@ arma::vec adaHuberReg(const arma::mat& X, arma::vec Y, const int n, const int p,
     ite++;
   }
   beta.rows(1, p) /= sx;
-  beta(0) += my - arma::as_scalar(mx * beta.rows(1, p));
+  beta(0) = huberMean(Y + my - X * beta.rows(1, p), n);
   return beta;
 }
 

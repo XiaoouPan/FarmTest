@@ -3,7 +3,7 @@
 #' @param X An \eqn{n}-dimensional data vector.
 #' @return A Huber mean estimator will be returned.
 #' @references Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.
-#' @references Wang, L., Zheng, C., Zhou, W. and Zhou, W.-X. (2018). A New Principle for Tuning-Free Huber Regression. Preprint.
+#' @references Wang, L., Zheng, C., Zhou, W. and Zhou, W.-X. (2020). A New Principle for Tuning-Free Huber Regression. Stat. Sin., to appear.
 #' @seealso \code{\link{huber.cov}} for tuning-free Huber-type covariance estimation and \code{\link{huber.reg}} for tuning-free Huber regression.
 #' @examples
 #' n = 10000
@@ -36,13 +36,14 @@ huber.cov = function(X) {
 }
 
 #' @title Tuning-free Huber regression
-#' @description The function calculates adaptive Huber regression estimator from a data sample, with robustification parameter \eqn{\tau} determined by a tuning-free principle.
+#' @description The function conducts Huber regression from a data sample, with robustification parameter \eqn{\tau} determined by a tuning-free principle.
 #' @param X An \eqn{n} by \eqn{p} design matrix, where \eqn{p < n}.
 #' @param Y A continuous response with length \eqn{n}.
+#' @param method An \strong{optional} character string specifying the method to calibrate the robustification parameter \eqn{\tau}. Two choices are "standard"(default) and "adaptive". See Wang et al. for details.
 #' @return A coefficients estimator with length \eqn{p + 1} will be returned.
 #' @references Huber, P. J. (1964). Robust estimation of a location parameter. Ann. Math. Statist., 35, 73–101.
 #' @references Sun, Q., Zhou, W.-X. and Fan, J. (2020). Adaptive Huber regression. J. Amer. Statist. Assoc., 115, 254-265.
-#' @references Wang, L., Zheng, C., Zhou, W. and Zhou, W.-X. (2018). A new principle for tuning-free Huber regression. Preprint.
+#' @references Wang, L., Zheng, C., Zhou, W. and Zhou, W.-X. (2020). A new principle for tuning-free Huber regression. Stat. Sin., to appear.
 #' @seealso \code{\link{huber.mean}} for tuning-free Huber mean estimation and \code{\link{huber.cov}} for tuning-free Huber-type covariance estimation.
 #' @examples
 #' n = 200
@@ -53,10 +54,17 @@ huber.cov = function(X) {
 #' Y = 1 + X %*% beta + err
 #' beta.hat = huber.reg(X, Y)
 #' @export
-huber.reg = function(X, Y) {
+huber.reg = function(X, Y, method = c("standard", "adaptive")) {
   n = nrow(X)
   p = ncol(X)
-  return (huberReg(X, Y, n, p))
+  method = match.arg(p.method)
+  beta = NULL
+  if (method == "standard") {
+    beta = huberReg(X, Y, n, p)
+  } else {
+    beta = aadaHuberReg(X, Y, n, p)
+  }
+  return (beta)
 }
 
 #' @title Factor-adjusted robust multiple testing
