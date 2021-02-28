@@ -154,7 +154,7 @@ Ahn, S. C. and Horenstein, A. R. (2013). Eigenvalue ratio test for the number of
 
 Benjamini, Y. and Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. *J. R. Stat. Soc. Ser. B. Stat. Methodol.* **57** 289–300. [Paper](https://www.jstor.org/stable/2346101?seq=1#metadata_info_tab_contents)
 
-Bose, K., Fan, J., Ke, Y., Pan, X. and Zhou, W.-X. (2020+). FarmTest: An R package for factor-adjusted robust multiple testing. *R. J.*, to appear. [Paper](https://www.math.ucsd.edu/~xip024/Papers/FarmTest.pdf)
+Bose, K., Fan, J., Ke, Y., Pan, X. and Zhou, W.-X. (2020+). FarmTest: An R package for factor-adjusted robust multiple testing. *R. J.* **12** 372-387. [Paper](https://journal.r-project.org/archive/2021/RJ-2021-023/index.html)
 
 Eddelbuettel, D. and Francois, R. (2011). Rcpp: Seamless R and C++ integration. *J. Stat. Softw.* **40** 1-18. [Paper](http://dirk.eddelbuettel.com/code/rcpp/Rcpp-introduction.pdf)
 
